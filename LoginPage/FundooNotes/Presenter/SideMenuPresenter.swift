@@ -10,6 +10,5 @@ class SideMenuPresenter{
     }
     
     func showSignOutAlert(){
-        pSideMenuView?.showSignOutAlert()
     }
 }

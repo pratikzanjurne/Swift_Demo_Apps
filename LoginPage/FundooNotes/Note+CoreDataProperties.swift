@@ -1,3 +1,10 @@
+//
+//  Note+CoreDataProperties.swift
+//  
+//
+//  Created by BridgeLabz Solutions LLP  on 9/12/18.
+//
+//
 
 import Foundation
 import CoreData
@@ -14,10 +21,12 @@ extension Note {
     @NSManaged public var image: NSData?
     @NSManaged public var is_archived: Bool
     @NSManaged public var is_deleted: Bool
+    @NSManaged public var is_pinned: Bool
     @NSManaged public var is_remidered: Bool
     @NSManaged public var note: String?
     @NSManaged public var note_id: String?
     @NSManaged public var title: String?
-    @NSManaged public var is_pinned: Bool
+    @NSManaged public var reminder_date: String?
+    @NSManaged public var reminder_time: String?
 
 }

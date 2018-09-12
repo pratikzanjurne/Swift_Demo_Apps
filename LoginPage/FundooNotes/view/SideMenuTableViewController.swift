@@ -1,6 +1,12 @@
 import UIKit
 
 protocol PSideMenuView{
+}
+protocol PShowNotes{
+    func showNotes(option: Helper.sideMenuOptionSelected,colour:String,viewTitle:String)
+}
+protocol PHideSideMenu{
+    func toggleMenu()
     func showSignOutAlert()
 }
 
@@ -16,6 +22,8 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
     @IBOutlet var signOutCell: UITableViewCell!
      let menu = ["Notes","Archive","Deleted","Sign Out",""]
     var presenter:SideMenuPresenter?
+    static var showNotesDelegate:PShowNotes?
+    static var sideMenuDelegate:PHideSideMenu?
     override func viewDidLoad() {
         super.viewDidLoad()
         initialiseView()
@@ -29,25 +37,29 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
         signOutCell.textLabel?.text = "Sign Out"
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.section == 4{
-            presenter?.showSignOutAlert()
+        switch indexPath.section{
+            case 0:
+                SideMenuTableViewController.sideMenuDelegate?.toggleMenu()
+                SideMenuTableViewController.showNotesDelegate?.showNotes(option: .notes, colour: Constant.Color.colorWhite, viewTitle: Constant.DashboardViewTitle.noteView)
+                break;
+            case 1:
+               SideMenuTableViewController.sideMenuDelegate?.toggleMenu()
+               SideMenuTableViewController.showNotesDelegate?.showNotes(option: .archived, colour: Constant.Color.colourForFilterOn, viewTitle: Constant.DashboardViewTitle.archivedView)
+                break;
+            case 2:
+                SideMenuTableViewController.sideMenuDelegate?.toggleMenu()
+                SideMenuTableViewController.showNotesDelegate?.showNotes(option: .deleted, colour: Constant.Color.colourForFilterOn, viewTitle: Constant.DashboardViewTitle.deletedView)
+                break;
+            case 3:
+               SideMenuTableViewController.sideMenuDelegate?.toggleMenu()
+               SideMenuTableViewController.showNotesDelegate?.showNotes(option: .reminder, colour: Constant.Color.colourForFilterOn, viewTitle: Constant.DashboardViewTitle.reminderView)
+                break;
+            case 4:
+                SideMenuTableViewController.sideMenuDelegate?.toggleMenu()
+                SideMenuTableViewController.sideMenuDelegate?.showSignOutAlert()
+                break;
+            default:
+                break
         }
     }
-    
-    
-    func showSignOutAlert() {
-        let alert = UIAlertController(title: "Do you want to sign out",
-                                      message:nil, preferredStyle: .alert)
-        let action = UIAlertAction(title: "Sign Out", style: .default) { (_) in
-            UserDefaults.standard.set(nil, forKey: "userId")
-            UIHelper.shared.postNotification(Name: "ShowLoginView")
-        }
-        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (_) in
-        }
-        alert.addAction(cancelAction)
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
-
-    }
-    
 }

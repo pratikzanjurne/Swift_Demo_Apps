@@ -19,6 +19,15 @@ class DashboardPresenter{
         
     }
     
+    func getDeletedNotes(){
+        pDashboardView?.startLoading()
+        presenterService?.getDeletedNotes(completion: { (notes) in
+            pDashboardView?.stopLoading()
+            pDashboardView?.setDeletedNotes(notes: notes)
+        })
+        
+    }
+    
     func getCellHeight(note:NoteModel,width:CGFloat,completion:(_ Height:CGFloat)->Void){
         var height:CGFloat = 40
         self.computeTextLabelHeight(text: note.note, width: width) { (noteHeight) in
@@ -47,9 +56,13 @@ class DashboardPresenter{
     }
     
     func computeImageHeight(image:UIImage,width:CGFloat,completion:(CGFloat)->Void){
-        let height =  width / image.getAspectRatio()
-//        completion(height)
         let newHeight =  Helper.shared.getScaledHeight(imageWidth: image.size.width, imageHeight: image.size.height, scaleWidth: width)
         completion(newHeight)
+    }
+    
+    func getNotesOfType(_ type:Constant.NoteOfType,completion:([NoteModel])->Void){
+        presenterService?.getNotesOfType(type, completion: { (notes) in
+            completion(notes)
+        })
     }
 }

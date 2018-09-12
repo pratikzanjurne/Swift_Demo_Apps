@@ -11,5 +11,11 @@ class TakeNotePresenterService {
             completion(status, message)
         }
     }
+    func deleteNoteT(noteToDelete:NoteModel,completion:(Bool,String)->Void){
+        NoteDBManager.deleteNoteT(noteToDelete: noteToDelete) { (status, message) in
+            completion(status, message)
+        }
+    }
+
         
 }

@@ -34,15 +34,10 @@ class UIHelper {
     }
     
     func setCornerRadius(view:UIView){
-        view.layer.cornerRadius = 10.0
+        view.layer.cornerRadius = 3.0
         view.layer.borderWidth = 1.0
         view.layer.borderColor = UIColor.clear.cgColor
         view.layer.masksToBounds = true;
 
-    }
-    
-    enum photoOptionSelected {
-        case camera
-        case gallary
     }
 }

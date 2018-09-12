@@ -13,5 +13,22 @@ class Helper {
         let scalFactor = scaleWidth/oldWidth
         return imageHeight * scalFactor
     }
+    enum photoOptionSelected {
+        case camera
+        case gallary
+    }
+    
+    enum reminderOptionSelected{
+        case date
+        case time
+        case repeate
+    }
+    
+    enum sideMenuOptionSelected {
+        case notes
+        case reminder
+        case archived
+        case deleted
+    }
 
 }

@@ -37,12 +37,16 @@
 		0A93BB0C2139204A00BA586B /* ColourOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A93BB0B2139204A00BA586B /* ColourOptions.swift */; };
 		0A93BB0E213950A600BA586B /* ColourCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A93BB0D213950A600BA586B /* ColourCell.xib */; };
 		0A93BB102139510F00BA586B /* ColourCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A93BB0F2139510F00BA586B /* ColourCell.swift */; };
+		0A99E0BA21493E8600F5021E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A99E0B921493E8600F5021E /* Constant.swift */; };
 		0AA2B0022125406C00C3B33E /* PresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA2B0012125406C00C3B33E /* PresenterService.swift */; };
 		0AA2B0042125962C00C3B33E /* UserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA2B0032125962C00C3B33E /* UserModel.swift */; };
 		0AA2B0062125A98800C3B33E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA2B0052125A98800C3B33E /* BaseViewController.swift */; };
 		0AA2B00B2125C6B600C3B33E /* DashboardPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA2B00A2125C6B600C3B33E /* DashboardPresenter.swift */; };
-		0AB14D9621439BD9001BDAD6 /* Note+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB14D9421439BD9001BDAD6 /* Note+CoreDataClass.swift */; };
-		0AB14D9721439BD9001BDAD6 /* Note+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AB14D9521439BD9001BDAD6 /* Note+CoreDataProperties.swift */; };
+		0AA79C8C2148E31100BA2B3F /* Note+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA79C8A2148E31100BA2B3F /* Note+CoreDataClass.swift */; };
+		0AA79C8D2148E31100BA2B3F /* Note+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA79C8B2148E31100BA2B3F /* Note+CoreDataProperties.swift */; };
+		0AA79C8F21491A8800BA2B3F /* HCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AA79C8E21491A8800BA2B3F /* HCollectionReusableView.xib */; };
+		0AA79C9121491BC600BA2B3F /* HCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA79C9021491BC600BA2B3F /* HCollectionReusableView.swift */; };
+		0AC7EBA6214786A200CAF9BC /* SetReminderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC7EBA5214786A200CAF9BC /* SetReminderPresenter.swift */; };
 		0AC9E6D2214294D40069573B /* PopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC9E6D1214294D40069573B /* PopUpViewController.swift */; };
 		0AD21241212686FA00FAEE00 /* LoginViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD21240212686FA00FAEE00 /* LoginViewPresenter.swift */; };
 		0AD2124321269EDE00FAEE00 /* RagisterPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD2124221269EDE00FAEE00 /* RagisterPresenter.swift */; };
@@ -116,12 +120,16 @@
 		0A93BB0B2139204A00BA586B /* ColourOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColourOptions.swift; sourceTree = "<group>"; };
 		0A93BB0D213950A600BA586B /* ColourCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColourCell.xib; sourceTree = "<group>"; };
 		0A93BB0F2139510F00BA586B /* ColourCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColourCell.swift; sourceTree = "<group>"; };
+		0A99E0B921493E8600F5021E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		0AA2B0012125406C00C3B33E /* PresenterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresenterService.swift; sourceTree = "<group>"; };
 		0AA2B0032125962C00C3B33E /* UserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserModel.swift; sourceTree = "<group>"; };
 		0AA2B0052125A98800C3B33E /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
 		0AA2B00A2125C6B600C3B33E /* DashboardPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardPresenter.swift; sourceTree = "<group>"; };
-		0AB14D9421439BD9001BDAD6 /* Note+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Note+CoreDataClass.swift"; path = "../Note+CoreDataClass.swift"; sourceTree = "<group>"; };
-		0AB14D9521439BD9001BDAD6 /* Note+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Note+CoreDataProperties.swift"; path = "../Note+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0AA79C8A2148E31100BA2B3F /* Note+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Note+CoreDataClass.swift"; path = "../Note+CoreDataClass.swift"; sourceTree = "<group>"; };
+		0AA79C8B2148E31100BA2B3F /* Note+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Note+CoreDataProperties.swift"; path = "../Note+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0AA79C8E21491A8800BA2B3F /* HCollectionReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HCollectionReusableView.xib; sourceTree = "<group>"; };
+		0AA79C9021491BC600BA2B3F /* HCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HCollectionReusableView.swift; sourceTree = "<group>"; };
+		0AC7EBA5214786A200CAF9BC /* SetReminderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetReminderPresenter.swift; sourceTree = "<group>"; };
 		0AC9E6D1214294D40069573B /* PopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpViewController.swift; sourceTree = "<group>"; };
 		0AD21240212686FA00FAEE00 /* LoginViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewPresenter.swift; sourceTree = "<group>"; };
 		0AD2124221269EDE00FAEE00 /* RagisterPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RagisterPresenter.swift; sourceTree = "<group>"; };
@@ -240,6 +248,8 @@
 				0A93BB0D213950A600BA586B /* ColourCell.xib */,
 				0A93BB0F2139510F00BA586B /* ColourCell.swift */,
 				0A5D7E6C2146883700F81F39 /* SetReminderTableViewCell.swift */,
+				0AA79C8E21491A8800BA2B3F /* HCollectionReusableView.xib */,
+				0AA79C9021491BC600BA2B3F /* HCollectionReusableView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -275,8 +285,8 @@
 		0AA2AFFD2125388300C3B33E /* model */ = {
 			isa = PBXGroup;
 			children = (
-				0AB14D9421439BD9001BDAD6 /* Note+CoreDataClass.swift */,
-				0AB14D9521439BD9001BDAD6 /* Note+CoreDataProperties.swift */,
+				0AA79C8A2148E31100BA2B3F /* Note+CoreDataClass.swift */,
+				0AA79C8B2148E31100BA2B3F /* Note+CoreDataProperties.swift */,
 				0A17863121340CA900622F72 /* NoteModel.swift */,
 				0A230C842127FFF200088573 /* User+CoreDataClass.swift */,
 				0A230C852127FFF200088573 /* User+CoreDataProperties.swift */,
@@ -295,6 +305,7 @@
 				0AD212482126E85500FAEE00 /* ForgotPasswrdPresenter.swift */,
 				0A1311312131424C00D785DD /* TakeNotePresenter.swift */,
 				0A048A62212E6C7900871177 /* SideMenuPresenter.swift */,
+				0AC7EBA5214786A200CAF9BC /* SetReminderPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -325,6 +336,7 @@
 			children = (
 				0ADF0EC02143FBCB00B28139 /* Helper.swift */,
 				0A048A64212E6DD200871177 /* UIHelper.swift */,
+				0A99E0B921493E8600F5021E /* Constant.swift */,
 			);
 			path = Util;
 			sourceTree = "<group>";
@@ -464,6 +476,7 @@
 				0A11FC4521228CAF0035CEC2 /* LaunchScreen.storyboard in Resources */,
 				0A11FC4221228CAF0035CEC2 /* Assets.xcassets in Resources */,
 				0A2AA46E212EE98F00515640 /* NoteView.xib in Resources */,
+				0AA79C8F21491A8800BA2B3F /* HCollectionReusableView.xib in Resources */,
 				0A11FC3D21228CAF0035CEC2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -492,12 +505,12 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-FundooNotes/Pods-FundooNotes-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/MaterialControls/MaterialControls.framework",
 				"${BUILT_PRODUCTS_DIR}/UITextView+Placeholder/UITextView_Placeholder.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialControls.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextView_Placeholder.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -544,29 +557,32 @@
 				0ADF0EC72144098200B28139 /* PinterestLayoutDelegate.swift in Sources */,
 				0AD21241212686FA00FAEE00 /* LoginViewPresenter.swift in Sources */,
 				0AD212492126E85500FAEE00 /* ForgotPasswrdPresenter.swift in Sources */,
+				0AA79C9121491BC600BA2B3F /* HCollectionReusableView.swift in Sources */,
 				0A1311322131424C00D785DD /* TakeNotePresenter.swift in Sources */,
 				0ADF6276212D29A300C07571 /* TakeNoteViewController.swift in Sources */,
 				0A230C862127FFF200088573 /* User+CoreDataClass.swift in Sources */,
-				0AB14D9721439BD9001BDAD6 /* Note+CoreDataProperties.swift in Sources */,
 				0AD21FED21351687000025B3 /* DashboardNoteCell.swift in Sources */,
+				0A99E0BA21493E8600F5021E /* Constant.swift in Sources */,
 				0A11FC712122F3C00035CEC2 /* RagisterViewController.swift in Sources */,
 				0ADF0EC82144098200B28139 /* PinterestLayout.swift in Sources */,
 				0AA2B0042125962C00C3B33E /* UserModel.swift in Sources */,
 				0AA2B0062125A98800C3B33E /* BaseViewController.swift in Sources */,
 				0A048A63212E6C7900871177 /* SideMenuPresenter.swift in Sources */,
-				0AB14D9621439BD9001BDAD6 /* Note+CoreDataClass.swift in Sources */,
 				0ADF0EC12143FBCB00B28139 /* Helper.swift in Sources */,
 				0AD212472126E72C00FAEE00 /* ForgotPasswordModel.swift in Sources */,
 				0A13112F2131265E00D785DD /* OptionCell.swift in Sources */,
 				0ADF0EC92144098200B28139 /* PinterestLayoutAttributes.swift in Sources */,
 				0AA2B0022125406C00C3B33E /* PresenterService.swift in Sources */,
 				0A048A65212E6DD200871177 /* UIHelper.swift in Sources */,
+				0AA79C8D2148E31100BA2B3F /* Note+CoreDataProperties.swift in Sources */,
 				0A11FC4021228CAF0035CEC2 /* LoginPage.xcdatamodeld in Sources */,
+				0AA79C8C2148E31100BA2B3F /* Note+CoreDataClass.swift in Sources */,
 				0A5D7E6B2146879B00F81F39 /* SetReminderViewController.swift in Sources */,
 				0A230C872127FFF200088573 /* User+CoreDataProperties.swift in Sources */,
 				0A11FC3A21228CAF0035CEC2 /* LoginViewController.swift in Sources */,
 				0A17863221340CA900622F72 /* NoteModel.swift in Sources */,
 				0A93BB102139510F00BA586B /* ColourCell.swift in Sources */,
+				0AC7EBA6214786A200CAF9BC /* SetReminderPresenter.swift in Sources */,
 				0A0FEA7A212BDE05003DB52F /* SideMenuTableViewController.swift in Sources */,
 				0A5D7E6D2146883700F81F39 /* SetReminderTableViewCell.swift in Sources */,
 				0A11FC3821228CAF0035CEC2 /* AppDelegate.swift in Sources */,

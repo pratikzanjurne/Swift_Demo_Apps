@@ -9,7 +9,7 @@ class TakeNotePresenter{
         self.presenterService = presenterService
     }
     
-    func getPhoto(_ option: UIHelper.photoOptionSelected){
+    func getPhoto(_ option: Helper.photoOptionSelected){
         pTakeNoteView?.getPhoto(option)
     }
 
@@ -27,6 +27,11 @@ class TakeNotePresenter{
     
     func deleteNote(noteToDelete:NoteModel,completion:(Bool,String)->Void){
         presenterService?.deleteNote(noteToDelete: noteToDelete, completion: { (status, message) in
+            completion(status, message)
+        })
+    }
+    func deleteNoteT(noteToDelete:NoteModel,completion:(Bool,String)->Void){
+        presenterService?.deleteNoteT(noteToDelete: noteToDelete, completion: { (status, message) in
             completion(status, message)
         })
     }

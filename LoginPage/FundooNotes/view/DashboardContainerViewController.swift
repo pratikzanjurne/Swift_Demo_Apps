@@ -1,16 +1,15 @@
 import UIKit
 
 protocol PDashboardContainerView {
-    func showView(view:String)
+
 }
 
-class DashboardContainerViewController: BaseViewController,PDashboardContainerView {
+class DashboardContainerViewController: BaseViewController,PDashboardContainerView,PHideSideMenu {
     
     var name:String = ""
     @IBOutlet var sideMenuConstrains: NSLayoutConstraint!
 
     var isOpenedSideMenu = false
-    var data:((_ note:User)->())?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,9 +17,8 @@ class DashboardContainerViewController: BaseViewController,PDashboardContainerVi
     }
     
     override func initialseView() {
+        SideMenuTableViewController.sideMenuDelegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(toggleSideMenu), name: NSNotification.Name("ToggleSideMenu"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(showLoginViewController), name: NSNotification.Name("ShowLoginView"), object: nil)
-
     }
 
     @objc func toggleSideMenu(){
@@ -38,14 +36,36 @@ class DashboardContainerViewController: BaseViewController,PDashboardContainerVi
             self.isOpenedSideMenu = true
         }
     }
-    @objc func showLoginViewController(){
+    func showLoginViewController(){
         performSegue(withIdentifier: "logout", sender: self)
     }
-    
-    func showView(view:String){
-        let vc = storyboard?.instantiateViewController(withIdentifier: view) as! TakeNoteViewController
-        let vc1 = UINavigationController(rootViewController: vc)
-        self.navigationController?.pushViewController(vc1, animated: true)
+    func toggleMenu(){
+        if isOpenedSideMenu{
+            self.sideMenuConstrains.constant = -240
+            UIView.animate(withDuration: 0.8){
+                self.view.layoutIfNeeded()
+            }
+            self.isOpenedSideMenu = false
+        }else{
+            self.sideMenuConstrains.constant = 0
+            UIView.animate(withDuration:0.8){
+                self.view.layoutIfNeeded()
+            }
+            self.isOpenedSideMenu = true
+        }
+    }
+    func showSignOutAlert() {
+        let alert = UIAlertController(title: "Do you want to sign out",
+                                      message:nil, preferredStyle: .alert)
+        let action = UIAlertAction(title: "Sign Out", style: .default) { (_) in
+            UserDefaults.standard.set(nil, forKey: "userId")
+            self.showLoginViewController()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (_) in
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
     }
 }
 

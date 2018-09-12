@@ -1,7 +1,7 @@
 import UIKit
 
 protocol PTakeNoteView{
-    func getPhoto(_ option: UIHelper.photoOptionSelected)
+    func getPhoto(_ option: Helper.photoOptionSelected)
     func updateView()
     func updateImageView()
     func showAlert(message: String)
@@ -31,6 +31,7 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     var isPinned = false
     var isArchived = false
     let optionsMenu = ["Open Gallery","Open Camera","Delete"]
+    var reminderArray = [""]
     var presenter:TakeNotePresenter?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +39,11 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        print(reminderArray)
+    }
+    
     override func initialseView() {
         btnPin.target = self
         btnPin.action = #selector(onPinPressed)
@@ -100,10 +106,11 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         let date = Date()
         print("\(date)")
         if let receivedNote = self.note{
-            presenter?.deleteNote(noteToDelete: receivedNote, completion: { (status, message) in
+            presenter?.deleteNoteT(noteToDelete: receivedNote, completion: { (status, message) in
             })
         }
-        let note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:image, is_archived: isArchived, is_remidered: false, is_deleted: false, creadted_date: "\(date)", colour: (self.view.backgroundColor?.toHexString())! , note_id: "1", is_pinned: isPinned)
+        let uuid = UUID().uuidString.lowercased()
+        let note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:image, is_archived: isArchived, is_remidered: false, is_deleted: false, creadted_date: "\(date)", colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned)
         if (note.image != nil || note.note != "" || note.title != ""){
             print(note.title)
             print(note.note)
@@ -218,9 +225,6 @@ extension TakeNoteViewController:UITableViewDelegate,UITableViewDataSource{
             break
         }
     }
-    
-    
-    
 }
 
 extension TakeNoteViewController:UIImagePickerControllerDelegate,UINavigationControllerDelegate{
@@ -251,7 +255,7 @@ extension UIImage{
 
 
 extension TakeNoteViewController:PTakeNoteView {
-    func getPhoto(_ option: UIHelper.photoOptionSelected){
+    func getPhoto(_ option: Helper.photoOptionSelected){
         switch option{
         case .camera:
             let imagePicker = UIImagePickerController()

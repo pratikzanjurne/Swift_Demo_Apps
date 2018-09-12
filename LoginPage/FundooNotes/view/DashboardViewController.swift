@@ -3,6 +3,7 @@ import  CoreData
 
 protocol PDashboardView {
     func setNotes(notes : [NoteModel])
+    func setDeletedNotes(notes:[NoteModel])
     func stopLoading()
     func startLoading()
 }
@@ -17,15 +18,20 @@ class DashboardViewController:BaseViewController{
     @IBOutlet var btnChangeView: UIBarButtonItem!
     @IBOutlet var searchBarConstraint: NSLayoutConstraint!
     @IBOutlet var searchBar: UISearchBar!
+    @IBOutlet var navigationBar: UINavigationBar!
     
     let searchController = UISearchController(searchResultsController: nil)
     var userId:String?
     var isListView:Bool = false
     var isSearchBarVisible = false
-    var searchActive = false
+    var isFilterActive = false
     var presenter:DashboardPresenter?
     var notes = [NoteModel]()
+    var pinnedNotes = [NoteModel]()
+    var unpinnedNotes = [NoteModel]()
     var filteredNotes = [NoteModel]()
+    var pinnedFilteredNotes = [NoteModel]()
+    var deletedNotes = [NoteModel]()
     override func viewDidLoad() {
         super.viewDidLoad()
         initialseView()
@@ -34,6 +40,7 @@ class DashboardViewController:BaseViewController{
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        setupData()
         if let presenter = presenter{
             presenter.getNotes()
         }
@@ -42,6 +49,8 @@ class DashboardViewController:BaseViewController{
     override func initialseView() {
         let cell = UINib(nibName: "DashboardNoteCell", bundle: nil)
         self.collectionView.register(cell, forCellWithReuseIdentifier: "DashboardNoteCell")
+        collectionView.register(UINib(nibName:"HCollectionReusableView",bundle:nil),forSupplementaryViewOfKind:UICollectionElementKindSectionHeader,withReuseIdentifier:"HeaderCell")
+
         collectionView.contentInset.bottom = 5
         collectionView.contentInset.left = 5
         collectionView.contentInset.right = 5
@@ -53,7 +62,7 @@ class DashboardViewController:BaseViewController{
         searchBar.searchBarStyle = .minimal
         searchBar.delegate = self
         searchBar.showsCancelButton = true
-        
+        SideMenuTableViewController.showNotesDelegate = self
     }
     
     func setupData(){
@@ -63,7 +72,14 @@ class DashboardViewController:BaseViewController{
         }
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.allowsMultipleSelection = true
         self.presenter?.getNotes()
+        pinnedNotes = notes.filter({ (note) -> Bool in
+            return note.is_pinned == true
+        })
+        unpinnedNotes = notes.filter({ (note) -> Bool in
+            return note.is_pinned != true
+        })
     }
     
     @IBAction func onSideMenuTapped(_ sender: Any) {
@@ -129,10 +145,25 @@ extension DashboardViewController:PinterestLayoutDelegate{
         let listWidth = ((collectionView.bounds.width-10))
         let width = self.isListView ? listWidth : gridWidth
         var cellHeight:CGFloat = 0
-        presenter?.getCellHeight(note: notes[indexPath.item], width:width, completion: { (height) in
+        if isFilterActive{
+            presenter?.getCellHeight(note: filteredNotes[indexPath.item], width:width, completion: { (height) in
+                print(height)
+                cellHeight = height
+            })
+        }else{
+            if indexPath.section == 0{
+                presenter?.getCellHeight(note: pinnedNotes[indexPath.item], width:width, completion: { (height) in
                     print(height)
                     cellHeight = height
-        })
+                })
+            }else{
+                presenter?.getCellHeight(note: unpinnedNotes[indexPath.item], width:width, completion: { (height) in
+                    print(height)
+                    cellHeight = height
+                })
+            }
+
+        }
         return cellHeight
     }
     
@@ -148,30 +179,56 @@ extension DashboardViewController:PinterestLayoutDelegate{
     }
     
     func collectionView(collectionView: UICollectionView, sizeForSectionHeaderViewForSection section: Int) -> CGSize {
-        let gridWidth = ((collectionView.bounds.width-15)/2)
-        let listWidth = ((collectionView.bounds.width-10)/2)
+        let gridWidth = ((collectionView.bounds.width-15))
+        let listWidth = ((collectionView.bounds.width-10))
         let width = self.isListView ? listWidth : gridWidth
-        return CGSize(width: width, height: 0)
+        return CGSize(width: width, height:30)
     }
     
     
 }
 extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if searchActive{
+        if isFilterActive{
             return filteredNotes.count
         }
-        return self.notes.count
+        return (section == 0) ? self.pinnedNotes.count:self.unpinnedNotes.count
+    }
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return isFilterActive ? 1:2
     }
     
-    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+            let reusableview = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderCell", for: indexPath) as! HCollectionReusableView
+            if isFilterActive{
+            reusableview.setHeader(text: "Notes")
+        }else{
+            if indexPath.section == 0{
+                reusableview.setHeader(text: "Pinned")
+            }else{
+                reusableview.setHeader(text: "Notes")
+            }
+        }
+
+        //do other header related calls or settups
+            return reusableview
+            
+            
+//        default:  fatalError("Unexpected element kind")
+//        }
+    }
+
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "DashboardNoteCell", for: indexPath) as! DashboardNoteCell
         let note:NoteModel
-        if searchActive{
+        if isFilterActive{
             note = filteredNotes[indexPath.item]
         }else{
-            note = notes[indexPath.item]
+            if indexPath.section == 0{
+                note = pinnedNotes[indexPath.item]
+            }else{
+                note = unpinnedNotes[indexPath.item]
+            }
         }
         cell.setData(note: note)
         UIHelper.shared.setCornerRadius(view: cell)
@@ -184,7 +241,7 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let stroryBoard = UIStoryboard(name: "Main", bundle: nil)
         let vc = stroryBoard.instantiateViewController(withIdentifier: "TakeNoteViewController") as! TakeNoteViewController
-        if searchActive{
+        if isFilterActive{
             vc.note = filteredNotes[indexPath.item]
         }else{
             vc.note = notes[indexPath.item]
@@ -204,14 +261,14 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
 
 extension DashboardViewController:UISearchBarDelegate{
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        searchActive = false
+        isFilterActive = false
         searchBar.resignFirstResponder()
     }
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchActive = false
+        isFilterActive = false
         isSearchBarVisible = false
         searchBarConstraint.constant = 0
         UIView.animate(withDuration: 0.5) {
@@ -221,7 +278,7 @@ extension DashboardViewController:UISearchBarDelegate{
         searchBar.resignFirstResponder()
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchActive = true
+        isFilterActive = true
     }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if (searchBar.text?.isEmpty)!{
@@ -249,6 +306,56 @@ extension DashboardViewController:PDashboardView{
         self.notes = notes
         self.collectionView.reloadData()
     }
+    
+    func setDeletedNotes(notes: [NoteModel]) {
+        self.filteredNotes = notes
+        collectionView.reloadData()
+    }
 }
 
+
+extension DashboardViewController:PShowNotes{
+    func showNotes(option: Helper.sideMenuOptionSelected, colour: String, viewTitle: String) {
+        switch option{
+        case .archived:
+            self.isFilterActive = true
+            self.notesNavigationItem.title = title
+            self.view.backgroundColor = UIColor(hexString: colour)
+            self.navigationBar.barTintColor = UIColor(hexString: colour)
+            presenter?.getNotesOfType(.archive, completion: { (notes) in
+                self.filteredNotes = notes
+            })
+            collectionView.reloadData()
+            break
+        case .deleted:
+            self.isFilterActive = true
+            self.notesNavigationItem.title = title
+            self.view.backgroundColor = UIColor(hexString: colour)
+            self.navigationBar.barTintColor = UIColor(hexString: colour)
+            presenter?.getNotesOfType(.deleted, completion: { (notes) in
+                self.deletedNotes = notes
+            })
+            collectionView.reloadData()
+            break
+        case .notes:
+            self.isFilterActive = false
+            self.notesNavigationItem.title = title
+            self.view.backgroundColor = UIColor(hexString: colour)
+            self.navigationBar.barTintColor = UIColor(hexString: colour)
+            presenter?.getNotes()
+            break
+        case .reminder:
+            self.isFilterActive = true
+            self.notesNavigationItem.title = title
+            self.view.backgroundColor = UIColor(hexString: colour)
+            self.navigationBar.barTintColor = UIColor(hexString: colour)
+            presenter?.getNotesOfType(.reminder, completion: { (notes) in
+                self.filteredNotes = notes
+            })
+            collectionView.reloadData()
+            break
+        }
+
+    }
+}
 

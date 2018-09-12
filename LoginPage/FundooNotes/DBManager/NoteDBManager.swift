@@ -59,18 +59,20 @@ class NoteDBManager{
             let fetchRequest:NSFetchRequest<Note> = Note.fetchRequest()
             let dBNotes = try self.context.fetch(fetchRequest)
             for note in dBNotes{
-                if let image = note.image{
-                    let noteImage = UIImage(data: image as Data)
-                    notes.append(NoteModel(title: note.title!, note: note.note!, image: noteImage, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned))
-
+//                if note.is_deleted != true{
+                    if let image = note.image{
+                        let noteImage = UIImage(data: image as Data)
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: noteImage, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned))
+                        
+                        
+                    }else{
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned))
+                    }
                     
-                }else{
-                    notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned))
+//                }
+                print("returned")
+                completion(notes)
                 }
-
-            }
-            print("returned")
-            completion(notes)
         }catch{
             
         }
@@ -79,10 +81,10 @@ class NoteDBManager{
    static  func deleteNote(noteToDelete:NoteModel,completion:(Bool,String)->Void){
         do{
             let fetchRequest:NSFetchRequest<Note> = Note.fetchRequest()
-            fetchRequest.predicate = NSPredicate(format: "title = %@", noteToDelete.title)
+            fetchRequest.predicate = NSPredicate(format: "note_id = %@", noteToDelete.note_id)
             let dBNotes = try self.context.fetch(fetchRequest)
             if let note = dBNotes.first{
-                self.context.delete(note)
+                note.is_deleted  = true
                 saveContext()
                 completion(true, "Deleted")
             }else{
@@ -91,6 +93,89 @@ class NoteDBManager{
             }
         }catch{
             completion(false, "Not able to delete the note. ")
+        }
+    }
+    static  func deleteNoteT(noteToDelete:NoteModel,completion:(Bool,String)->Void){
+        do{
+            let fetchRequest:NSFetchRequest<Note> = Note.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "note_id = %@", noteToDelete.note_id)
+            let dBNotes = try self.context.fetch(fetchRequest)
+            if let note = dBNotes.first{
+                context.delete(note)
+                saveContext()
+                completion(true, "Deleted")
+            }else{
+                completion(false, "Note not found")
+                return
+            }
+        }catch{
+            completion(false, "Not able to delete the note. ")
+        }
+    }
+
+    
+    static func getDeletedNotes(completion:([NoteModel])->Void){
+         var notes = [NoteModel]()
+        do{
+            let fetchRequest:NSFetchRequest<Note> = Note.fetchRequest()
+            let dBNotes = try self.context.fetch(fetchRequest)
+            for note in dBNotes{
+                if note.is_deleted{
+                    if let image = note.image{
+                        let noteImage = UIImage(data: image as Data)
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: noteImage, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned))
+                        
+                        
+                    }else{
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned))
+                    }
+                    
+                }
+                print("returned")
+                completion(notes)
+            }
+        }catch{
+            
+        }
+    }
+    
+    static func getNotesOfType(_ type:Constant.NoteOfType,completion:([NoteModel])->Void){
+        do{
+            var dBNotes = [NoteModel]()
+            getNotes(completion: { (notes) in
+                dBNotes = notes
+            })
+            switch type {
+            case .note:
+                let notes = dBNotes.filter({ (note) -> Bool in
+                    return note.is_deleted != true && note.is_archived != true
+                })
+                completion(notes)
+                break
+            case .archive:
+                let notes = dBNotes.filter({ (note) -> Bool in
+                    return note.is_deleted != true && note.is_archived == true
+                })
+                completion(notes)
+                break
+            case .reminder:
+                let notes = dBNotes.filter({ (note) -> Bool in
+                    return note.is_deleted != true && note.is_remidered == true
+                })
+                completion(notes)
+                break
+            case .deleted:
+                let notes = dBNotes.filter({ (note) -> Bool in
+                    return note.is_deleted == true
+                })
+                completion(notes)
+                break
+            default:
+                break
+            }
+
+        }catch{
+            
         }
     }
 }

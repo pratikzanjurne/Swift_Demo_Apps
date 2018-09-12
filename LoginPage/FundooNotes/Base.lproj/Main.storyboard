@@ -400,7 +400,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Cdq-HN-tGy">
                                 <rect key="frame" x="0.0" y="64" width="375" height="539"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <collectionViewLayout key="collectionViewLayout" id="MWT-GB-bfp" customClass="PinterestLayout" customModule="FundooNotes" customModuleProvider="target"/>
+                                <collectionViewLayout key="collectionViewLayout" id="Qpn-Tf-6fH" customClass="PinterestLayout" customModule="FundooNotes" customModuleProvider="target"/>
                                 <activityIndicatorView key="backgroundView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="gS6-yn-zmF">
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="539"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -521,6 +521,7 @@
                         <outlet property="bottomView" destination="ENh-ZM-1S7" id="7Mc-ud-lMS"/>
                         <outlet property="btnChangeView" destination="2eO-v8-iWe" id="NQI-En-FsF"/>
                         <outlet property="collectionView" destination="Cdq-HN-tGy" id="bOP-XF-9Pp"/>
+                        <outlet property="navigationBar" destination="JZd-zz-bNd" id="AgW-Ol-Sni"/>
                         <outlet property="notesNavigationItem" destination="Tai-1b-YrY" id="Pco-ud-skG"/>
                         <outlet property="searchBar" destination="dy5-wI-Onb" id="lTu-1P-0QR"/>
                         <outlet property="searchBarConstraint" destination="KZk-Me-UTR" id="a3Y-9Z-YQr"/>
@@ -588,7 +589,11 @@
                                                 <action selector="onCancelPressed:" destination="bjb-oP-dTo" id="vUE-nZ-6qk"/>
                                             </connections>
                                         </barButtonItem>
-                                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="l6r-dl-feC"/>
+                                        <barButtonItem key="rightBarButtonItem" systemItem="done" id="l6r-dl-feC">
+                                            <connections>
+                                                <action selector="onDonePressed:" destination="bjb-oP-dTo" id="TiT-Qe-Dzx"/>
+                                            </connections>
+                                        </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
