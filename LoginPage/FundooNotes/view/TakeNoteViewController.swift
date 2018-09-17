@@ -1,4 +1,5 @@
 import UIKit
+import UserNotifications
 
 protocol PTakeNoteView{
     func getPhoto(_ option: Helper.photoOptionSelected)
@@ -8,6 +9,8 @@ protocol PTakeNoteView{
     func presentDashboardView()
     func pinAction()
     func archiveAction()
+    func setUpData(note:NoteModel)
+    func setReminder(note:NoteModel)
 }
 
 class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelegate {
@@ -23,6 +26,7 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     @IBOutlet var navigationBar: UINavigationBar!
     @IBOutlet var btnPin: UIBarButtonItem!
     @IBOutlet var btnArchive: UIBarButtonItem!
+    @IBOutlet var editedDateBarBtnItm: UIBarButtonItem!
     
     var image:UIImage?
     var note:NoteModel?
@@ -30,8 +34,10 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     var isColourOptionEnabled = false
     var isPinned = false
     var isArchived = false
+    var isRemindered = false
     let optionsMenu = ["Open Gallery","Open Camera","Delete"]
-    var reminderArray = [""]
+    var reminderArray = ["MMM d, yyyy","HH:MM"]
+    var imageData:NSData?
     var presenter:TakeNotePresenter?
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,30 +68,16 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         UIHelper.shared.setShadow(view: colourOptionView)
         colourOptionView.delegate = self
         if let recievedNote = note{
-            noteView.titleTextView.insertText(recievedNote.title)
-            noteView.noteTextView.insertText(recievedNote.note)
-            self.view.backgroundColor = UIColor(hexString: recievedNote.colour)
-            self.navigationBar.barTintColor = UIColor(hexString: recievedNote.colour)
-            if let noteImage = recievedNote.image{
-                noteView.imageView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: (self.view.bounds.width / noteImage.getAspectRatio()))
-                noteView.imageView.image = noteImage
-                noteView.imageViewHeightC.constant = noteView.imageView.frame.height
-                presenter?.updateImageView()
-            }
-            if recievedNote.is_pinned{
-                btnPin.tintColor = UIColor.blue
-                isPinned = true
-            }
-            if recievedNote.is_archived{
-                btnArchive.image = UIImage(named: "unarchive")
-                isArchived = true
-            }
-            presenter?.updateImageView()
-            presenter?.updateView()
+            presenter?.setUpData(note: recievedNote)
         }
     }
     
     func onChangeColor(color: String) {
+        colourOptionconstraint.constant = 0
+        UIView.animate(withDuration: 0.3){
+            self.view.layoutIfNeeded()
+        }
+        isColourOptionEnabled = false
         self.view.backgroundColor = UIColor(hexString: color)
         self.navigationBar.barTintColor = UIColor(hexString: color)
     }
@@ -103,17 +95,25 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     
     
     @IBAction func backAction(_ sender: Any) {
+        let dateFormater = DateFormatter()
         let date = Date()
-        print("\(date)")
+        dateFormater.dateFormat = "MMM d, yyyy"
+        let dateInFormat = dateFormater.string(from: date)
         if let receivedNote = self.note{
             presenter?.deleteNoteT(noteToDelete: receivedNote, completion: { (status, message) in
             })
         }
         let uuid = UUID().uuidString.lowercased()
-        let note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:image, is_archived: isArchived, is_remidered: false, is_deleted: false, creadted_date: "\(date)", colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned)
+        if let image = self.image{
+            self.imageData = UIImagePNGRepresentation(image) as NSData?
+        }
+        var note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:imageData, is_archived: isArchived, is_remidered: isRemindered , is_deleted: false, creadted_date: dateInFormat , colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned, reminder_date: reminderArray[0], reminder_time: reminderArray[1])
+        if reminderArray[0] != "MMM d, yyyy" && reminderArray[1] != "HH:MM"{
+            presenter?.setReminder(note:note)
+        }else{
+            note.is_remidered = false
+        }
         if (note.image != nil || note.note != "" || note.title != ""){
-            print(note.title)
-            print(note.note)
             presenter?.saveNote(note: note)
              print("Saved")
         }
@@ -172,15 +172,11 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     @IBAction func setReminder(_ sender: Any) {
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "SetReminderView")
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "SetReminderView") as? SetReminderViewController else{
+            return;
+        }
+        vc.reminderDelegate = self
         present(vc, animated: true, completion: nil)
-//        let popOverVC = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "sbPopUpID") as! PopUpViewController
-//        popOverVC.modalPresentationStyle = .overCurrentContext
-//        present(popOverVC, animated: true, completion: nil)
-        //self.addChildViewController(popOverVC)
-        //popOverVC.view.frame = self.view.frame
-        //self.view.addSubview(popOverVC.view)
-        //popOverVC.didMove(toParentViewController: self)
     }
    @objc func onPinPressed() {
         presenter?.performPinAction()
@@ -209,6 +205,11 @@ extension TakeNoteViewController:UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        showOptionConstrains.constant = -(optionMenuTableView.contentSize.height-44)
+        UIView.animate(withDuration: 0.3){
+            self.view.layoutIfNeeded()
+        }
+        isOptionsEnabled = false
         switch indexPath.row {
         case 0:
             presenter?.getPhoto(.gallary)
@@ -255,6 +256,35 @@ extension UIImage{
 
 
 extension TakeNoteViewController:PTakeNoteView {
+    func setReminder(note:NoteModel) {
+        let center = UNUserNotificationCenter.current()
+        let options: UNAuthorizationOptions = [.alert,.sound]
+        center.requestAuthorization(options: options) { (granted, error) in
+            if !granted{
+            }
+        }
+        center.getNotificationSettings { (setting) in
+            if setting.authorizationStatus != .authorized{
+                
+            }
+        }
+        let content = UNMutableNotificationContent()
+        content.body = note.note
+        content.title = note.title
+        content.sound = UNNotificationSound.default()
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "MM-dd-yyyy HH:mm"
+        let convertedDate = dateFormater.date(from: "\(reminderArray[0]) \(reminderArray[1])")
+        let triggerDate = Calendar.current.dateComponents([.year,.month,.day,.hour,.minute], from: convertedDate!)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
+        let request = UNNotificationRequest(identifier: "UYLLocalNotification", content: content, trigger: trigger)
+        center.add(request) { (error) in
+            if let error = error{
+                
+            }
+        }
+    }
+    
     func getPhoto(_ option: Helper.photoOptionSelected){
         switch option{
         case .camera:
@@ -274,7 +304,7 @@ extension TakeNoteViewController:PTakeNoteView {
     
     
     func updateView(){
-        var height:CGFloat = 24
+        var height:CGFloat = 50
         let titleHeight = noteView.titleTextView.frame.size.height
         let noteHeight = noteView.noteTextView.frame.size.height
         let imageViewHeight = noteView.imageView.frame.height
@@ -302,7 +332,7 @@ extension TakeNoteViewController:PTakeNoteView {
     }
     
     func updateImageView(){
-        let imageViewHeight = noteView.imageView.frame.height
+        let imageViewHeight = noteView.imageViewHeightC.constant
         var height = noteViewHeightC.constant
         if image != nil{
             height = height + imageViewHeight
@@ -333,6 +363,7 @@ extension TakeNoteViewController:PTakeNoteView {
         else{
             btnPin.tintColor = UIColor.blue
             isPinned = true
+            isArchived = false
         }
     }
     func archiveAction(){
@@ -342,9 +373,50 @@ extension TakeNoteViewController:PTakeNoteView {
         }else{
             btnArchive.image = UIImage(named: "unarchive")
             isArchived = true
+            isPinned = false
         }
+    }
+    
+    func setUpData(note:NoteModel){
+        noteView.titleTextView.insertText(note.title)
+        noteView.noteTextView.insertText(note.note)
+        self.editedDateBarBtnItm.title = "Edited \(note.creadted_date)"
+        if note.is_remidered{
+            self.isRemindered = true
+            noteView.reminderTextViewHC.constant = 18
+            self.reminderArray[0] = note.reminder_date!
+            self.reminderArray[1] = note.reminder_time!
+            noteView.reminderLabel.text = "\(note.reminder_date!) \(note.reminder_time!)"
+        }else{
+            noteView.reminderTextViewHC.constant = 0
+        }
+        self.view.backgroundColor = UIColor(hexString: note.colour)
+        self.navigationBar.barTintColor = UIColor(hexString: note.colour)
+        if let imageData = note.image{
+            if let noteImage = UIImage(data:imageData as Data){
+                let newHeight = Helper.shared.getScaledHeight(imageWidth: noteImage.size.width, imageHeight: noteImage.size.height, scaleWidth: self.view.bounds.width)
+                noteView.imageViewHeightC.constant = newHeight
+                noteView.imageView.image = noteImage
+                presenter?.updateImageView()
+            }
+        }
+        if note.is_pinned{
+            btnPin.tintColor = UIColor.blue
+            isPinned = true
+        }
+        if note.is_archived{
+            btnArchive.image = UIImage(named: "unarchive")
+            isArchived = true
+        }
+        presenter?.updateImageView()
+        presenter?.updateView()
     }
 }
 
-
-
+extension TakeNoteViewController:PReminderDelegate{
+    func setReminderData(date: String, time: String) {
+        self.isRemindered = true
+        self.reminderArray[0] = date
+        self.reminderArray[1] = time
+    }
+}

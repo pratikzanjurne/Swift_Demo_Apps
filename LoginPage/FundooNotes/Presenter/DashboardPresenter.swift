@@ -29,16 +29,18 @@ class DashboardPresenter{
     }
     
     func getCellHeight(note:NoteModel,width:CGFloat,completion:(_ Height:CGFloat)->Void){
-        var height:CGFloat = 40
+        var height:CGFloat = 20
         self.computeTextLabelHeight(text: note.note, width: width) { (noteHeight) in
             height = height + noteHeight
         }
         self.computeTextLabelHeight(text: note.creadted_date,  width: width) { (dateHeight) in
             height = height + 30
         }
-        if let noteImage = note.image{
-            self.computeImageHeight(image: noteImage, width: width) { (imageHeight) in
-                height = height + imageHeight
+        if let imageData = note.image{
+            if let noteImage = UIImage(data:imageData as Data){
+                self.computeImageHeight(image: noteImage, width: width) { (imageHeight) in
+                    height = height + imageHeight
+                }
             }
         }
         completion(height)

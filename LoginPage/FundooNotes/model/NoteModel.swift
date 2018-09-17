@@ -1,10 +1,9 @@
 import Foundation
-import UIKit
 
 struct NoteModel{
     var title: String
     var note: String
-    var image: UIImage?
+    var image: NSData?
     var is_archived: Bool
     var is_remidered: Bool
     var is_deleted: Bool
@@ -12,4 +11,6 @@ struct NoteModel{
     var colour: String
     var note_id: String
     var is_pinned:Bool
+    var reminder_date:String?
+    var reminder_time:String?
 }

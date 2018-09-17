@@ -3,7 +3,7 @@ import UIKit
 protocol PSideMenuView{
 }
 protocol PShowNotes{
-    func showNotes(option: Helper.sideMenuOptionSelected,colour:String,viewTitle:String)
+    func showNotes(_ option: Constant.NoteOfType ,colour:String,viewTitle:String)
 }
 protocol PHideSideMenu{
     func toggleMenu()
@@ -40,19 +40,19 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
         switch indexPath.section{
             case 0:
                 SideMenuTableViewController.sideMenuDelegate?.toggleMenu()
-                SideMenuTableViewController.showNotesDelegate?.showNotes(option: .notes, colour: Constant.Color.colorWhite, viewTitle: Constant.DashboardViewTitle.noteView)
+                SideMenuTableViewController.showNotesDelegate?.showNotes(.note, colour: Constant.Color.colourOrange, viewTitle: Constant.DashboardViewTitle.noteView)
                 break;
             case 1:
                SideMenuTableViewController.sideMenuDelegate?.toggleMenu()
-               SideMenuTableViewController.showNotesDelegate?.showNotes(option: .archived, colour: Constant.Color.colourForFilterOn, viewTitle: Constant.DashboardViewTitle.archivedView)
+               SideMenuTableViewController.showNotesDelegate?.showNotes(.archive, colour: Constant.Color.colourForFilterOn, viewTitle: Constant.DashboardViewTitle.archivedView)
                 break;
             case 2:
                 SideMenuTableViewController.sideMenuDelegate?.toggleMenu()
-                SideMenuTableViewController.showNotesDelegate?.showNotes(option: .deleted, colour: Constant.Color.colourForFilterOn, viewTitle: Constant.DashboardViewTitle.deletedView)
+                SideMenuTableViewController.showNotesDelegate?.showNotes(.deleted, colour: Constant.Color.colourForFilterOn, viewTitle: Constant.DashboardViewTitle.deletedView)
                 break;
             case 3:
                SideMenuTableViewController.sideMenuDelegate?.toggleMenu()
-               SideMenuTableViewController.showNotesDelegate?.showNotes(option: .reminder, colour: Constant.Color.colourForFilterOn, viewTitle: Constant.DashboardViewTitle.reminderView)
+               SideMenuTableViewController.showNotesDelegate?.showNotes(.reminder, colour: Constant.Color.colourForFilterOn, viewTitle: Constant.DashboardViewTitle.reminderView)
                 break;
             case 4:
                 SideMenuTableViewController.sideMenuDelegate?.toggleMenu()

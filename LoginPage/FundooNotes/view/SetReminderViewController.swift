@@ -5,11 +5,16 @@ protocol PSetReminderView{
     func openPopUpView(_ option : Helper.reminderOptionSelected)
 }
 
+protocol PReminderDelegate{
+    func setReminderData(date:String,time:String)
+}
+
 class SetReminderViewController: UIViewController,UITableViewDelegate,UITableViewDataSource,PSetReminderView {
     
     
     @IBOutlet var tableViewOptions: UITableView!
     var presenter:SetReminderPresenter?
+    var reminderDelegate:PReminderDelegate?
     var array = ["Date","Time","Repeat"]
     var subTitleArray = ["MMM d, yyyy","HH:MM","Repeat"]
     var selectedSection:Int = 0;
@@ -18,39 +23,40 @@ class SetReminderViewController: UIViewController,UITableViewDelegate,UITableVie
         presenter = SetReminderPresenter(pSetReminderView: self)
         tableViewOptions.dataSource = self
         tableViewOptions.delegate = self
+        UIApplication.shared.statusBarStyle = .lightContent
     }
-
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        UIApplication.shared.statusBarStyle = .default
+    }
 
     @IBAction func onCancelPressed(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func onDonePressed(_ sender: Any) {
-        let storyBoard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyBoard.instantiateViewController(withIdentifier: "TakeNoteViewController") as! TakeNoteViewController
-        self.dismiss(animated: true) {
-            vc.reminderArray.append("efresfe")
-        }
+        self.reminderDelegate?.setReminderData(date: subTitleArray[0],time: subTitleArray[1])
+        self.dismiss(animated: true, completion: nil)
     }
     func numberOfSections(in tableView: UITableView) -> Int {
-        return array.count
+        return 1
     }
 
      func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return array.count
     }
 
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "SetReminderCell", for: indexPath) as! SetReminderTableViewCell
-        cell.titleLabel.text = array[indexPath.section]
-        cell.subTitleLbl.text = subTitleArray[indexPath.section]
+        cell.titleLabel.text = array[indexPath.row]
+        cell.subTitleLbl.text = subTitleArray[indexPath.row]
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        selectedSection = indexPath.section
-        switch indexPath.section {
+        selectedSection = indexPath.row
+        switch indexPath.row {
         case 0:
             presenter?.openPopUpView(.date)
             break
@@ -90,6 +96,7 @@ class SetReminderViewController: UIViewController,UITableViewDelegate,UITableVie
 extension SetReminderViewController:MDDatePickerDialogDelegate,MDTimePickerDialogDelegate{
     func timePickerDialog(_ timePickerDialog: MDTimePickerDialog, didSelectHour hour: Int, andMinute minute: Int) {
         self.subTitleArray[selectedSection] = "\(hour):\(minute)"
+        print(subTitleArray[selectedSection])
         self.tableViewOptions.reloadData()
     }
     
@@ -98,9 +105,8 @@ extension SetReminderViewController:MDDatePickerDialogDelegate,MDTimePickerDialo
         dateFormater.dateFormat = "MMM d, yyyy"
         let dateInFormat = dateFormater.string(from: date)
         self.subTitleArray[selectedSection] = "\(dateInFormat)"
+        print(subTitleArray[0])
         self.tableViewOptions.reloadData()
     }
-    
-
 }
 

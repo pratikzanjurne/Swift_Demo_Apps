@@ -44,7 +44,6 @@ class DashboardViewController:BaseViewController{
         if let presenter = presenter{
             presenter.getNotes()
         }
-        
     }
     override func initialseView() {
         let cell = UINib(nibName: "DashboardNoteCell", bundle: nil)
@@ -78,7 +77,7 @@ class DashboardViewController:BaseViewController{
             return note.is_pinned == true
         })
         unpinnedNotes = notes.filter({ (note) -> Bool in
-            return note.is_pinned != true
+            return note.is_pinned != true && note.is_archived != true
         })
     }
     
@@ -105,6 +104,7 @@ class DashboardViewController:BaseViewController{
 
     @IBAction func onSearchBtnPressed(_ sender: Any) {
         if isSearchBarVisible{
+            searchBar.resignFirstResponder()
             self.searchBarConstraint.constant = 0
             UIView.animate(withDuration:0.5){
                 self.view.layoutIfNeeded()
@@ -199,19 +199,19 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-            let reusableview = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderCell", for: indexPath) as! HCollectionReusableView
+            let reusableView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionElementKindSectionHeader, withReuseIdentifier: "HeaderCell", for: indexPath) as! HCollectionReusableView
             if isFilterActive{
-            reusableview.setHeader(text: "Notes")
+            reusableView.setHeader(text: "Notes")
         }else{
             if indexPath.section == 0{
-                reusableview.setHeader(text: "Pinned")
+                reusableView.setHeader(text: "Pinned")
             }else{
-                reusableview.setHeader(text: "Notes")
+                reusableView.setHeader(text: "Notes")
             }
         }
 
         //do other header related calls or settups
-            return reusableview
+            return reusableView
             
             
 //        default:  fatalError("Unexpected element kind")
@@ -244,7 +244,11 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
         if isFilterActive{
             vc.note = filteredNotes[indexPath.item]
         }else{
-            vc.note = notes[indexPath.item]
+            if indexPath.section == 0{
+                vc.note = pinnedNotes[indexPath.item]
+            }else{
+                vc.note = unpinnedNotes[indexPath.item]
+            }
         }
         present(vc, animated: true, completion: nil)
     }
@@ -315,47 +319,31 @@ extension DashboardViewController:PDashboardView{
 
 
 extension DashboardViewController:PShowNotes{
-    func showNotes(option: Helper.sideMenuOptionSelected, colour: String, viewTitle: String) {
+    func showNotes(_ option: Constant.NoteOfType, colour: String, viewTitle: String) {
         switch option{
-        case .archived:
-            self.isFilterActive = true
-            self.notesNavigationItem.title = title
-            self.view.backgroundColor = UIColor(hexString: colour)
-            self.navigationBar.barTintColor = UIColor(hexString: colour)
-            presenter?.getNotesOfType(.archive, completion: { (notes) in
-                self.filteredNotes = notes
-            })
-            collectionView.reloadData()
-            break
-        case .deleted:
-            self.isFilterActive = true
-            self.notesNavigationItem.title = title
-            self.view.backgroundColor = UIColor(hexString: colour)
-            self.navigationBar.barTintColor = UIColor(hexString: colour)
-            presenter?.getNotesOfType(.deleted, completion: { (notes) in
-                self.deletedNotes = notes
-            })
-            collectionView.reloadData()
-            break
-        case .notes:
-            self.isFilterActive = false
-            self.notesNavigationItem.title = title
-            self.view.backgroundColor = UIColor(hexString: colour)
-            self.navigationBar.barTintColor = UIColor(hexString: colour)
-            presenter?.getNotes()
-            break
-        case .reminder:
-            self.isFilterActive = true
-            self.notesNavigationItem.title = title
-            self.view.backgroundColor = UIColor(hexString: colour)
-            self.navigationBar.barTintColor = UIColor(hexString: colour)
-            presenter?.getNotesOfType(.reminder, completion: { (notes) in
-                self.filteredNotes = notes
-            })
-            collectionView.reloadData()
-            break
+            case .deleted:
+                self.isFilterActive = true
+                self.notesNavigationItem.title = viewTitle
+                self.view.backgroundColor = UIColor(hexString: colour)
+                self.navigationBar.barTintColor = UIColor(hexString: colour)
+                presenter?.getNotesOfType(.deleted, completion: { (notes) in
+                    self.filteredNotes = notes
+                })
+                collectionView.reloadData()
+                break
+            default:
+                if option == .note{
+                    self.isFilterActive = false
+                }else{
+                    self.isFilterActive = true
+                }
+                self.notesNavigationItem.title = viewTitle
+                self.view.backgroundColor = UIColor(hexString: colour)
+                self.navigationBar.barTintColor = UIColor(hexString: colour)
+                presenter?.getNotesOfType(option, completion: { (notes) in
+                    self.filteredNotes = notes
+                })
+                collectionView.reloadData()
         }
-
     }
 }
-

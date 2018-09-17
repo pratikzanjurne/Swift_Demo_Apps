@@ -49,4 +49,10 @@ class TakeNotePresenter{
     func performArchiveAction(){
         pTakeNoteView?.archiveAction()
     }
+    func setUpData(note:NoteModel){
+        pTakeNoteView?.setUpData(note: note)
+    }
+    func setReminder(note:NoteModel){
+        pTakeNoteView?.setReminder(note:note)
+    }
 }

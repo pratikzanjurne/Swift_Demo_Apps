@@ -36,20 +36,22 @@ class NoteDBManager{
     static func saveNote(note:NoteModel){
         let DBNote = Note(context:NoteDBManager.context)
         if let noteImage = note.image{
-            if let image = UIImagePNGRepresentation(noteImage) as NSData?
-            {
-                DBNote.image = image
-            }
+//            if let image = UIImagePNGRepresentation(noteImage) as NSData?
+//            {
+                DBNote.image = noteImage
+//            }
         }
         DBNote.colour = note.colour
         DBNote.creadted_date = note.creadted_date
         DBNote.is_archived = note.is_archived
-        DBNote.is_deleted = note.is_remidered
         DBNote.is_deleted = note.is_deleted
         DBNote.note = note.note
         DBNote.note_id = note.note_id
         DBNote.title = note.title
         DBNote.is_pinned = note.is_pinned
+        DBNote.is_remidered = note.is_remidered
+        DBNote.reminder_date = note.reminder_date
+        DBNote.reminder_time = note.reminder_time
         saveContext()
         print("Saved1")
     }
@@ -59,17 +61,17 @@ class NoteDBManager{
             let fetchRequest:NSFetchRequest<Note> = Note.fetchRequest()
             let dBNotes = try self.context.fetch(fetchRequest)
             for note in dBNotes{
-//                if note.is_deleted != true{
+                if note.is_deleted != true{
                     if let image = note.image{
-                        let noteImage = UIImage(data: image as Data)
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: noteImage, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned))
+//                        let noteImage = UIImage(data: image as Data)
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: image, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time))
                         
                         
                     }else{
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned))
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time))
                     }
                     
-//                }
+                }
                 print("returned")
                 completion(notes)
                 }
@@ -122,12 +124,12 @@ class NoteDBManager{
             for note in dBNotes{
                 if note.is_deleted{
                     if let image = note.image{
-                        let noteImage = UIImage(data: image as Data)
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: noteImage, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned))
+//                        let noteImage = UIImage(data: image as Data)
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: image, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time))
                         
                         
                     }else{
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned))
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time))
                     }
                     
                 }
@@ -165,10 +167,12 @@ class NoteDBManager{
                 completion(notes)
                 break
             case .deleted:
-                let notes = dBNotes.filter({ (note) -> Bool in
-                    return note.is_deleted == true
+                getDeletedNotes(completion: { (notes) in
+                    completion(notes)
                 })
-                completion(notes)
+//                let notes = dBNotes.filter({ (note) -> Bool in
+//                    return note.is_deleted == true
+//                })
                 break
             default:
                 break
@@ -177,5 +181,9 @@ class NoteDBManager{
         }catch{
             
         }
+    }
+    
+    func setReminder(){
+        
     }
 }

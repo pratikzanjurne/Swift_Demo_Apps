@@ -41,3 +41,15 @@ class UIHelper {
 
     }
 }
+//extension UIView {
+//    
+//    func withPadding(padding: UIEdgeInsets) -&gt; UIView {
+//    let container = UIView()
+//    container.addSubview(self)
+//    snp_makeConstraints { make in
+//    make.edges.equalTo(container).inset(padding)
+//    }
+//    return container
+//    }
+//}
+

@@ -10,6 +10,8 @@ struct Constant {
         static let colorWhite = "#ffffff"
         static let colorBlack = "#000000"
         static let colourForFilterOn = "#8187C1"
+        static let colourOrange = "#FF9300"
+        static let colourReminderText = "#898989"
     }
     
     struct DashboardViewTitle{
