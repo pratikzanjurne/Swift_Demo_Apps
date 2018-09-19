@@ -14,6 +14,9 @@ class LoginViewPresenter{
             presenterService.loginUser(email: email, password: password) { (response, message, user) in
                 if response{
                     UserDefaults.standard.set(user?.email, forKey: "userId")
+                    let firstName = user?.username
+                    let lastName = user?.lastname
+                    UserDefaults.standard.set("\(firstName!) \(lastName!)", forKey: "username")
                     pLoginView?.showDashboardViewController()
                 }else{
                     pLoginView?.showAlert(message: message)

@@ -33,8 +33,8 @@ class UIHelper {
         view.layer.masksToBounds = false;
     }
     
-    func setCornerRadius(view:UIView){
-        view.layer.cornerRadius = 3.0
+    func setCornerRadius(view:UIView ,radius:CGFloat){
+        view.layer.cornerRadius = radius
         view.layer.borderWidth = 1.0
         view.layer.borderColor = UIColor.clear.cgColor
         view.layer.masksToBounds = true;

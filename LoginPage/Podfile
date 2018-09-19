@@ -7,6 +7,7 @@ target 'FundooNotes' do
 	pod 'UITextView+Placeholder'
     #pod 'Alamofire', '~> 4.7'
     pod 'MaterialControls', '~> 1.2.2'
+    pod 'FBSDKLoginKit'
     
 
     

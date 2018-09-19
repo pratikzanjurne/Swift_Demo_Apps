@@ -11,6 +11,7 @@ protocol PTakeNoteView{
     func archiveAction()
     func setUpData(note:NoteModel)
     func setReminder(note:NoteModel)
+    func toggleColorOptionTblView(constant:CGFloat)
 }
 
 class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelegate {
@@ -21,12 +22,14 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     @IBOutlet var optionMenuHeight: NSLayoutConstraint!
     @IBOutlet var optionMenuTableView: UITableView!
     @IBOutlet var optionView: UIView!
-    @IBOutlet var colourOptionconstraint: NSLayoutConstraint!
     @IBOutlet var colourOptionView: ColourOptions!
     @IBOutlet var navigationBar: UINavigationBar!
     @IBOutlet var btnPin: UIBarButtonItem!
     @IBOutlet var btnArchive: UIBarButtonItem!
     @IBOutlet var editedDateBarBtnItm: UIBarButtonItem!
+    @IBOutlet var colorOptionTblViewHeight: NSLayoutConstraint!
+    @IBOutlet var colorOptionTblView: ColourOptionTblView!
+    @IBOutlet var colorOptionTblConstraint: NSLayoutConstraint!
     
     var image:UIImage?
     var note:NoteModel?
@@ -35,10 +38,11 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     var isPinned = false
     var isArchived = false
     var isRemindered = false
-    let optionsMenu = ["Open Gallery","Open Camera","Delete"]
+    let optionsMenu = ["Open Gallery","Open Camera"]
     var reminderArray = ["MMM d, yyyy","HH:MM"]
     var imageData:NSData?
     var presenter:TakeNotePresenter?
+    var colorOptionTblContentHeight:CGFloat?
     override func viewDidLoad() {
         super.viewDidLoad()
         initialseView()
@@ -64,16 +68,20 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         optionMenuTableView.layoutIfNeeded()
         optionMenuHeight.constant = optionMenuTableView.contentSize.height
         showOptionConstrains.constant = -(optionMenuTableView.contentSize.height - 40)
+//        colorOptionTblViewHeight.constant = colorOptionTblView.colourOptionTblView.contentSize.height
         UIHelper.shared.setShadow(view: optionView)
-        UIHelper.shared.setShadow(view: colourOptionView)
+        UIHelper.shared.setShadow(view: colorOptionTblView)
         colourOptionView.delegate = self
+        colorOptionTblView.delegate = self
+        
         if let recievedNote = note{
             presenter?.setUpData(note: recievedNote)
         }
+        self.noteView.reminderTextViewHC.constant = 0
     }
     
     func onChangeColor(color: String) {
-        colourOptionconstraint.constant = 0
+        colorOptionTblConstraint.constant = 0
         UIView.animate(withDuration: 0.3){
             self.view.layoutIfNeeded()
         }
@@ -107,7 +115,9 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         if let image = self.image{
             self.imageData = UIImagePNGRepresentation(image) as NSData?
         }
-        var note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:imageData, is_archived: isArchived, is_remidered: isRemindered , is_deleted: false, creadted_date: dateInFormat , colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned, reminder_date: reminderArray[0], reminder_time: reminderArray[1])
+        let userId = UserDefaults.standard.object(forKey: "userId") as! String
+        print(userId)
+        var note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:imageData, is_archived: isArchived, is_remidered: isRemindered , is_deleted: false, creadted_date: dateInFormat , colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned, reminder_date: reminderArray[0], reminder_time: reminderArray[1], userId: userId)
         if reminderArray[0] != "MMM d, yyyy" && reminderArray[1] != "HH:MM"{
             presenter?.setReminder(note:note)
         }else{
@@ -121,32 +131,19 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     }
     
     @IBAction func showColourOption(_ sender: Any) {
-        if isOptionsEnabled{
-            showOptionConstrains.constant = -(optionMenuTableView.contentSize.height-44)
-            UIView.animate(withDuration: 0.3){
-                self.view.layoutIfNeeded()
+        if let note = self.note{
+            if note.is_deleted{
+                presenter?.toggleColorOptionTblView(constant: -88)
+            }else{
+                presenter?.toggleColorOptionTblView(constant: -270)
             }
-            isOptionsEnabled = false
-        }
-        if isColourOptionEnabled == false{
-            colourOptionView.isHidden = false
-            colourOptionconstraint.constant = -50
-            UIView.animate(withDuration: 0.3){
-                self.view.layoutIfNeeded()
-            }
-            isColourOptionEnabled = true
         }else{
-            colourOptionconstraint.constant = 0
-            UIView.animate(withDuration: 0.3){
-                self.view.layoutIfNeeded()
-            }
-            isColourOptionEnabled = false
+            presenter?.toggleColorOptionTblView(constant: -270)
         }
-        
     }
     @IBAction func showOptions(_ sender: Any) {
         if isColourOptionEnabled{
-            colourOptionconstraint.constant = 0
+            colorOptionTblConstraint.constant = 0
             UIView.animate(withDuration: 0.3){
                 self.view.layoutIfNeeded()
             }
@@ -154,6 +151,7 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         }
         if isOptionsEnabled == false{
             colourOptionView.isHidden = true
+            colorOptionTblView.isHidden = true
             showOptionConstrains.constant = 44
             UIView.animate(withDuration: 0.3){
                 self.view.layoutIfNeeded()
@@ -217,11 +215,6 @@ extension TakeNoteViewController:UITableViewDelegate,UITableViewDataSource{
         case 1:
             presenter?.getPhoto(.camera)
             break
-        case 2:
-            presenter?.deleteNote(noteToDelete: self.note!, completion: { (status, message) in
-                showAlert(message: message)
-            })
-            break
         default:
             break
         }
@@ -256,6 +249,32 @@ extension UIImage{
 
 
 extension TakeNoteViewController:PTakeNoteView {
+    func toggleColorOptionTblView(constant: CGFloat) {
+        if isOptionsEnabled{
+            showOptionConstrains.constant = -(optionMenuTableView.contentSize.height-44)
+            UIView.animate(withDuration: 0.3){
+                self.view.layoutIfNeeded()
+            }
+            isOptionsEnabled = false
+        }
+        if isColourOptionEnabled == false{
+            colourOptionView.isHidden = false
+            colorOptionTblView.isHidden = false
+            colorOptionTblConstraint.constant = constant
+            //                (colorOptionTblView.colourOptionTblView.contentSize.height + 40)
+            print(colorOptionTblConstraint.constant)
+            UIView.animate(withDuration: 0.3){
+                self.view.layoutIfNeeded()
+            }
+            isColourOptionEnabled = true
+        }else{
+            colorOptionTblConstraint.constant = 0
+            UIView.animate(withDuration: 0.3){
+                self.view.layoutIfNeeded()
+            }
+            isColourOptionEnabled = false
+        }
+    }
     func setReminder(note:NoteModel) {
         let center = UNUserNotificationCenter.current()
         let options: UNAuthorizationOptions = [.alert,.sound]
@@ -408,6 +427,17 @@ extension TakeNoteViewController:PTakeNoteView {
             btnArchive.image = UIImage(named: "unarchive")
             isArchived = true
         }
+        if note.is_deleted{
+            noteView.noteTextView.isEditable = false
+            noteView.titleTextView.isEditable = false
+            self.colorOptionTblView.array = ["Delete permanantly","Restore"]
+            self.colorOptionTblView.imageArray = [#imageLiteral(resourceName: "delete"),#imageLiteral(resourceName: "send")]
+            self.colorOptionTblView.colourOptionTblView.reloadData()
+        }else{
+            noteView.noteTextView.isEditable = true
+            noteView.titleTextView.isEditable = true
+        }
+
         presenter?.updateImageView()
         presenter?.updateView()
     }
@@ -418,5 +448,37 @@ extension TakeNoteViewController:PReminderDelegate{
         self.isRemindered = true
         self.reminderArray[0] = date
         self.reminderArray[1] = time
+    }
+}
+extension TakeNoteViewController:PColorOptionTblView{
+    func onOptionSelected(_ option: Constant.TableViewOptions) {
+        switch  option {
+        case .delete:
+            colorOptionTblConstraint.constant = 0
+            UIView.animate(withDuration: 0.3){
+                self.view.layoutIfNeeded()
+            }
+            isColourOptionEnabled = false
+            if let note = self.note{
+                if note.is_deleted{
+                    presenter?.deleteNoteT(noteToDelete: note, completion: { (status, message) in
+                        showAlert(message: message)
+                    })
+                }
+                presenter?.deleteNote(noteToDelete: note, completion: { (status, message) in
+                    showAlert(message: message)
+                })
+            }else{
+                showAlert(message: "Note not Found.")
+            }
+            break
+        default:
+            colorOptionTblConstraint.constant = 0
+            UIView.animate(withDuration: 0.3){
+                self.view.layoutIfNeeded()
+            }
+            isColourOptionEnabled = false
+            break
+        }
     }
 }

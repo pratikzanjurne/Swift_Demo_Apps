@@ -31,6 +31,7 @@ class SetReminderViewController: UIViewController,UITableViewDelegate,UITableVie
     }
 
     @IBAction func onCancelPressed(_ sender: Any) {
+        self.reminderDelegate?.setReminderData(date: "MMM d, yyyy",time: "HH:MM")
         self.dismiss(animated: true, completion: nil)
     }
     

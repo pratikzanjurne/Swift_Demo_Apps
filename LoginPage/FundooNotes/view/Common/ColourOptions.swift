@@ -41,10 +41,11 @@ extension ColourOptions:UICollectionViewDelegate,UICollectionViewDataSource{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colourCell", for: indexPath) as! ColourCell
         cell.backgroundColor = UIColor(hexString: colourArray[indexPath.item])
         UIHelper.shared.setShadow(view: cell)
-        UIHelper.shared.setCornerRadius(view: cell)
-        UIHelper.shared.setCornerRadius(view: cell.contentView)
-        cell.layer.shadowRadius = 2.0
-        cell.layer.shadowPath = UIBezierPath(roundedRect:cell.bounds, cornerRadius:cell.contentView.layer.cornerRadius).cgPath
+        UIHelper.shared.setCornerRadius(view: cell,radius:22)
+        UIHelper.shared.setCornerRadius(view: cell.contentView,radius:22)
+        cell.sizeThatFits(CGSize(width: 36, height: 36))
+//        cell.layer.shadowRadius = 2.0
+//        cell.layer.shadowPath = UIBezierPath(roundedRect:cell.bounds, cornerRadius:cell.contentView.layer.cornerRadius).cgPath
         return cell
     }
     

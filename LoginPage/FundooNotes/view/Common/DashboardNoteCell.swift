@@ -20,7 +20,7 @@ class DashboardNoteCell:UICollectionViewCell{
         self.dateTextLabel.sizeToFit()
         self.scheduleImageView.tintColor = UIColor(hexString: Constant.Color.colourReminderText)
         self.reminderTextView.layer.cornerRadius = 2
-        UIHelper.shared.setCornerRadius(view: reminderTextView)
+        UIHelper.shared.setCornerRadius(view: reminderTextView, radius: 3.0)
         noteTextLabel.lineBreakMode = .byWordWrapping
         noteTextLabel.numberOfLines = 0
         

@@ -2,7 +2,7 @@
 //  Note+CoreDataProperties.swift
 //  
 //
-//  Created by BridgeLabz Solutions LLP  on 9/12/18.
+//  Created by BridgeLabz Solutions LLP  on 9/18/18.
 //
 //
 
@@ -25,8 +25,9 @@ extension Note {
     @NSManaged public var is_remidered: Bool
     @NSManaged public var note: String?
     @NSManaged public var note_id: String?
-    @NSManaged public var title: String?
     @NSManaged public var reminder_date: String?
     @NSManaged public var reminder_time: String?
+    @NSManaged public var title: String?
+    @NSManaged public var userid: String?
 
 }

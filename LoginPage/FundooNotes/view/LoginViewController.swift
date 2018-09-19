@@ -1,5 +1,6 @@
 import UIKit
 import CoreData
+import FBSDKLoginKit
 
 protocol PLoginView{
     func showAlert(message:String)
@@ -22,6 +23,7 @@ class LoginViewController:BaseViewController,PLoginView {
         super.viewDidLoad()
         initialseView()
         
+        facebookBtn.addTarget(self, action: #selector(self.loginButtonClicked), for: .touchUpInside)
     }
     
     override func initialseView() {
@@ -62,6 +64,44 @@ class LoginViewController:BaseViewController,PLoginView {
     }
     
     func showDashboardViewController() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "DashboardContainerViewController") as! DashboardContainerViewController
+        present(vc, animated: true) {
+            
+        }
+    }
+    
+    @objc func loginButtonClicked() {
+        let loginManager = FBSDKLoginManager()
+        loginManager.logIn(withReadPermissions: ["email"], from: self) { (loginresult, error) in
+            if error == nil{
+                let result:FBSDKLoginManagerLoginResult = loginresult!
+                if result.isCancelled{
+                    print("Cancled")
+                    loginManager.logOut()
+                }else if result.grantedPermissions.contains("email"){
+                    self.returnUserData()
+                    loginManager.logOut()
+                    print("LoggedIn")
+                }
+            }
+        }
+    }
+    func returnUserData(){
+        if((FBSDKAccessToken.current()) != nil){
+            FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email"]).start(completionHandler: { (connection, result, error) -> Void in
+                if (error == nil){
+                    print(result)
+//                    if let result = result as? [String:Any]{
+//                        result.valueForKey("email") as! String
+//                        result.valueForKey("id") as! String
+//                        result.valueForKey("name") as! String
+//                        result.valueForKey("first_name") as! String
+//                        result.valueForKey("last_name") as! String
+//                    }
+                }
+            })
+        }
     }
 }
 

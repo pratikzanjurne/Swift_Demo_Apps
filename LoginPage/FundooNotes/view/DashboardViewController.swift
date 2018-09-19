@@ -41,6 +41,7 @@ class DashboardViewController:BaseViewController{
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         setupData()
+        collectionView.reloadData()
         if let presenter = presenter{
             presenter.getNotes()
         }
@@ -231,8 +232,8 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
             }
         }
         cell.setData(note: note)
-        UIHelper.shared.setCornerRadius(view: cell)
-        UIHelper.shared.setCornerRadius(view: cell.contentView)
+        UIHelper.shared.setCornerRadius(view: cell, radius: 5.0)
+        UIHelper.shared.setCornerRadius(view: cell.contentView, radius: 5.0)
         UIHelper.shared.setShadow(view: cell)
         cell.layer.shadowPath = UIBezierPath(roundedRect:cell.bounds, cornerRadius:cell.contentView.layer.cornerRadius).cgPath
         return cell

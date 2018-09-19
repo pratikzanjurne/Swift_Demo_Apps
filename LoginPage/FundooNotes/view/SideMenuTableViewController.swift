@@ -20,7 +20,9 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
     @IBOutlet var deletedCell: UITableViewCell!
     @IBOutlet var remainderCell: UITableViewCell!
     @IBOutlet var signOutCell: UITableViewCell!
-     let menu = ["Notes","Archive","Deleted","Sign Out",""]
+    @IBOutlet var userNameLabel: UILabel!
+    @IBOutlet var userIdlabel: UILabel!
+    let menu = ["Notes","Archive","Deleted","Sign Out",""]
     var presenter:SideMenuPresenter?
     static var showNotesDelegate:PShowNotes?
     static var sideMenuDelegate:PHideSideMenu?
@@ -30,6 +32,8 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
     }
     func initialiseView(){
         presenter = SideMenuPresenter(pSideMenuView: self, persenterService: DashboardPresenterService())
+        self.userNameLabel.text = (UserDefaults.standard.object(forKey: "username") as? String)
+        self.userEmailLabel.text = UserDefaults.standard.object(forKey: "userId") as? String
         notesCell.textLabel?.text = "Notes"
         archiveCell.textLabel?.text = "Archieve"
         deletedCell.textLabel?.text = "Deleted"

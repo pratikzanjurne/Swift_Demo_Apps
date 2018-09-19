@@ -2,7 +2,7 @@
 //  Note+CoreDataClass.swift
 //  
 //
-//  Created by BridgeLabz Solutions LLP  on 9/12/18.
+//  Created by BridgeLabz Solutions LLP  on 9/18/18.
 //
 //
 

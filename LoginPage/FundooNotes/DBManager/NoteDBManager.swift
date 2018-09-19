@@ -52,23 +52,26 @@ class NoteDBManager{
         DBNote.is_remidered = note.is_remidered
         DBNote.reminder_date = note.reminder_date
         DBNote.reminder_time = note.reminder_time
+        DBNote.userid = note.userId
         saveContext()
         print("Saved1")
     }
     static func getNotes(completion:([NoteModel])->Void){
         var notes = [NoteModel]()
         do{
+            let userId = UserDefaults.standard.object(forKey: "userId") as! String
+            print(userId)
             let fetchRequest:NSFetchRequest<Note> = Note.fetchRequest()
             let dBNotes = try self.context.fetch(fetchRequest)
             for note in dBNotes{
-                if note.is_deleted != true{
+                if note.is_deleted != true && note.userid == userId{
                     if let image = note.image{
 //                        let noteImage = UIImage(data: image as Data)
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: image, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time))
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: image, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!))
                         
                         
                     }else{
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time))
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!))
                     }
                     
                 }
@@ -119,17 +122,18 @@ class NoteDBManager{
     static func getDeletedNotes(completion:([NoteModel])->Void){
          var notes = [NoteModel]()
         do{
+            let userId = UserDefaults.standard.object(forKey: "userId") as! String
             let fetchRequest:NSFetchRequest<Note> = Note.fetchRequest()
             let dBNotes = try self.context.fetch(fetchRequest)
             for note in dBNotes{
-                if note.is_deleted{
+                if note.is_deleted && note.userid == userId{
                     if let image = note.image{
 //                        let noteImage = UIImage(data: image as Data)
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: image, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time))
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: image, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!))
                         
                         
                     }else{
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time))
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!))
                     }
                     
                 }

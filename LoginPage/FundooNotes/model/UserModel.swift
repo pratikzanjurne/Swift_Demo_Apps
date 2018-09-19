@@ -6,5 +6,6 @@ struct UserModel{
     let mobileNo:String
     let emailId:String
     let password:String
+    let userId:String
 }
 

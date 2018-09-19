@@ -1,3 +1,11 @@
+//
+//  User+CoreDataProperties.swift
+//  
+//
+//  Created by BridgeLabz Solutions LLP  on 9/18/18.
+//
+//
+
 import Foundation
 import CoreData
 
@@ -8,10 +16,11 @@ extension User {
         return NSFetchRequest<User>(entityName: "User")
     }
 
-    @NSManaged public var username: String?
+    @NSManaged public var email: String?
     @NSManaged public var lastname: String?
     @NSManaged public var moble_number: String?
-    @NSManaged public var email: String?
     @NSManaged public var password: String?
+    @NSManaged public var userid: String?
+    @NSManaged public var username: String?
 
 }

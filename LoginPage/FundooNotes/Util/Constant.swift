@@ -27,4 +27,12 @@ struct Constant {
         case archive
         case deleted
     }
+    
+    enum TableViewOptions{
+        case delete
+        case makeACopy
+        case send
+        case colabrator
+        case Labels
+    }
 }

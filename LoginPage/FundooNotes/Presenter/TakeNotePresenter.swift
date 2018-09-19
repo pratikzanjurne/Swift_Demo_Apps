@@ -55,4 +55,7 @@ class TakeNotePresenter{
     func setReminder(note:NoteModel){
         pTakeNoteView?.setReminder(note:note)
     }
+    func toggleColorOptionTblView(constant: CGFloat){
+        pTakeNoteView?.toggleColorOptionTblView(constant: constant)
+    }
 }

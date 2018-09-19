@@ -10,6 +10,7 @@ class DashboardContainerViewController: BaseViewController,PDashboardContainerVi
     @IBOutlet var sideMenuConstrains: NSLayoutConstraint!
 
     var isOpenedSideMenu = false
+    var userId:String?
     
     override func viewDidLoad() {
         super.viewDidLoad()

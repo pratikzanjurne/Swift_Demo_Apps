@@ -13,4 +13,5 @@ struct NoteModel{
     var is_pinned:Bool
     var reminder_date:String?
     var reminder_time:String?
+    var userId:String
 }

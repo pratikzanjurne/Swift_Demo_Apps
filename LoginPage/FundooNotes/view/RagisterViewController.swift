@@ -35,7 +35,8 @@ class RagisterViewController: BaseViewController,PRagisterView {
     }
     
     func takeUserData()->UserModel{
-        let user = UserModel(username: name.text!, lastname: lastName.text!, mobileNo: phoneNumber.text!, emailId: emailID.text!, password: password.text!)
+        let userId = UUID().uuidString.lowercased()
+        let user = UserModel(username: name.text!, lastname: lastName.text!, mobileNo: phoneNumber.text!, emailId: emailID.text!, password: password.text!, userId: userId)
         return user
     }
     

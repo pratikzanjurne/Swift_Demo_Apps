@@ -60,6 +60,7 @@ class UserDBManager{
             dBUser.moble_number = user.mobileNo
             dBUser.email = user.emailId.lowercased()
             dBUser.password = user.password
+            dBUser.userid = user.userId
             saveContext()
         }else{
             completion(false)

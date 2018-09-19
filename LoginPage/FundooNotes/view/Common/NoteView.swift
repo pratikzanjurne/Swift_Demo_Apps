@@ -29,7 +29,7 @@ class NoteView: UIView {
         addSubview(containerView)
         containerView.frame = self.bounds
         self.scheduleImageView.tintColor = UIColor(hexString: Constant.Color.colourReminderText)
-        UIHelper.shared.setCornerRadius(view: reminderTextView)
+        UIHelper.shared.setCornerRadius(view: reminderTextView, radius: 3.0)
         containerView.autoresizingMask = [.flexibleHeight,.flexibleWidth]
     }
 }

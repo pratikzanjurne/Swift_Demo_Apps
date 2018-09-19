@@ -12,6 +12,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--SideMenuTableViewController-->
         <scene sceneID="6if-fe-SdR">
@@ -27,8 +32,11 @@
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="email" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O2R-UF-1Gd">
-                                    <rect key="frame" x="18" y="109" width="214" height="34"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                    <rect key="frame" x="8" y="137" width="224" height="20"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="20" id="RXK-IG-2A1"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <nil key="textColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -39,15 +47,26 @@
                                         <constraint firstAttribute="width" constant="80" id="mmV-lz-TKE"/>
                                     </constraints>
                                 </imageView>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HjV-TO-NDn">
+                                    <rect key="frame" x="8" y="104" width="224" height="25"/>
+                                    <constraints>
+                                        <constraint firstAttribute="height" constant="25" id="C5x-yZ-1YQ"/>
+                                    </constraints>
+                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="19"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
                             </subviews>
                             <color key="backgroundColor" red="1" green="0.57810515169999999" blue="0.0" alpha="0.7537457192" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
-                                <constraint firstAttribute="trailing" secondItem="O2R-UF-1Gd" secondAttribute="trailing" constant="8" id="0NO-MS-aPv"/>
                                 <constraint firstItem="33C-8o-oR5" firstAttribute="leading" secondItem="KrK-uu-eHh" secondAttribute="leading" constant="8" id="BMo-Iw-YMW"/>
-                                <constraint firstItem="O2R-UF-1Gd" firstAttribute="top" secondItem="33C-8o-oR5" secondAttribute="bottom" constant="12.5" id="OqQ-Ej-aTw"/>
-                                <constraint firstItem="O2R-UF-1Gd" firstAttribute="leading" secondItem="KrK-uu-eHh" secondAttribute="leading" constant="18" id="Qsq-ge-ioi"/>
+                                <constraint firstAttribute="trailing" secondItem="O2R-UF-1Gd" secondAttribute="trailing" constant="8" id="Hsx-GZ-mH6"/>
+                                <constraint firstAttribute="trailing" secondItem="HjV-TO-NDn" secondAttribute="trailing" constant="8" id="Phz-zl-eJ9"/>
+                                <constraint firstItem="O2R-UF-1Gd" firstAttribute="leading" secondItem="KrK-uu-eHh" secondAttribute="leading" constant="8" id="ZH0-Vi-gur"/>
+                                <constraint firstItem="HjV-TO-NDn" firstAttribute="top" secondItem="33C-8o-oR5" secondAttribute="bottom" constant="8" id="iHb-0v-0xY"/>
                                 <constraint firstItem="33C-8o-oR5" firstAttribute="top" secondItem="KrK-uu-eHh" secondAttribute="top" constant="16" id="l1D-IW-cA4"/>
-                                <constraint firstAttribute="bottom" secondItem="O2R-UF-1Gd" secondAttribute="bottom" constant="24" id="pPp-W3-6KK"/>
+                                <constraint firstItem="HjV-TO-NDn" firstAttribute="leading" secondItem="KrK-uu-eHh" secondAttribute="leading" constant="8" id="rCk-BN-Loh"/>
+                                <constraint firstItem="O2R-UF-1Gd" firstAttribute="top" secondItem="HjV-TO-NDn" secondAttribute="bottom" constant="8" id="wPQ-Z8-QUa"/>
                             </constraints>
                         </view>
                         <sections>
@@ -129,12 +148,14 @@
                         <outlet property="remainderCell" destination="6av-iI-SCH" id="vlP-C0-VS4"/>
                         <outlet property="signOutCell" destination="l3v-eB-vKM" id="If9-Sb-ksm"/>
                         <outlet property="userEmailLabel" destination="O2R-UF-1Gd" id="V9e-Cm-ndl"/>
+                        <outlet property="userIdlabel" destination="O2R-UF-1Gd" id="3RD-aT-3Mt"/>
                         <outlet property="userImageView" destination="33C-8o-oR5" id="mgr-ae-aQ8"/>
+                        <outlet property="userNameLabel" destination="HjV-TO-NDn" id="8Nl-g6-J0p"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8eC-c5-kBW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-48" y="-546"/>
+            <point key="canvasLocation" x="-48" y="-546.47676161919048"/>
         </scene>
         <!--main-->
         <scene sceneID="tne-QT-ifu">
@@ -186,7 +207,6 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="loginAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="D96-y4-BxD"/>
-                                                    <segue destination="MEt-23-Vv3" kind="show" identifier="login" id="m2h-bg-IjZ"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Bqp-0f-gyw">
@@ -769,8 +789,15 @@
                                     <constraint firstItem="d8N-bm-XHZ" firstAttribute="leading" secondItem="TH5-B2-Ydt" secondAttribute="leading" id="w8h-jI-4Gc"/>
                                 </constraints>
                             </view>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="n1u-wt-WCD" customClass="ColourOptionTblView" customModule="FundooNotes" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="623" width="375" height="220"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="220" id="8Ik-Kf-b4c"/>
+                                </constraints>
+                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="V1q-ay-PpQ" userLabel="ColourOption" customClass="ColourOptions" customModule="FundooNotes" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="843" width="375" height="44"/>
                                 <color key="backgroundColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="44" id="YbS-XE-Odh"/>
@@ -810,14 +837,17 @@
                             <constraint firstItem="yVl-vr-RKL" firstAttribute="top" secondItem="ad4-uX-Cvb" secondAttribute="bottom" id="CAZ-yN-cR0"/>
                             <constraint firstAttribute="trailing" secondItem="TH5-B2-Ydt" secondAttribute="trailing" id="CD8-mO-4V1"/>
                             <constraint firstItem="V1q-ay-PpQ" firstAttribute="leading" secondItem="SGH-nS-rBe" secondAttribute="leading" id="G21-Lb-YM6"/>
+                            <constraint firstItem="n1u-wt-WCD" firstAttribute="leading" secondItem="SGH-nS-rBe" secondAttribute="leading" id="I4F-G0-oXS"/>
                             <constraint firstItem="ad4-uX-Cvb" firstAttribute="leading" secondItem="SGH-nS-rBe" secondAttribute="leading" id="NNn-Ev-Eu3"/>
                             <constraint firstItem="TH5-B2-Ydt" firstAttribute="top" secondItem="yVl-vr-RKL" secondAttribute="bottom" id="Vw3-C8-e9c"/>
                             <constraint firstItem="yVl-vr-RKL" firstAttribute="trailing" secondItem="SGH-nS-rBe" secondAttribute="trailing" id="ZZM-fC-uOm"/>
-                            <constraint firstItem="V1q-ay-PpQ" firstAttribute="top" secondItem="yVl-vr-RKL" secondAttribute="bottom" id="f3r-x0-Sda"/>
+                            <constraint firstItem="n1u-wt-WCD" firstAttribute="top" secondItem="yVl-vr-RKL" secondAttribute="bottom" id="f4W-LX-XOt"/>
                             <constraint firstItem="0fV-Ui-7rK" firstAttribute="leading" secondItem="SGH-nS-rBe" secondAttribute="leading" id="fUC-3t-8dp"/>
                             <constraint firstItem="0fV-Ui-7rK" firstAttribute="bottom" secondItem="SGH-nS-rBe" secondAttribute="bottom" id="hnw-I3-0qN"/>
                             <constraint firstAttribute="bottom" secondItem="TH5-B2-Ydt" secondAttribute="bottom" constant="-88" id="ikc-fv-B14"/>
                             <constraint firstItem="ad4-uX-Cvb" firstAttribute="top" secondItem="SGH-nS-rBe" secondAttribute="top" id="jdg-jp-Zv1"/>
+                            <constraint firstItem="n1u-wt-WCD" firstAttribute="trailing" secondItem="SGH-nS-rBe" secondAttribute="trailing" id="mIn-3b-Mm5"/>
+                            <constraint firstItem="V1q-ay-PpQ" firstAttribute="top" secondItem="n1u-wt-WCD" secondAttribute="bottom" id="oRI-fw-TiZ"/>
                             <constraint firstItem="yVl-vr-RKL" firstAttribute="leading" secondItem="SGH-nS-rBe" secondAttribute="leading" id="y7j-a7-bMb"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="SGH-nS-rBe"/>
@@ -825,8 +855,10 @@
                     <connections>
                         <outlet property="btnArchive" destination="cFw-uX-kWl" id="CMN-Vk-136"/>
                         <outlet property="btnPin" destination="vPs-K1-LT9" id="TyJ-Ga-oTf"/>
+                        <outlet property="colorOptionTblConstraint" destination="f4W-LX-XOt" id="3Av-hA-dNn"/>
+                        <outlet property="colorOptionTblView" destination="n1u-wt-WCD" id="jZH-tt-pES"/>
+                        <outlet property="colorOptionTblViewHeight" destination="8Ik-Kf-b4c" id="vXg-qP-3Ni"/>
                         <outlet property="colourOptionView" destination="V1q-ay-PpQ" id="vQT-9x-1Uc"/>
-                        <outlet property="colourOptionconstraint" destination="f3r-x0-Sda" id="Ru9-rU-g78"/>
                         <outlet property="editedDateBarBtnItm" destination="Fg7-Wc-mrW" id="8GW-cv-pwI"/>
                         <outlet property="navigationBar" destination="ad4-uX-Cvb" id="9KG-zF-ApP"/>
                         <outlet property="noteView" destination="Sp4-re-CxE" id="4b6-RR-eG8"/>

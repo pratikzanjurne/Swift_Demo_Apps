@@ -1,5 +1,8 @@
-import UIKit
+ import UIKit
 import CoreData
+import FBSDKLoginKit
+import FBSDKCoreKit
+
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -11,7 +14,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             self.loginUser()
         }else{
         }
+        FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
         return true
+    }
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
+        return FBSDKApplicationDelegate.sharedInstance().application(application, open: url, sourceApplication: sourceApplication, annotation: annotation)
     }
     func loginUser(){
         let stroryBoard = UIStoryboard(name: "Main", bundle: nil)
