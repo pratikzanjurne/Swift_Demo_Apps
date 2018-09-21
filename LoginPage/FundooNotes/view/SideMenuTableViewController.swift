@@ -22,7 +22,7 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
     @IBOutlet var signOutCell: UITableViewCell!
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var userIdlabel: UILabel!
-    let menu = ["Notes","Archive","Deleted","Sign Out",""]
+    let menu = ["Notes","Archive","Deleted","Remainder","Sign Out",""]
     var presenter:SideMenuPresenter?
     static var showNotesDelegate:PShowNotes?
     static var sideMenuDelegate:PHideSideMenu?
@@ -34,11 +34,17 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
         presenter = SideMenuPresenter(pSideMenuView: self, persenterService: DashboardPresenterService())
         self.userNameLabel.text = (UserDefaults.standard.object(forKey: "username") as? String)
         self.userEmailLabel.text = UserDefaults.standard.object(forKey: "userId") as? String
-        notesCell.textLabel?.text = "Notes"
-        archiveCell.textLabel?.text = "Archieve"
-        deletedCell.textLabel?.text = "Deleted"
-        remainderCell.textLabel?.text = "Remainder"
-        signOutCell.textLabel?.text = "Sign Out"
+        notesCell.textLabel?.text = menu[0]
+        archiveCell.textLabel?.text = menu[1]
+        archiveCell.imageView?.image = UIImage(named: Constant.Image.archive)
+        archiveCell.imageView?.tintColor = UIColor(hexString: Constant.Color.colourReminderText)
+        deletedCell.textLabel?.text = menu[2]
+        deletedCell.imageView?.image = UIImage(named: Constant.Image.deleted)
+        deletedCell.imageView?.tintColor = UIColor(hexString: Constant.Color.colourReminderText)
+        remainderCell.textLabel?.text = menu[3]
+        remainderCell.imageView?.image = UIImage(named: Constant.Image.reminder)
+        remainderCell.imageView?.tintColor = UIColor(hexString: Constant.Color.colourReminderText)
+        signOutCell.textLabel?.text = menu[4]
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section{
@@ -52,7 +58,7 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
                 break;
             case 2:
                 SideMenuTableViewController.sideMenuDelegate?.toggleMenu()
-                SideMenuTableViewController.showNotesDelegate?.showNotes(.deleted, colour: Constant.Color.colourForFilterOn, viewTitle: Constant.DashboardViewTitle.deletedView)
+                SideMenuTableViewController.showNotesDelegate?.showNotes(.deleted, colour: Constant.Color.colorForDeleted, viewTitle: Constant.DashboardViewTitle.deletedView)
                 break;
             case 3:
                SideMenuTableViewController.sideMenuDelegate?.toggleMenu()

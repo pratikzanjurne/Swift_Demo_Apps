@@ -30,7 +30,7 @@ class TakeNotePresenter{
             completion(status, message)
         })
     }
-    func deleteNoteT(noteToDelete:NoteModel,completion:(Bool,String)->Void){
+    func deleteNoteFromTrash(noteToDelete:NoteModel,completion:(Bool,String)->Void){
         presenterService?.deleteNoteT(noteToDelete: noteToDelete, completion: { (status, message) in
             completion(status, message)
         })
@@ -57,5 +57,11 @@ class TakeNotePresenter{
     }
     func toggleColorOptionTblView(constant: CGFloat){
         pTakeNoteView?.toggleColorOptionTblView(constant: constant)
+    }
+    
+    func restoreNote(noteToRestore:NoteModel,completion:(Bool,String)->Void){
+        presenterService?.restoreNote(noteToRestore: noteToRestore, completion: { (status, message) in
+            completion(status, message)
+        })
     }
 }

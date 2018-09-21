@@ -187,6 +187,23 @@ class NoteDBManager{
         }
     }
     
+    static func restoreNote(note:NoteModel,completion:(Bool,String)->Void){
+        do{
+            let fetchRequest:NSFetchRequest<Note> = Note.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "note_id = %@", note.note_id)
+            let dBNotes = try self.context.fetch(fetchRequest)
+            if let note = dBNotes.first{
+                note.is_deleted = false
+                saveContext()
+                completion(true, "Restored")
+            }else{
+                completion(false, "Note not found")
+                return
+            }
+        }catch{
+            completion(false, "Not able to restore the note. ")
+        }    }
+    
     func setReminder(){
         
     }

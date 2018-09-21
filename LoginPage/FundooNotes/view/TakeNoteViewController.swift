@@ -38,6 +38,7 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     var isPinned = false
     var isArchived = false
     var isRemindered = false
+    var isDeleted = false
     let optionsMenu = ["Open Gallery","Open Camera"]
     var reminderArray = ["MMM d, yyyy","HH:MM"]
     var imageData:NSData?
@@ -46,8 +47,6 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         initialseView()
-        
-        
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -73,11 +72,10 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         UIHelper.shared.setShadow(view: colorOptionTblView)
         colourOptionView.delegate = self
         colorOptionTblView.delegate = self
-        
+        self.noteView.reminderTextViewHC.constant = 0
         if let recievedNote = note{
             presenter?.setUpData(note: recievedNote)
         }
-        self.noteView.reminderTextViewHC.constant = 0
     }
     
     func onChangeColor(color: String) {
@@ -108,7 +106,7 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         dateFormater.dateFormat = "MMM d, yyyy"
         let dateInFormat = dateFormater.string(from: date)
         if let receivedNote = self.note{
-            presenter?.deleteNoteT(noteToDelete: receivedNote, completion: { (status, message) in
+            presenter?.deleteNoteFromTrash(noteToDelete: receivedNote, completion: { (status, message) in
             })
         }
         let uuid = UUID().uuidString.lowercased()
@@ -116,8 +114,7 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
             self.imageData = UIImagePNGRepresentation(image) as NSData?
         }
         let userId = UserDefaults.standard.object(forKey: "userId") as! String
-        print(userId)
-        var note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:imageData, is_archived: isArchived, is_remidered: isRemindered , is_deleted: false, creadted_date: dateInFormat , colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned, reminder_date: reminderArray[0], reminder_time: reminderArray[1], userId: userId)
+        var note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:imageData, is_archived: isArchived, is_remidered: isRemindered , is_deleted: isDeleted, creadted_date: dateInFormat , colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned, reminder_date: reminderArray[0], reminder_time: reminderArray[1], userId: userId)
         if reminderArray[0] != "MMM d, yyyy" && reminderArray[1] != "HH:MM"{
             presenter?.setReminder(note:note)
         }else{
@@ -298,8 +295,7 @@ extension TakeNoteViewController:PTakeNoteView {
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
         let request = UNNotificationRequest(identifier: "UYLLocalNotification", content: content, trigger: trigger)
         center.add(request) { (error) in
-            if let error = error{
-                
+            if error != nil{
             }
         }
     }
@@ -323,7 +319,7 @@ extension TakeNoteViewController:PTakeNoteView {
     
     
     func updateView(){
-        var height:CGFloat = 50
+        var height:CGFloat = 55
         let titleHeight = noteView.titleTextView.frame.size.height
         let noteHeight = noteView.noteTextView.frame.size.height
         let imageViewHeight = noteView.imageView.frame.height
@@ -365,6 +361,8 @@ extension TakeNoteViewController:PTakeNoteView {
         let action = UIAlertAction(title: "OK", style: .default) { (_) in
             if message == "Deleted"{
                 self.presenter?.presentDashboardView()
+            }else if message == "Restored"{
+                self.presenter?.presentDashboardView()
             }
         }
         alert.addAction(action)
@@ -401,21 +399,22 @@ extension TakeNoteViewController:PTakeNoteView {
         noteView.noteTextView.insertText(note.note)
         self.editedDateBarBtnItm.title = "Edited \(note.creadted_date)"
         if note.is_remidered{
+            self.noteView.reminderTextViewHC.constant = 18
             self.isRemindered = true
-            noteView.reminderTextViewHC.constant = 18
             self.reminderArray[0] = note.reminder_date!
             self.reminderArray[1] = note.reminder_time!
             noteView.reminderLabel.text = "\(note.reminder_date!) \(note.reminder_time!)"
         }else{
-            noteView.reminderTextViewHC.constant = 0
+            self.noteView.reminderTextViewHC.constant = 0
         }
         self.view.backgroundColor = UIColor(hexString: note.colour)
         self.navigationBar.barTintColor = UIColor(hexString: note.colour)
         if let imageData = note.image{
             if let noteImage = UIImage(data:imageData as Data){
-                let newHeight = Helper.shared.getScaledHeight(imageWidth: noteImage.size.width, imageHeight: noteImage.size.height, scaleWidth: self.view.bounds.width)
-                noteView.imageViewHeightC.constant = newHeight
+                self.image = noteImage
+                noteView.imageView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: (self.view.bounds.width / noteImage.getAspectRatio()))
                 noteView.imageView.image = noteImage
+                noteView.imageViewHeightC.constant = noteView.imageView.frame.height
                 presenter?.updateImageView()
             }
         }
@@ -428,10 +427,11 @@ extension TakeNoteViewController:PTakeNoteView {
             isArchived = true
         }
         if note.is_deleted{
+            self.isDeleted = true
             noteView.noteTextView.isEditable = false
             noteView.titleTextView.isEditable = false
             self.colorOptionTblView.array = ["Delete permanantly","Restore"]
-            self.colorOptionTblView.imageArray = [#imageLiteral(resourceName: "delete"),#imageLiteral(resourceName: "send")]
+            self.colorOptionTblView.imageArray = [#imageLiteral(resourceName: "delete"),#imageLiteral(resourceName: "restore")]
             self.colorOptionTblView.colourOptionTblView.reloadData()
         }else{
             noteView.noteTextView.isEditable = true
@@ -448,8 +448,16 @@ extension TakeNoteViewController:PReminderDelegate{
         self.isRemindered = true
         self.reminderArray[0] = date
         self.reminderArray[1] = time
+        if date != "MMM d, yyyy" && time != "HH:MM"{
+            self.noteView.reminderTextViewHC.constant = 18
+            noteView.reminderLabel.text = "\(date) \(time)"
+        }else{
+            noteView.reminderLabel.text = nil
+            self.noteView.reminderTextViewHC.constant = 0
+        }
     }
 }
+
 extension TakeNoteViewController:PColorOptionTblView{
     func onOptionSelected(_ option: Constant.TableViewOptions) {
         switch  option {
@@ -461,13 +469,32 @@ extension TakeNoteViewController:PColorOptionTblView{
             isColourOptionEnabled = false
             if let note = self.note{
                 if note.is_deleted{
-                    presenter?.deleteNoteT(noteToDelete: note, completion: { (status, message) in
+                    presenter?.deleteNoteFromTrash(noteToDelete: note, completion: { (status, message) in
+                        showAlert(message: message)
+                    })
+                }else{
+                    presenter?.deleteNote(noteToDelete: note, completion: { (status, message) in
                         showAlert(message: message)
                     })
                 }
-                presenter?.deleteNote(noteToDelete: note, completion: { (status, message) in
-                    showAlert(message: message)
-                })
+            }else{
+                showAlert(message: "Note not Found.")
+            }
+            break
+        case .restore:
+            colorOptionTblConstraint.constant = 0
+            UIView.animate(withDuration: 0.3){
+                self.view.layoutIfNeeded()
+            }
+            isColourOptionEnabled = false
+            if let note = self.note{
+                if note.is_deleted{
+                    presenter?.restoreNote(noteToRestore: note, completion: { (status, message) in
+                        showAlert(message: message)
+                    })
+                }else{
+                    showAlert(message: "Note not Found.")
+                }
             }else{
                 showAlert(message: "Note not Found.")
             }

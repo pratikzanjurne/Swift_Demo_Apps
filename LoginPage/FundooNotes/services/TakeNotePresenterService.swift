@@ -16,5 +16,10 @@ class TakeNotePresenterService {
             completion(status, message)
         }
     }
+    func restoreNote(noteToRestore:NoteModel,completion:(Bool,String)->Void){
+        NoteDBManager.restoreNote(note: noteToRestore) { (status, message) in
+            completion(status, message)
+        }
+    }
 
 }

@@ -43,7 +43,10 @@ class DashboardNoteCell:UICollectionViewCell{
                 self.imageView.image = noteImage
             }
         }
-        self.noteTextLabel.text = note.note
+        let titleString = "\(note.title) \n"
+        let attributedString = NSMutableAttributedString(string: titleString, attributes: [NSAttributedStringKey.font:UIFont.boldSystemFont(ofSize: 15)])
+        attributedString.append(NSAttributedString(string: note.note, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
+        self.noteTextLabel.attributedText = attributedString
         if note.is_remidered{
             self.reminderTextViewHConstraint.constant = 18
             self.dateTextLabel.text =  "\(note.reminder_date!) \(note.reminder_time!)"

@@ -9,9 +9,10 @@ struct Constant {
     struct Color {
         static let colorWhite = "#ffffff"
         static let colorBlack = "#000000"
-        static let colourForFilterOn = "#8187C1"
+        static let colourForFilterOn = "#507786"
         static let colourOrange = "#FF9300"
         static let colourReminderText = "#898989"
+        static let colorForDeleted = "#555555"
     }
     
     struct DashboardViewTitle{
@@ -19,6 +20,12 @@ struct Constant {
         static let reminderView = "Remindered"
         static let archivedView = "Archived"
         static let deletedView = "Deleted"
+    }
+    
+    struct Image{
+        static let archive = "archive"
+        static let deleted = "delete"
+        static let reminder = "remind"
     }
     
     enum NoteOfType{
@@ -34,5 +41,7 @@ struct Constant {
         case send
         case colabrator
         case Labels
+        case restore
     }
+    
 }

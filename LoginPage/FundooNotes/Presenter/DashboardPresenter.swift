@@ -29,8 +29,11 @@ class DashboardPresenter{
     }
     
     func getCellHeight(note:NoteModel,width:CGFloat,completion:(_ Height:CGFloat)->Void){
-        var height:CGFloat = 20
-        self.computeTextLabelHeight(text: note.note, width: width) { (noteHeight) in
+        var height:CGFloat = 15
+        let titleString = "\(note.title) \n"
+        let attributedString = NSMutableAttributedString(string: titleString, attributes: [NSAttributedStringKey.font:UIFont.boldSystemFont(ofSize: 15)])
+        attributedString.append(NSAttributedString(string: note.note, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))
+        self.computeTextLabelHeightAttributed(text: attributedString, width: width) { (noteHeight) in
             height = height + noteHeight
         }
         self.computeTextLabelHeight(text: note.creadted_date,  width: width) { (dateHeight) in
@@ -45,6 +48,16 @@ class DashboardPresenter{
         }
         completion(height)
         
+    }
+    
+    func computeTextLabelHeightAttributed(text:NSAttributedString,width:CGFloat,completion:(CGFloat)->Void){
+        let labelText = UILabel()
+        labelText.numberOfLines = 0
+        labelText.lineBreakMode = .byWordWrapping
+        labelText.attributedText = text
+        labelText.preferredMaxLayoutWidth = (width) - 32
+        labelText.invalidateIntrinsicContentSize()
+        completion(labelText.intrinsicContentSize.height)
     }
     
     func computeTextLabelHeight(text:String,width:CGFloat,completion:(CGFloat)->Void){

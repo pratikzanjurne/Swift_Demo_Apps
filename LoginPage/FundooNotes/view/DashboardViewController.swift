@@ -258,9 +258,27 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
     return true
     }
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        let item = notes.remove(at: sourceIndexPath.item)
-        notes.insert(item, at: destinationIndexPath.item)
-        collectionView.reloadData()
+        if isFilterActive{
+            let item = filteredNotes.remove(at: sourceIndexPath.item)
+            filteredNotes.insert(item, at: destinationIndexPath.item)
+            collectionView.reloadData()
+        }else{
+            if sourceIndexPath.section == 0 && destinationIndexPath.section == 0{
+                let item = pinnedNotes.remove(at: sourceIndexPath.item)
+                pinnedNotes.insert(item, at: destinationIndexPath.item)
+                collectionView.reloadData()
+            }else if sourceIndexPath.section == 1 && destinationIndexPath.section == 1{
+                let item = unpinnedNotes.remove(at: sourceIndexPath.item)
+                unpinnedNotes.insert(item, at: destinationIndexPath.item)
+                collectionView.reloadData()
+            }else{
+                
+            }
+        }
+
+//        let item = notes.remove(at: sourceIndexPath.item)
+//        notes.insert(item, at: destinationIndexPath.item)
+//        collectionView.reloadData()
     }
 }
 
