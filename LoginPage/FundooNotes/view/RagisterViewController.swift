@@ -25,6 +25,7 @@ class RagisterViewController: BaseViewController,PRagisterView {
     
     override func initialseView() {
         presenter = RagisterPresenter(pRagisterView: self, presenterService: PresenterService())
+        
     }
     
     @IBAction func createAcc(_ sender: Any) {

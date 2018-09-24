@@ -52,18 +52,20 @@ class UserDBManager{
     }
     
     static func ragisterUserModel(user:UserModel,completion:(Bool)->Void){
-        if isUserExist(email: user.emailId) == false{
-            completion(true)
-            let dBUser = User(context: UserDBManager.context)
-            dBUser.username = user.username
-            dBUser.lastname = user.lastname
-            dBUser.moble_number = user.mobileNo
-            dBUser.email = user.emailId.lowercased()
-            dBUser.password = user.password
-            dBUser.userid = user.userId
-            saveContext()
-        }else{
-            completion(false)
+        self.isUserExist(email: user.emailId) { (result) in
+            if result == false{
+                completion(true)
+                let dBUser = User(context: UserDBManager.context)
+                dBUser.username = user.username
+                dBUser.lastname = user.lastname
+                dBUser.moble_number = user.mobileNo
+                dBUser.email = user.emailId.lowercased()
+                dBUser.password = user.password
+                dBUser.userid = user.userId
+                saveContext()
+            }else{
+                completion(false)
+            }
         }
     }
     
@@ -82,20 +84,19 @@ class UserDBManager{
         }
     }
     
-    static func isUserExist(email:String)->Bool{
+    static func isUserExist(email:String,completion:(Bool)->Void){
         let fetchRequest:NSFetchRequest<User> = User.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "email == %@", email.lowercased())
         do{
             let users = try self.context.fetch(fetchRequest) as [User]
             if users.first == nil{
-                return false
+                completion(false)
             }else{
-                return true
+                completion(true)
             }
         }catch{
             print(error)
         }
-        return false
     }
  
 }

@@ -14,4 +14,5 @@ struct NoteModel{
     var reminder_date:String?
     var reminder_time:String?
     var userId:String
+    var edited_date:String
 }

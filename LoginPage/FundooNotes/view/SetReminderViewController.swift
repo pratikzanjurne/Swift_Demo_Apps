@@ -21,6 +21,14 @@ class SetReminderViewController: UIViewController,UITableViewDelegate,UITableVie
     override func viewDidLoad() {
         super.viewDidLoad()
         presenter = SetReminderPresenter(pSetReminderView: self)
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, yyyy"
+        let todaysDate = formatter.string(from: date)
+        subTitleArray[0] = todaysDate
+        formatter.dateFormat = "h:mm a"
+        let currentTime = formatter.string(from: date)
+        subTitleArray[1] = currentTime
         tableViewOptions.dataSource = self
         tableViewOptions.delegate = self
         UIApplication.shared.statusBarStyle = .lightContent
@@ -96,7 +104,13 @@ class SetReminderViewController: UIViewController,UITableViewDelegate,UITableVie
 
 extension SetReminderViewController:MDDatePickerDialogDelegate,MDTimePickerDialogDelegate{
     func timePickerDialog(_ timePickerDialog: MDTimePickerDialog, didSelectHour hour: Int, andMinute minute: Int) {
-        self.subTitleArray[selectedSection] = "\(hour):\(minute)"
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        let timeString = "\(hour):\(minute)"
+        let date = formatter.date(from: timeString)
+        formatter.dateFormat = "h:mm a"
+        let time = formatter.string(from: date!)
+        self.subTitleArray[selectedSection] = time
         print(subTitleArray[selectedSection])
         self.tableViewOptions.reloadData()
     }

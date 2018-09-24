@@ -105,16 +105,20 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         let date = Date()
         dateFormater.dateFormat = "MMM d, yyyy"
         let dateInFormat = dateFormater.string(from: date)
+        let createdDate:String
         if let receivedNote = self.note{
+            createdDate = receivedNote.creadted_date
             presenter?.deleteNoteFromTrash(noteToDelete: receivedNote, completion: { (status, message) in
             })
+        }else{
+            createdDate = dateInFormat
         }
         let uuid = UUID().uuidString.lowercased()
         if let image = self.image{
             self.imageData = UIImagePNGRepresentation(image) as NSData?
         }
         let userId = UserDefaults.standard.object(forKey: "userId") as! String
-        var note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:imageData, is_archived: isArchived, is_remidered: isRemindered , is_deleted: isDeleted, creadted_date: dateInFormat , colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned, reminder_date: reminderArray[0], reminder_time: reminderArray[1], userId: userId)
+        var note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:imageData, is_archived: isArchived, is_remidered: isRemindered , is_deleted: isDeleted, creadted_date: createdDate , colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned, reminder_date: reminderArray[0], reminder_time: reminderArray[1], userId: userId, edited_date: dateInFormat)
         if reminderArray[0] != "MMM d, yyyy" && reminderArray[1] != "HH:MM"{
             presenter?.setReminder(note:note)
         }else{
@@ -132,10 +136,10 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
             if note.is_deleted{
                 presenter?.toggleColorOptionTblView(constant: -88)
             }else{
-                presenter?.toggleColorOptionTblView(constant: -270)
+                presenter?.toggleColorOptionTblView(constant: -268)
             }
         }else{
-            presenter?.toggleColorOptionTblView(constant: -270)
+            presenter?.toggleColorOptionTblView(constant: -268)
         }
     }
     @IBAction func showOptions(_ sender: Any) {
@@ -289,7 +293,7 @@ extension TakeNoteViewController:PTakeNoteView {
         content.title = note.title
         content.sound = UNNotificationSound.default()
         let dateFormater = DateFormatter()
-        dateFormater.dateFormat = "MM-dd-yyyy HH:mm"
+        dateFormater.dateFormat = "MM-dd-yyyy h:mm a"
         let convertedDate = dateFormater.date(from: "\(reminderArray[0]) \(reminderArray[1])")
         let triggerDate = Calendar.current.dateComponents([.year,.month,.day,.hour,.minute], from: convertedDate!)
         let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
@@ -397,7 +401,7 @@ extension TakeNoteViewController:PTakeNoteView {
     func setUpData(note:NoteModel){
         noteView.titleTextView.insertText(note.title)
         noteView.noteTextView.insertText(note.note)
-        self.editedDateBarBtnItm.title = "Edited \(note.creadted_date)"
+        self.editedDateBarBtnItm.title = "Edited \(note.edited_date)"
         if note.is_remidered{
             self.noteView.reminderTextViewHC.constant = 18
             self.isRemindered = true
@@ -446,11 +450,14 @@ extension TakeNoteViewController:PTakeNoteView {
 extension TakeNoteViewController:PReminderDelegate{
     func setReminderData(date: String, time: String) {
         self.isRemindered = true
+        
         self.reminderArray[0] = date
         self.reminderArray[1] = time
         if date != "MMM d, yyyy" && time != "HH:MM"{
             self.noteView.reminderTextViewHC.constant = 18
-            noteView.reminderLabel.text = "\(date) \(time)"
+            Helper.shared.compareDate(date: date, time: time, completion: { (dateString) in
+                noteView.reminderLabel.text = "\(dateString)"
+            })
         }else{
             noteView.reminderLabel.text = nil
             self.noteView.reminderTextViewHC.constant = 0

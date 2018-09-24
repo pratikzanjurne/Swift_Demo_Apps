@@ -103,6 +103,7 @@
                 <outlet property="imageView" destination="6AS-av-KcV" id="Asz-Eb-emN"/>
                 <outlet property="imageViewHeightConstraint" destination="AVD-eK-iGk" id="dTf-uc-Kld"/>
                 <outlet property="noteTextLabel" destination="ccg-xK-PuC" id="GPD-e6-Wyc"/>
+                <outlet property="pinImage" destination="h4l-sy-Fct" id="uMT-S3-Wpo"/>
                 <outlet property="pinImageConstraint" destination="Reg-FF-EbI" id="EyI-6Z-JB2"/>
                 <outlet property="reminderTextView" destination="iaj-oO-J96" id="Wgq-H9-pSa"/>
                 <outlet property="reminderTextViewHConstraint" destination="gBe-fD-HBY" id="vFH-tO-aDT"/>

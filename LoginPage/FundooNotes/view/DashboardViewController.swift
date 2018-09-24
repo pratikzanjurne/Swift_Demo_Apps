@@ -25,6 +25,7 @@ class DashboardViewController:BaseViewController{
     var isListView:Bool = false
     var isSearchBarVisible = false
     var isFilterActive = false
+    var isMultipleSelectionActive = false
     var presenter:DashboardPresenter?
     var notes = [NoteModel]()
     var pinnedNotes = [NoteModel]()
@@ -72,7 +73,6 @@ class DashboardViewController:BaseViewController{
         }
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.allowsMultipleSelection = true
         self.presenter?.getNotes()
         pinnedNotes = notes.filter({ (note) -> Bool in
             return note.is_pinned == true
@@ -130,6 +130,8 @@ class DashboardViewController:BaseViewController{
                 break
             }
             collectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
+            collectionView.allowsMultipleSelection = true
+            self.isMultipleSelectionActive = true
         case .changed:
             collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view!))
         case .ended:
@@ -153,10 +155,12 @@ extension DashboardViewController:PinterestLayoutDelegate{
             })
         }else{
             if indexPath.section == 0{
-                presenter?.getCellHeight(note: pinnedNotes[indexPath.item], width:width, completion: { (height) in
-                    print(height)
-                    cellHeight = height
-                })
+                if pinnedNotes.count != 0{
+                    presenter?.getCellHeight(note: pinnedNotes[indexPath.item], width:width, completion: { (height) in
+                        print(height)
+                        cellHeight = height
+                    })
+                }
             }else{
                 presenter?.getCellHeight(note: unpinnedNotes[indexPath.item], width:width, completion: { (height) in
                     print(height)
@@ -240,18 +244,30 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let stroryBoard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = stroryBoard.instantiateViewController(withIdentifier: "TakeNoteViewController") as! TakeNoteViewController
-        if isFilterActive{
-            vc.note = filteredNotes[indexPath.item]
+        if isMultipleSelectionActive{
+            let cell = collectionView.cellForItem(at: indexPath)
+            cell?.layer.borderColor = UIColor.gray.cgColor
+            cell?.layer.borderWidth = 3.0
+            print(collectionView.indexPathsForSelectedItems)
         }else{
-            if indexPath.section == 0{
-                vc.note = pinnedNotes[indexPath.item]
+            let stroryBoard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = stroryBoard.instantiateViewController(withIdentifier: "TakeNoteViewController") as! TakeNoteViewController
+            if isFilterActive{
+                vc.note = filteredNotes[indexPath.item]
             }else{
-                vc.note = unpinnedNotes[indexPath.item]
+                if indexPath.section == 0{
+                    vc.note = pinnedNotes[indexPath.item]
+                }else{
+                    vc.note = unpinnedNotes[indexPath.item]
+                }
             }
+            present(vc, animated: true, completion: nil)
         }
-        present(vc, animated: true, completion: nil)
+    }
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath)
+        cell?.layer.borderColor = UIColor.gray.cgColor
+        cell?.layer.borderWidth = 0.0
     }
     
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
@@ -279,6 +295,15 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
 //        let item = notes.remove(at: sourceIndexPath.item)
 //        notes.insert(item, at: destinationIndexPath.item)
 //        collectionView.reloadData()
+    }
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    func collectionView(_ collectionView: UICollectionView, shouldDeselectItemAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        return true
     }
 }
 
@@ -308,7 +333,7 @@ extension DashboardViewController:UISearchBarDelegate{
            presenter?.getNotes()
         }else{
             filteredNotes = notes.filter({ (note) -> Bool in
-                return note.title.lowercased().contains(searchText.lowercased())
+                return note.title.lowercased().contains(searchText.lowercased()) || note.note.lowercased().contains(searchText.lowercased())
             })
             collectionView.reloadData()
         }

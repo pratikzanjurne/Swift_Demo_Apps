@@ -22,7 +22,7 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
     @IBOutlet var signOutCell: UITableViewCell!
     @IBOutlet var userNameLabel: UILabel!
     @IBOutlet var userIdlabel: UILabel!
-    let menu = ["Notes","Archive","Deleted","Remainder","Sign Out",""]
+    let menu = ["Notes","Archive","Deleted","Remainder"," Sign Out",""]
     var presenter:SideMenuPresenter?
     static var showNotesDelegate:PShowNotes?
     static var sideMenuDelegate:PHideSideMenu?
@@ -32,9 +32,22 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
     }
     func initialiseView(){
         presenter = SideMenuPresenter(pSideMenuView: self, persenterService: DashboardPresenterService())
+        self.userImageView.backgroundColor = UIColor.white
+        if let imageUrlString = UserDefaults.standard.object(forKey: "imageUrl") as? String{
+            print(imageUrlString)
+            let imageUrl = URL(fileURLWithPath: imageUrlString)
+            do{
+                let imageData = try Data(contentsOf: imageUrl)
+                self.userImageView.image = UIImage(data: imageData)
+            }catch{
+                print(error)
+            }
+        }
         self.userNameLabel.text = (UserDefaults.standard.object(forKey: "username") as? String)
         self.userEmailLabel.text = UserDefaults.standard.object(forKey: "userId") as? String
         notesCell.textLabel?.text = menu[0]
+        notesCell.imageView?.image = #imageLiteral(resourceName: "note")
+        notesCell.imageView?.tintColor = UIColor(hexString: Constant.Color.colourReminderText)
         archiveCell.textLabel?.text = menu[1]
         archiveCell.imageView?.image = UIImage(named: Constant.Image.archive)
         archiveCell.imageView?.tintColor = UIColor(hexString: Constant.Color.colourReminderText)
@@ -45,6 +58,9 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
         remainderCell.imageView?.image = UIImage(named: Constant.Image.reminder)
         remainderCell.imageView?.tintColor = UIColor(hexString: Constant.Color.colourReminderText)
         signOutCell.textLabel?.text = menu[4]
+        signOutCell.imageView?.image = #imageLiteral(resourceName: "log_out")
+        signOutCell.imageView?.tintColor = UIColor(hexString: Constant.Color.colourReminderText)
+        UIHelper.shared.setCornerRadius(view: self.userImageView, radius: userImageView.bounds.width/2)
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section{

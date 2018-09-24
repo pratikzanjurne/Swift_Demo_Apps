@@ -60,5 +60,11 @@ class PresenterService{
             completion(response, message, user)
         }
     }
+    
+    func isUserExist(email:String,completion:(Bool)->Void){
+        UserDBManager.isUserExist(email: email) { (result) in
+            completion(result)
+        }
+    }
 
 }

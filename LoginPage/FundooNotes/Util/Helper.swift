@@ -30,5 +30,25 @@ class Helper {
         case archived
         case deleted
     }
+    
+    func compareDate(date:String,time:String,completion:(String)->Void){
+        let dateD = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "MMM d, yyyy"
+        let todaysDate = formatter.string(from: dateD)
+        if todaysDate == date{
+            completion("Today \(time)")
+            return
+        }
+        var dateComponents = DateComponents()
+        dateComponents.setValue(1, for: .day); // +1 day
+        let tomorrow = Calendar.current.date(byAdding: dateComponents, to: dateD)
+        let tomorrowDateString = formatter.string(from: tomorrow!)
+        if tomorrowDateString == date{
+            completion("Tomorrow \(time)")
+        }else{
+            completion("\(date) \(time)")
+        }
+    }
 
 }

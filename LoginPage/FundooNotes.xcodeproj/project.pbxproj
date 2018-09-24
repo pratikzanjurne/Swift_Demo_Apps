@@ -14,8 +14,6 @@
 		0A0FEA7C212BDEF1003DB52F /* DashboardContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A0FEA7B212BDEF1003DB52F /* DashboardContainerViewController.swift */; };
 		0A11626321510B540020F502 /* User+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A11626221510B530020F502 /* User+CoreDataClass.swift */; };
 		0A11626521510B7B0020F502 /* User+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A11626421510B7A0020F502 /* User+CoreDataProperties.swift */; };
-		0A116268215114740020F502 /* Note+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A116266215114740020F502 /* Note+CoreDataProperties.swift */; };
-		0A116269215114740020F502 /* Note+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A116267215114740020F502 /* Note+CoreDataClass.swift */; };
 		0A11FC3821228CAF0035CEC2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A11FC3721228CAF0035CEC2 /* AppDelegate.swift */; };
 		0A11FC3A21228CAF0035CEC2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A11FC3921228CAF0035CEC2 /* LoginViewController.swift */; };
 		0A11FC3D21228CAF0035CEC2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0A11FC3B21228CAF0035CEC2 /* Main.storyboard */; };
@@ -26,6 +24,8 @@
 		0A11FC5B21228CAF0035CEC2 /* LoginPageUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A11FC5A21228CAF0035CEC2 /* LoginPageUITests.swift */; };
 		0A11FC6F2122EA660035CEC2 /* DashboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A11FC6E2122EA660035CEC2 /* DashboardViewController.swift */; };
 		0A11FC712122F3C00035CEC2 /* RagisterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A11FC702122F3C00035CEC2 /* RagisterViewController.swift */; };
+		0A125BAA2158B4D000DA04CE /* Note+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A125BA82158B4CF00DA04CE /* Note+CoreDataProperties.swift */; };
+		0A125BAB2158B4D000DA04CE /* Note+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A125BA92158B4D000DA04CE /* Note+CoreDataClass.swift */; };
 		0A13112F2131265E00D785DD /* OptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A13112E2131265E00D785DD /* OptionCell.swift */; };
 		0A1311322131424C00D785DD /* TakeNotePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1311312131424C00D785DD /* TakeNotePresenter.swift */; };
 		0A17863221340CA900622F72 /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A17863121340CA900622F72 /* NoteModel.swift */; };
@@ -94,8 +94,6 @@
 		0A0FEA7B212BDEF1003DB52F /* DashboardContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardContainerViewController.swift; sourceTree = "<group>"; };
 		0A11626221510B530020F502 /* User+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "User+CoreDataClass.swift"; path = "/Users/bridgelabz/Documents/Pratik/Swift_Demo_Apps/LoginPage/FundooNotes/model/User+CoreDataClass.swift"; sourceTree = "<absolute>"; };
 		0A11626421510B7A0020F502 /* User+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "User+CoreDataProperties.swift"; path = "/Users/bridgelabz/Documents/Pratik/Swift_Demo_Apps/LoginPage/FundooNotes/model/User+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
-		0A116266215114740020F502 /* Note+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Note+CoreDataProperties.swift"; path = "../Note+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		0A116267215114740020F502 /* Note+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Note+CoreDataClass.swift"; path = "../Note+CoreDataClass.swift"; sourceTree = "<group>"; };
 		0A11FC3421228CAF0035CEC2 /* FundooNotes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FundooNotes.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0A11FC3721228CAF0035CEC2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0A11FC3921228CAF0035CEC2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -112,6 +110,8 @@
 		0A11FC5C21228CAF0035CEC2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0A11FC6E2122EA660035CEC2 /* DashboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardViewController.swift; sourceTree = "<group>"; };
 		0A11FC702122F3C00035CEC2 /* RagisterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RagisterViewController.swift; sourceTree = "<group>"; };
+		0A125BA82158B4CF00DA04CE /* Note+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Note+CoreDataProperties.swift"; path = "../Note+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		0A125BA92158B4D000DA04CE /* Note+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "Note+CoreDataClass.swift"; path = "../Note+CoreDataClass.swift"; sourceTree = "<group>"; };
 		0A13112E2131265E00D785DD /* OptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionCell.swift; sourceTree = "<group>"; };
 		0A1311312131424C00D785DD /* TakeNotePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeNotePresenter.swift; sourceTree = "<group>"; };
 		0A17863121340CA900622F72 /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
@@ -297,8 +297,8 @@
 		0AA2AFFD2125388300C3B33E /* model */ = {
 			isa = PBXGroup;
 			children = (
-				0A116267215114740020F502 /* Note+CoreDataClass.swift */,
-				0A116266215114740020F502 /* Note+CoreDataProperties.swift */,
+				0A125BA92158B4D000DA04CE /* Note+CoreDataClass.swift */,
+				0A125BA82158B4CF00DA04CE /* Note+CoreDataProperties.swift */,
 				0A11626421510B7A0020F502 /* User+CoreDataProperties.swift */,
 				0A11626221510B530020F502 /* User+CoreDataClass.swift */,
 				0A17863121340CA900622F72 /* NoteModel.swift */,
@@ -572,12 +572,11 @@
 				0A1786342134140C00622F72 /* NoteDBManager.swift in Sources */,
 				0AC9E6D2214294D40069573B /* PopUpViewController.swift in Sources */,
 				0AA043C9215218CA00B91E67 /* ColourOptionTblViewCell.swift in Sources */,
-				0A116268215114740020F502 /* Note+CoreDataProperties.swift in Sources */,
 				0AD2124321269EDE00FAEE00 /* RagisterPresenter.swift in Sources */,
 				0A11FC6F2122EA660035CEC2 /* DashboardViewController.swift in Sources */,
+				0A125BAB2158B4D000DA04CE /* Note+CoreDataClass.swift in Sources */,
 				0AA2B00B2125C6B600C3B33E /* DashboardPresenter.swift in Sources */,
 				0ADF0EC72144098200B28139 /* PinterestLayoutDelegate.swift in Sources */,
-				0A116269215114740020F502 /* Note+CoreDataClass.swift in Sources */,
 				0AD21241212686FA00FAEE00 /* LoginViewPresenter.swift in Sources */,
 				0AD212492126E85500FAEE00 /* ForgotPasswrdPresenter.swift in Sources */,
 				0AA79C9121491BC600BA2B3F /* HCollectionReusableView.swift in Sources */,
@@ -609,6 +608,7 @@
 				0A5D7E6D2146883700F81F39 /* SetReminderTableViewCell.swift in Sources */,
 				0A11FC3821228CAF0035CEC2 /* AppDelegate.swift in Sources */,
 				0A0FEA7C212BDEF1003DB52F /* DashboardContainerViewController.swift in Sources */,
+				0A125BAA2158B4D000DA04CE /* Note+CoreDataProperties.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,7 +9,6 @@ protocol PLoginView{
 
 
 class LoginViewController:BaseViewController,PLoginView {
-
     private var presenter:LoginViewPresenter?
     
     @IBOutlet var googleBtn: UIButton!
@@ -22,7 +21,6 @@ class LoginViewController:BaseViewController,PLoginView {
     override func viewDidLoad() {
         super.viewDidLoad()
         initialseView()
-        
         facebookBtn.addTarget(self, action: #selector(self.loginButtonClicked), for: .touchUpInside)
     }
     
@@ -91,14 +89,15 @@ class LoginViewController:BaseViewController,PLoginView {
         if((FBSDKAccessToken.current()) != nil){
             FBSDKGraphRequest(graphPath: "me", parameters: ["fields": "id, name, first_name, last_name, picture.type(large), email"]).start(completionHandler: { (connection, result, error) -> Void in
                 if (error == nil){
-                    print(result)
-//                    if let result = result as? [String:Any]{
-//                        result.valueForKey("email") as! String
-//                        result.valueForKey("id") as! String
-//                        result.valueForKey("name") as! String
-//                        result.valueForKey("first_name") as! String
-//                        result.valueForKey("last_name") as! String
-//                    }
+                    if let result = result as? [String:Any]{
+                        if let email = result["email"] as? String,let username = result["name"] as? String{
+                                if let picture = result["picture"] as? NSDictionary , let data = picture["data"] as? NSDictionary , let url = data["url"] as? String{
+                                    self.presenter?.loginWithFacebook(email: email, username: username, imageUrl: url)
+                                }else{
+                                    self.presenter?.loginWithFacebook(email: email, username: username,imageUrl: nil)
+                                }
+                        }
+                    }
                 }
             })
         }

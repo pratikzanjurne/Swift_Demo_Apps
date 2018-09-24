@@ -11,6 +11,7 @@ class DashboardNoteCell:UICollectionViewCell{
     @IBOutlet var pinImageConstraint: NSLayoutConstraint!
     @IBOutlet var reminderTextView:UIView!
     @IBOutlet var reminderTextViewHConstraint:NSLayoutConstraint!
+    @IBOutlet var pinImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -49,7 +50,9 @@ class DashboardNoteCell:UICollectionViewCell{
         self.noteTextLabel.attributedText = attributedString
         if note.is_remidered{
             self.reminderTextViewHConstraint.constant = 18
-            self.dateTextLabel.text =  "\(note.reminder_date!) \(note.reminder_time!)"
+            Helper.shared.compareDate(date: note.reminder_date!, time: note.reminder_time!, completion: { (dateString) in
+                self.dateTextLabel.text = "\(dateString)"
+            })
         }else{
             self.reminderTextViewHConstraint.constant = 0
         }
@@ -59,6 +62,7 @@ class DashboardNoteCell:UICollectionViewCell{
         self.layer.backgroundColor = UIColor(hexString: note.colour).cgColor
         if note.is_pinned{
             self.pinImageConstraint.constant = 18
+            self.pinImage.backgroundColor = UIColor(hexString: note.colour)
         }else{
             self.pinImageConstraint.constant = 0
         }

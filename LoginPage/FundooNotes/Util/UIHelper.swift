@@ -40,6 +40,8 @@ class UIHelper {
         view.layer.masksToBounds = true;
 
     }
+    
+    
 }
 //extension UIView {
 //    

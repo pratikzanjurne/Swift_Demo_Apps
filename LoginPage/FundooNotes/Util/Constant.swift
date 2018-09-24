@@ -10,7 +10,7 @@ struct Constant {
         static let colorWhite = "#ffffff"
         static let colorBlack = "#000000"
         static let colourForFilterOn = "#507786"
-        static let colourOrange = "#FF9300"
+        static let colourOrange = "#f9bd00"
         static let colourReminderText = "#898989"
         static let colorForDeleted = "#555555"
     }

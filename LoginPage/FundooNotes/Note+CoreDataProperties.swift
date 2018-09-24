@@ -1,4 +1,3 @@
-
 import Foundation
 import CoreData
 
@@ -22,5 +21,6 @@ extension Note {
     @NSManaged public var reminder_time: String?
     @NSManaged public var title: String?
     @NSManaged public var userid: String?
+    @NSManaged public var edited_date: String?
 
 }

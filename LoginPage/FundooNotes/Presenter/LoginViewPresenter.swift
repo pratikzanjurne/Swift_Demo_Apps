@@ -26,4 +26,11 @@ class LoginViewPresenter{
     self.pLoginView?.showAlert(message: "Enter the valid email address.")
         }
     }
+    
+    func loginWithFacebook(email:String,username:String,imageUrl:String?){
+                UserDefaults.standard.set(email, forKey: "userId")
+                UserDefaults.standard.set(username, forKey: "username")
+                UserDefaults.standard.set(imageUrl, forKey: "imageUrl")
+                pLoginView?.showDashboardViewController()
+    }
 }
