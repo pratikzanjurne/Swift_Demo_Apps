@@ -36,10 +36,10 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="pinned" translatesAutoresizingMaskIntoConstraints="NO" id="h4l-sy-Fct">
-                                <rect key="frame" x="220" y="44.5" width="18" height="18"/>
+                                <rect key="frame" x="220" y="44.5" width="17" height="17"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="18" id="7qs-R5-QkY"/>
-                                    <constraint firstAttribute="height" constant="18" id="Reg-FF-EbI"/>
+                                    <constraint firstAttribute="width" constant="17" id="7qs-R5-QkY"/>
+                                    <constraint firstAttribute="height" constant="17" id="Reg-FF-EbI"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iaj-oO-J96">
@@ -56,7 +56,7 @@
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="XOw-zl-ne1">
                                         <rect key="frame" x="20" y="0.0" width="0.0" height="18"/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                         <color key="textColor" red="0.53725490196078429" green="0.53725490196078429" blue="0.53725490196078429" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -85,7 +85,7 @@
                             <constraint firstItem="ccg-xK-PuC" firstAttribute="leading" secondItem="nNo-Je-cRI" secondAttribute="leading" constant="16" id="mOg-sj-jup"/>
                             <constraint firstItem="h4l-sy-Fct" firstAttribute="top" secondItem="ccg-xK-PuC" secondAttribute="bottom" constant="16" id="qid-Rp-V7a"/>
                             <constraint firstAttribute="trailing" secondItem="ccg-xK-PuC" secondAttribute="trailing" constant="16" id="xLB-WA-2Ai"/>
-                            <constraint firstAttribute="trailing" secondItem="h4l-sy-Fct" secondAttribute="trailing" constant="16" id="xmL-RS-3Ax"/>
+                            <constraint firstAttribute="trailing" secondItem="h4l-sy-Fct" secondAttribute="trailing" constant="17" id="xmL-RS-3Ax"/>
                         </constraints>
                     </view>
                 </subviews>

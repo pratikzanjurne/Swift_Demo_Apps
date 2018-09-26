@@ -65,7 +65,6 @@ class LoginViewController:BaseViewController,PLoginView {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "DashboardContainerViewController") as! DashboardContainerViewController
         present(vc, animated: true) {
-            
         }
     }
     
@@ -103,5 +102,3 @@ class LoginViewController:BaseViewController,PLoginView {
         }
     }
 }
-
-

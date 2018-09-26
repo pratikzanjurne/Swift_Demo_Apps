@@ -179,12 +179,11 @@ class NoteDBManager{
 //                    return note.is_deleted == true
 //                })
                 break
-            default:
-                break
+//            default:
+//                break
             }
 
         }catch{
-            
         }
     }
     

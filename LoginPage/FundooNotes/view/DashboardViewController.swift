@@ -6,6 +6,7 @@ protocol PDashboardView {
     func setDeletedNotes(notes:[NoteModel])
     func stopLoading()
     func startLoading()
+    func setSelectedNotes(notes:[NoteModel])
 }
 
 
@@ -33,6 +34,9 @@ class DashboardViewController:BaseViewController{
     var filteredNotes = [NoteModel]()
     var pinnedFilteredNotes = [NoteModel]()
     var deletedNotes = [NoteModel]()
+    var selectedNotes = [NoteModel]()
+    var activeView = Constant.NoteOfType.note
+    var selectedColor:String = Constant.Color.colourOrange
     override func viewDidLoad() {
         super.viewDidLoad()
         initialseView()
@@ -41,13 +45,21 @@ class DashboardViewController:BaseViewController{
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        if activeView == .note{
+            self.isFilterActive = false
+        }else{
+            self.isFilterActive = true
+        }
+        presenter?.getNotesOfType(activeView, completion: { (notes) in
+            self.filteredNotes = notes
+        })
         setupData()
-        collectionView.reloadData()
         if let presenter = presenter{
             presenter.getNotes()
         }
     }
     override func initialseView() {
+        self.navigationBar.barTintColor = UIColor(hexString: selectedColor)
         let cell = UINib(nibName: "DashboardNoteCell", bundle: nil)
         self.collectionView.register(cell, forCellWithReuseIdentifier: "DashboardNoteCell")
         collectionView.register(UINib(nibName:"HCollectionReusableView",bundle:nil),forSupplementaryViewOfKind:UICollectionElementKindSectionHeader,withReuseIdentifier:"HeaderCell")
@@ -67,6 +79,7 @@ class DashboardViewController:BaseViewController{
     }
     
     func setupData(){
+        
         if let layout = collectionView.collectionViewLayout as? PinterestLayout{
             layout.delegate = self
             layout.numberOfColumns = isListView ? 1 : 2
@@ -130,13 +143,24 @@ class DashboardViewController:BaseViewController{
                 break
             }
             collectionView.beginInteractiveMovementForItem(at: selectedIndexPath)
+            let cell = collectionView.cellForItem(at: selectedIndexPath)
+            cell?.layer.borderColor = UIColor.gray.cgColor
+            cell?.layer.borderWidth = 3.0
             collectionView.allowsMultipleSelection = true
             self.isMultipleSelectionActive = true
+            NavigationHelper.setNavigationItem(target: self, delegate: self, option: self.activeView, completion: { (navigationItem) in
+                if let navigationItems = navigationItem.leftBarButtonItems{
+                    navigationItems[1].title = "\(self.selectedNotes.count)"
+                }
+                self.navigationBar.pushItem(navigationItem, animated: false)
+            })
+            self.view.backgroundColor = UIColor(hexString: Constant.Color.colourReminderText)
+            self.navigationBar.barTintColor = UIColor.white
         case .changed:
             collectionView.updateInteractiveMovementTargetPosition(gesture.location(in: gesture.view!))
         case .ended:
             collectionView.endInteractiveMovement()
-            self.collectionView.reloadData()
+                self.collectionView.reloadData()
         default:
             collectionView.cancelInteractiveMovement()
         }
@@ -214,13 +238,7 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
                 reusableView.setHeader(text: "Notes")
             }
         }
-
-        //do other header related calls or settups
             return reusableView
-            
-            
-//        default:  fatalError("Unexpected element kind")
-//        }
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -248,7 +266,22 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
             let cell = collectionView.cellForItem(at: indexPath)
             cell?.layer.borderColor = UIColor.gray.cgColor
             cell?.layer.borderWidth = 3.0
-            print(collectionView.indexPathsForSelectedItems)
+            if isFilterActive{
+                selectedNotes.append(filteredNotes[indexPath.item])
+            }else{
+                if indexPath.section == 0{
+                    selectedNotes.append(pinnedNotes[indexPath.item])
+                }else{
+                    selectedNotes.append(unpinnedNotes[indexPath.item])
+                }
+            }
+            if let navigationItems = self.navigationBar.items{
+                if navigationItems.count == 2{
+                    if let leftNavigationItems = navigationItems[1].leftBarButtonItems{
+                        leftNavigationItems[1].title = "\(self.selectedNotes.count)"
+                    }
+                }
+            }
         }else{
             let stroryBoard = UIStoryboard(name: "Main", bundle: nil)
             let vc = stroryBoard.instantiateViewController(withIdentifier: "TakeNoteViewController") as! TakeNoteViewController
@@ -268,6 +301,38 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
         let cell = collectionView.cellForItem(at: indexPath)
         cell?.layer.borderColor = UIColor.gray.cgColor
         cell?.layer.borderWidth = 0.0
+        if collectionView.indexPathsForSelectedItems?.count == 0 {
+            collectionView.allowsMultipleSelection = false
+            isMultipleSelectionActive = false
+            self.navigationBar.popItem(animated: false)
+            self.view.backgroundColor = UIColor(hexString: self.selectedColor)
+            self.navigationBar.barTintColor = UIColor(hexString: self.selectedColor)
+            self.selectedNotes.removeAll()
+            return
+        }
+        let note:NoteModel
+        if isFilterActive{
+            note = filteredNotes[indexPath.item]
+        }else{
+            if indexPath.section == 0{
+                note = pinnedNotes[indexPath.item]
+            }else{
+                note = unpinnedNotes[indexPath.item]
+            }
+        }
+        for i in 0..<selectedNotes.count {
+            if selectedNotes[i].note_id == note.note_id{
+                selectedNotes.remove(at: i)
+                break
+            }
+        }
+        if let navigationItems = self.navigationBar.items{
+            if navigationItems.count == 2{
+                if let leftNavigationItems = navigationItems[1].leftBarButtonItems{
+                    leftNavigationItems[1].title = "\(self.selectedNotes.count)"
+                }
+            }
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
@@ -340,6 +405,10 @@ extension DashboardViewController:UISearchBarDelegate{
     }
 }
 extension DashboardViewController:PDashboardView{
+    func setSelectedNotes(notes: [NoteModel]) {
+        self.selectedNotes = notes
+    }
+    
     func startLoading(){
         self.activityIndicatorView.isHidden = false
         self.activityIndicatorView.startAnimating()
@@ -364,10 +433,13 @@ extension DashboardViewController:PDashboardView{
 
 extension DashboardViewController:PShowNotes{
     func showNotes(_ option: Constant.NoteOfType, colour: String, viewTitle: String) {
+        self.activeView = option
+        self.selectedColor = colour
         switch option{
             case .deleted:
+                
                 self.isFilterActive = true
-                self.notesNavigationItem.title = viewTitle
+                self.notesNavigationItem.title = Constant.DashboardViewTitle.deletedView
                 self.view.backgroundColor = UIColor(hexString: colour)
                 self.navigationBar.barTintColor = UIColor(hexString: colour)
                 presenter?.getNotesOfType(.deleted, completion: { (notes) in
@@ -390,4 +462,36 @@ extension DashboardViewController:PShowNotes{
                 collectionView.reloadData()
         }
     }
+}
+extension DashboardViewController:PNavigationItemDelegate{
+    func onClickOption() {
+        print("clicked option in \(self.activeView)")
+    }
+    func onClickBack() {
+        print("clicked back in \(self.activeView)")
+        self.selectedNotes.removeAll()
+        self.navigationBar.popItem(animated: false)
+        self.isMultipleSelectionActive = false
+        self.view.backgroundColor = UIColor(hexString: self.selectedColor)
+        self.navigationBar.barTintColor = UIColor(hexString: self.selectedColor)
+        self.collectionView.allowsMultipleSelection = false
+        self.collectionView.reloadData()
+    }
+    func onClickPin() {
+        print("clicked pin in \(self.activeView)")
+    }
+    func onClickDelete() {
+        print("clicked delete in \(self.activeView)")
+    }
+    func onClickColor() {
+        print("clicked color in \(self.activeView)")
+    }
+    
+    func onClickReminder() {
+        print("clicked reminder in \(self.activeView)")
+    }
+    func onClickRestore() {
+        print("clicked restore in deleted")
+    }
+    
 }

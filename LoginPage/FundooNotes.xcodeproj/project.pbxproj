@@ -30,6 +30,7 @@
 		0A1311322131424C00D785DD /* TakeNotePresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1311312131424C00D785DD /* TakeNotePresenter.swift */; };
 		0A17863221340CA900622F72 /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A17863121340CA900622F72 /* NoteModel.swift */; };
 		0A1786342134140C00622F72 /* NoteDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1786332134140C00622F72 /* NoteDBManager.swift */; };
+		0A1E5BB5215B68BE002FD19F /* NavigationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1E5BB4215B68BE002FD19F /* NavigationHelper.swift */; };
 		0A230C8A2128008600088573 /* UserDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A230C892128008600088573 /* UserDBManager.swift */; };
 		0A2AA46C212EE97400515640 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2AA46B212EE97400515640 /* NoteView.swift */; };
 		0A2AA46E212EE98F00515640 /* NoteView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2AA46D212EE98F00515640 /* NoteView.xib */; };
@@ -116,6 +117,7 @@
 		0A1311312131424C00D785DD /* TakeNotePresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeNotePresenter.swift; sourceTree = "<group>"; };
 		0A17863121340CA900622F72 /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
 		0A1786332134140C00622F72 /* NoteDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDBManager.swift; sourceTree = "<group>"; };
+		0A1E5BB4215B68BE002FD19F /* NavigationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHelper.swift; sourceTree = "<group>"; };
 		0A230C892128008600088573 /* UserDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDBManager.swift; sourceTree = "<group>"; };
 		0A2AA46B212EE97400515640 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
 		0A2AA46D212EE98F00515640 /* NoteView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteView.xib; sourceTree = "<group>"; };
@@ -262,6 +264,7 @@
 				0AC79EDB2152160600258C45 /* ColourOptionTblView.swift */,
 				0AA043C62152189600B91E67 /* ColourOptionTbleViewCell.xib */,
 				0AA043C8215218CA00B91E67 /* ColourOptionTblViewCell.swift */,
+				0A1E5BB4215B68BE002FD19F /* NavigationHelper.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -596,6 +599,7 @@
 				0AD212472126E72C00FAEE00 /* ForgotPasswordModel.swift in Sources */,
 				0A13112F2131265E00D785DD /* OptionCell.swift in Sources */,
 				0ADF0EC92144098200B28139 /* PinterestLayoutAttributes.swift in Sources */,
+				0A1E5BB5215B68BE002FD19F /* NavigationHelper.swift in Sources */,
 				0AA2B0022125406C00C3B33E /* PresenterService.swift in Sources */,
 				0A048A65212E6DD200871177 /* UIHelper.swift in Sources */,
 				0A11FC4021228CAF0035CEC2 /* LoginPage.xcdatamodeld in Sources */,
