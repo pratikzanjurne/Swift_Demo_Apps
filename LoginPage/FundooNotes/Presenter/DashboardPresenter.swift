@@ -80,4 +80,10 @@ class DashboardPresenter{
             completion(notes)
         })
     }
+    
+    func pinNoteArray(notes:[NoteModel],completion:(Bool,String)->Void){
+        presenterService?.pinNoteArray(notes: notes, completion: { (status,message) in
+            completion(status,message)
+        })
+    }
 }

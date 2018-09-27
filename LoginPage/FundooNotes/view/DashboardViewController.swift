@@ -87,12 +87,6 @@ class DashboardViewController:BaseViewController{
         collectionView.delegate = self
         collectionView.dataSource = self
         self.presenter?.getNotes()
-        pinnedNotes = notes.filter({ (note) -> Bool in
-            return note.is_pinned == true
-        })
-        unpinnedNotes = notes.filter({ (note) -> Bool in
-            return note.is_pinned != true && note.is_archived != true
-        })
     }
     
     @IBAction func onSideMenuTapped(_ sender: Any) {
@@ -421,7 +415,16 @@ extension DashboardViewController:PDashboardView{
     
     func setNotes(notes : [NoteModel]) {
         self.notes = notes
+        pinnedNotes = notes.filter({ (note) -> Bool in
+            return note.is_pinned == true
+        })
+        unpinnedNotes = notes.filter({ (note) -> Bool in
+            return note.is_pinned != true && note.is_archived != true
+        })
         self.collectionView.reloadData()
+        presenter?.getNotesOfType(self.activeView, completion: { (notes) in
+            self.filteredNotes = notes
+        })
     }
     
     func setDeletedNotes(notes: [NoteModel]) {
@@ -478,7 +481,10 @@ extension DashboardViewController:PNavigationItemDelegate{
         self.collectionView.reloadData()
     }
     func onClickPin() {
-        print("clicked pin in \(self.activeView)")
+        self.presenter?.pinNoteArray(notes: selectedNotes, completion: { (status, message) in
+        })
+        onClickBack()
+        presenter?.getNotes()
     }
     func onClickDelete() {
         print("clicked delete in \(self.activeView)")

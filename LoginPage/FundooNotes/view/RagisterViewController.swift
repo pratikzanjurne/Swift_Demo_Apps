@@ -1,6 +1,8 @@
 
 import UIKit
 
+
+
 protocol PRagisterView {
     func showAlert(title:String,message:String)
     func takeUserData()->UserModel
@@ -18,9 +20,12 @@ class RagisterViewController: BaseViewController,PRagisterView {
     
     var presenter:RagisterPresenter?
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initialseView()
+    
     }
     
     override func initialseView() {

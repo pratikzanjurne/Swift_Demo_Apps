@@ -202,9 +202,37 @@ class NoteDBManager{
             }
         }catch{
             completion(false, "Not able to restore the note. ")
-        }    }
+        }
+    }
     
     func setReminder(){
         
+    }
+    
+    static func pinNote(note:NoteModel,completion:(Bool,String)->Void){
+        do{
+            let fetchRequest:NSFetchRequest<Note> = Note.fetchRequest()
+            fetchRequest.predicate = NSPredicate(format: "note_id = %@", note.note_id)
+            let dBNotes = try self.context.fetch(fetchRequest)
+            if let note = dBNotes.first{
+                note.is_pinned = true
+                note.is_archived = false
+                saveContext()
+                completion(true,"Success")
+            }else{
+                completion(false,"Not able to find the note")
+                return
+            }
+        }catch{
+            completion(false,"Something went wrong try after some time.")
+        }
+    }
+    
+    static func pinNoteArray(notes:[NoteModel],completion:(Bool,String)->Void){
+        for note in notes{
+            pinNote(note: note, completion: { (result,message) in
+                completion(result, message)
+            })
+        }
     }
 }

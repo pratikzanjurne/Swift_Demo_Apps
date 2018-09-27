@@ -31,6 +31,8 @@
 		0A17863221340CA900622F72 /* NoteModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A17863121340CA900622F72 /* NoteModel.swift */; };
 		0A1786342134140C00622F72 /* NoteDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1786332134140C00622F72 /* NoteDBManager.swift */; };
 		0A1E5BB5215B68BE002FD19F /* NavigationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1E5BB4215B68BE002FD19F /* NavigationHelper.swift */; };
+		0A1F5AB5215CE371004DEC82 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 0A1F5AB4215CE370004DEC82 /* GoogleService-Info.plist */; };
+		0A1F5AB7215D184B004DEC82 /* FirebaseDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A1F5AB6215D184B004DEC82 /* FirebaseDBManager.swift */; };
 		0A230C8A2128008600088573 /* UserDBManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A230C892128008600088573 /* UserDBManager.swift */; };
 		0A2AA46C212EE97400515640 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A2AA46B212EE97400515640 /* NoteView.swift */; };
 		0A2AA46E212EE98F00515640 /* NoteView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A2AA46D212EE98F00515640 /* NoteView.xib */; };
@@ -118,6 +120,8 @@
 		0A17863121340CA900622F72 /* NoteModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteModel.swift; sourceTree = "<group>"; };
 		0A1786332134140C00622F72 /* NoteDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDBManager.swift; sourceTree = "<group>"; };
 		0A1E5BB4215B68BE002FD19F /* NavigationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationHelper.swift; sourceTree = "<group>"; };
+		0A1F5AB4215CE370004DEC82 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		0A1F5AB6215D184B004DEC82 /* FirebaseDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseDBManager.swift; sourceTree = "<group>"; };
 		0A230C892128008600088573 /* UserDBManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDBManager.swift; sourceTree = "<group>"; };
 		0A2AA46B212EE97400515640 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
 		0A2AA46D212EE98F00515640 /* NoteView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NoteView.xib; sourceTree = "<group>"; };
@@ -222,6 +226,7 @@
 				0A11FC4321228CAF0035CEC2 /* LaunchScreen.storyboard */,
 				0A11FC4121228CAF0035CEC2 /* Assets.xcassets */,
 				0A11FC4621228CAF0035CEC2 /* Info.plist */,
+				0A1F5AB4215CE370004DEC82 /* GoogleService-Info.plist */,
 				0A11FC3E21228CAF0035CEC2 /* LoginPage.xcdatamodeld */,
 			);
 			path = FundooNotes;
@@ -274,6 +279,7 @@
 			children = (
 				0A230C892128008600088573 /* UserDBManager.swift */,
 				0A1786332134140C00622F72 /* NoteDBManager.swift */,
+				0A1F5AB6215D184B004DEC82 /* FirebaseDBManager.swift */,
 			);
 			path = DBManager;
 			sourceTree = "<group>";
@@ -493,6 +499,7 @@
 				0AC79EDA2152143000258C45 /* ColourOptionTblVew.xib in Resources */,
 				0A11FC4221228CAF0035CEC2 /* Assets.xcassets in Resources */,
 				0A2AA46E212EE98F00515640 /* NoteView.xib in Resources */,
+				0A1F5AB5215CE371004DEC82 /* GoogleService-Info.plist in Resources */,
 				0AA79C8F21491A8800BA2B3F /* HCollectionReusableView.xib in Resources */,
 				0A11FC3D21228CAF0035CEC2 /* Main.storyboard in Resources */,
 			);
@@ -525,16 +532,24 @@
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
+				"${BUILT_PRODUCTS_DIR}/GoogleUtilities/GoogleUtilities.framework",
 				"${BUILT_PRODUCTS_DIR}/MaterialControls/MaterialControls.framework",
 				"${BUILT_PRODUCTS_DIR}/UITextView+Placeholder/UITextView_Placeholder.framework",
+				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
+				"${BUILT_PRODUCTS_DIR}/nanopb/nanopb.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleUtilities.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MaterialControls.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextView_Placeholder.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/nanopb.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -586,6 +601,7 @@
 				0A1311322131424C00D785DD /* TakeNotePresenter.swift in Sources */,
 				0ADF6276212D29A300C07571 /* TakeNoteViewController.swift in Sources */,
 				0AD21FED21351687000025B3 /* DashboardNoteCell.swift in Sources */,
+				0A1F5AB7215D184B004DEC82 /* FirebaseDBManager.swift in Sources */,
 				0A11626521510B7B0020F502 /* User+CoreDataProperties.swift in Sources */,
 				0A99E0BA21493E8600F5021E /* Constant.swift in Sources */,
 				0A11FC712122F3C00035CEC2 /* RagisterViewController.swift in Sources */,

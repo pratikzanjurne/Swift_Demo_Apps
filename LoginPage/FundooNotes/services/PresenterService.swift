@@ -31,8 +31,11 @@ class PresenterService{
     }
     
     func createUserAcc(user:UserModel,completion:(Bool)->Void) {
-        UserDBManager.ragisterUserModel(user: user) { (status) in
-            completion(status)
+//        UserDBManager.ragisterUserModel(user: user) { (status) in
+//            completion(status)
+//        }
+        FirebaseDBManager.shared.createUser(userModel: user) { (status) in
+            
         }
     }
     
