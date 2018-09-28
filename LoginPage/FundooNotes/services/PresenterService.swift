@@ -30,12 +30,12 @@ class PresenterService{
         return result
     }
     
-    func createUserAcc(user:UserModel,completion:(Bool)->Void) {
+    func createUserAcc(user:UserModel,completion:@escaping (Bool)->Void) {
 //        UserDBManager.ragisterUserModel(user: user) { (status) in
 //            completion(status)
 //        }
         FirebaseDBManager.shared.createUser(userModel: user) { (status) in
-            
+            completion(status)
         }
     }
     
@@ -58,9 +58,12 @@ class PresenterService{
             completion(status)
         })
     }
-    func loginUser(email:String,password:String,completion:(Bool,String,User?)->Void) {
-        UserDBManager.loginUser(email: email, password: password) { (response, message, user) in
-            completion(response, message, user)
+    func loginUser(email:String,password:String,completion:@escaping (Bool,String)->Void) {
+//        UserDBManager.loginUser(email: email, password: password) { (response, message, user) in
+//            completion(response, message, user)
+//        }
+        FirebaseDBManager.shared.loginUser(email: email, password: password) { (result, message) in
+            completion(result, message)
         }
     }
     

@@ -16,9 +16,9 @@ class RagisterPresenter{
                 if (presenterService?.validateEmailPattern(email: user.emailId))!{
                     presenterService?.createUserAcc(user: user, completion: { (status) in
                         if status{
-                            pRagesterView?.showAlert(title: "Account created", message: "Account created with the name \(user.username)")
+                            self.pRagesterView?.showAlert(title: "Account created", message: "Account created with the name \(user.username)")
                         }else{
-                            pRagesterView?.showAlert(title: "Can't create account", message: "User with the entered email address already exist.")
+                            self.pRagesterView?.showAlert(title: "Can't create account", message: "User with the entered email address already exist.")
                         }
                     })
                 }else{

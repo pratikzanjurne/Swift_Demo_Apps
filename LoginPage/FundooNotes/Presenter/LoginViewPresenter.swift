@@ -11,19 +11,17 @@ class LoginViewPresenter{
     
     func loginUser(email:String,password:String){
         if presenterService.validateEmailPattern(email: email){
-            presenterService.loginUser(email: email, password: password) { (response, message, user) in
+            self.pLoginView?.startLoading()
+            presenterService.loginUser(email: email, password: password) { (response, message) in
+                self.pLoginView?.stopLoading()
                 if response{
-                    UserDefaults.standard.set(user?.email, forKey: "userId")
-                    let firstName = user?.username
-                    let lastName = user?.lastname
-                    UserDefaults.standard.set("\(firstName!) \(lastName!)", forKey: "username")
-                    pLoginView?.showDashboardViewController()
+                    self.pLoginView?.showDashboardViewController()
                 }else{
-                    pLoginView?.showAlert(message: message)
+                    self.pLoginView?.showAlert(message: message)
                 }
             }
         }else {
-    self.pLoginView?.showAlert(message: "Enter the valid email address.")
+            self.pLoginView?.showAlert(message: "Enter the valid email address.")
         }
     }
     

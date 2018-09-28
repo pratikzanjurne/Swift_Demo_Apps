@@ -42,6 +42,7 @@
 		0A93BB0C2139204A00BA586B /* ColourOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A93BB0B2139204A00BA586B /* ColourOptions.swift */; };
 		0A93BB0E213950A600BA586B /* ColourCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A93BB0D213950A600BA586B /* ColourCell.xib */; };
 		0A93BB102139510F00BA586B /* ColourCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A93BB0F2139510F00BA586B /* ColourCell.swift */; };
+		0A97F04A215DF3A40079099F /* UserInfoModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A97F049215DF3A40079099F /* UserInfoModel.swift */; };
 		0A99E0BA21493E8600F5021E /* Constant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A99E0B921493E8600F5021E /* Constant.swift */; };
 		0AA043C72152189600B91E67 /* ColourOptionTbleViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AA043C62152189600B91E67 /* ColourOptionTbleViewCell.xib */; };
 		0AA043C9215218CA00B91E67 /* ColourOptionTblViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA043C8215218CA00B91E67 /* ColourOptionTblViewCell.swift */; };
@@ -132,6 +133,7 @@
 		0A93BB0B2139204A00BA586B /* ColourOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColourOptions.swift; sourceTree = "<group>"; };
 		0A93BB0D213950A600BA586B /* ColourCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColourCell.xib; sourceTree = "<group>"; };
 		0A93BB0F2139510F00BA586B /* ColourCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColourCell.swift; sourceTree = "<group>"; };
+		0A97F049215DF3A40079099F /* UserInfoModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInfoModel.swift; sourceTree = "<group>"; };
 		0A99E0B921493E8600F5021E /* Constant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constant.swift; sourceTree = "<group>"; };
 		0AA043C62152189600B91E67 /* ColourOptionTbleViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColourOptionTbleViewCell.xib; sourceTree = "<group>"; };
 		0AA043C8215218CA00B91E67 /* ColourOptionTblViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColourOptionTblViewCell.swift; sourceTree = "<group>"; };
@@ -313,6 +315,7 @@
 				0A17863121340CA900622F72 /* NoteModel.swift */,
 				0AA2B0032125962C00C3B33E /* UserModel.swift */,
 				0AD212462126E72C00FAEE00 /* ForgotPasswordModel.swift */,
+				0A97F049215DF3A40079099F /* UserInfoModel.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -599,6 +602,7 @@
 				0AD212492126E85500FAEE00 /* ForgotPasswrdPresenter.swift in Sources */,
 				0AA79C9121491BC600BA2B3F /* HCollectionReusableView.swift in Sources */,
 				0A1311322131424C00D785DD /* TakeNotePresenter.swift in Sources */,
+				0A97F04A215DF3A40079099F /* UserInfoModel.swift in Sources */,
 				0ADF6276212D29A300C07571 /* TakeNoteViewController.swift in Sources */,
 				0AD21FED21351687000025B3 /* DashboardNoteCell.swift in Sources */,
 				0A1F5AB7215D184B004DEC82 /* FirebaseDBManager.swift in Sources */,

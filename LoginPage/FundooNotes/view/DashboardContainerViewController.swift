@@ -60,6 +60,7 @@ class DashboardContainerViewController: BaseViewController,PDashboardContainerVi
                                       message:nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "Sign Out", style: .default) { (_) in
             UserDefaults.standard.set(nil, forKey: "userId")
+            UserDefaults.standard.set(nil, forKey: "username")
             self.showLoginViewController()
         }
         let cancelAction = UIAlertAction(title: "Cancel", style: .default) { (_) in

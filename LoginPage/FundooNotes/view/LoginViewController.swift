@@ -5,6 +5,8 @@ import FBSDKLoginKit
 protocol PLoginView{
     func showAlert(message:String)
     func showDashboardViewController()
+    func startLoading()
+    func stopLoading()
 }
 
 
@@ -17,7 +19,8 @@ class LoginViewController:BaseViewController,PLoginView {
     @IBOutlet var createAccBtn: UIButton!
     @IBOutlet var loginBtn: UIButton!
     @IBOutlet var usernameID: UITextField!
- 
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         initialseView()
@@ -66,6 +69,15 @@ class LoginViewController:BaseViewController,PLoginView {
         let vc = storyboard.instantiateViewController(withIdentifier: "DashboardContainerViewController") as! DashboardContainerViewController
         present(vc, animated: true) {
         }
+    }
+    func startLoading() {
+        self.activityIndicator.isHidden = false
+        self.activityIndicator.startAnimating()
+    }
+    
+    func stopLoading() {
+        self.activityIndicator.isHidden = true
+        self.activityIndicator.stopAnimating()
     }
     
     @objc func loginButtonClicked() {

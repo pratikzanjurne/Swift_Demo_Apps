@@ -165,6 +165,10 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Qnx-hc-ZY8">
+                                <rect key="frame" x="177" y="323" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4th-yh-i1g">
                                 <rect key="frame" x="0.0" y="20" width="375" height="647"/>
                                 <subviews>
@@ -289,6 +293,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="6G2-fW-LfW"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="Qnx-hc-ZY8" id="c0F-kG-H5V"/>
                         <outlet property="createAccBtn" destination="Bqp-0f-gyw" id="n5r-gf-Ypj"/>
                         <outlet property="facebookBtn" destination="sDZ-uW-Gg4" id="vsJ-Wz-6Yv"/>
                         <outlet property="googleBtn" destination="859-ot-dbO" id="Elg-i1-lBt"/>
@@ -957,6 +962,10 @@
                                     <action selector="createAcc:" destination="HAF-2W-olf" eventType="touchUpInside" id="jEz-Dd-1NE"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ug3-ud-sMP">
+                                <rect key="frame" x="177" y="390" width="20" height="20"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -981,6 +990,7 @@
                         <viewLayoutGuide key="safeArea" id="b91-SY-fyh"/>
                     </view>
                     <connections>
+                        <outlet property="activityIndicator" destination="ug3-ud-sMP" id="ulx-6i-J68"/>
                         <outlet property="emailID" destination="sek-hf-APb" id="Gip-CQ-iXn"/>
                         <outlet property="lastName" destination="e6k-0w-j2X" id="ThO-F1-dfD"/>
                         <outlet property="name" destination="gwg-r2-Pk6" id="UQv-Z5-IvQ"/>

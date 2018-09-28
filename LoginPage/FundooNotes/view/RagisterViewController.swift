@@ -17,6 +17,7 @@ class RagisterViewController: BaseViewController,PRagisterView {
     @IBOutlet var phoneNumber: UITextField!
     @IBOutlet var emailID: UITextField!
     @IBOutlet var password: UITextField!
+    @IBOutlet var activityIndicator: UIActivityIndicatorView!
     
     var presenter:RagisterPresenter?
     
