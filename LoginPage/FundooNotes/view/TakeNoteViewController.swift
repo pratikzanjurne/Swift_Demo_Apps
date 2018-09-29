@@ -477,11 +477,11 @@ extension TakeNoteViewController:PColorOptionTblView{
             if let note = self.note{
                 if note.is_deleted{
                     presenter?.deleteNoteFromTrash(noteToDelete: note, completion: { (status, message) in
-                        showAlert(message: message)
+                        self.showAlert(message: message)
                     })
                 }else{
                     presenter?.deleteNote(noteToDelete: note, completion: { (status, message) in
-                        showAlert(message: message)
+                        self.showAlert(message: message)
                     })
                 }
             }else{
@@ -497,7 +497,7 @@ extension TakeNoteViewController:PColorOptionTblView{
             if let note = self.note{
                 if note.is_deleted{
                     presenter?.restoreNote(noteToRestore: note, completion: { (status, message) in
-                        showAlert(message: message)
+                        self.showAlert(message: message)
                     })
                 }else{
                     showAlert(message: "Note not Found.")

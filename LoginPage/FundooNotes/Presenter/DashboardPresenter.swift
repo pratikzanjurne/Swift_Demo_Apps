@@ -13,8 +13,8 @@ class DashboardPresenter{
     func getNotes(){
         pDashboardView?.startLoading()
         presenterService?.getNotes(completion: { (notes) in
-            pDashboardView?.stopLoading()
-            pDashboardView?.setNotes(notes: notes)
+            self.pDashboardView?.stopLoading()
+            self.pDashboardView?.setNotes(notes: notes)
         })
         
     }
@@ -22,8 +22,8 @@ class DashboardPresenter{
     func getDeletedNotes(){
         pDashboardView?.startLoading()
         presenterService?.getDeletedNotes(completion: { (notes) in
-            pDashboardView?.stopLoading()
-            pDashboardView?.setDeletedNotes(notes: notes)
+            self.pDashboardView?.stopLoading()
+            self.pDashboardView?.setDeletedNotes(notes: notes)
         })
         
     }
@@ -75,13 +75,13 @@ class DashboardPresenter{
         completion(newHeight)
     }
     
-    func getNotesOfType(_ type:Constant.NoteOfType,completion:([NoteModel])->Void){
+    func getNotesOfType(_ type:Constant.NoteOfType,completion:@escaping ([NoteModel])->Void){
         presenterService?.getNotesOfType(type, completion: { (notes) in
             completion(notes)
         })
     }
     
-    func pinNoteArray(notes:[NoteModel],completion:(Bool,String)->Void){
+    func pinNoteArray(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
         presenterService?.pinNoteArray(notes: notes, completion: { (status,message) in
             completion(status,message)
         })

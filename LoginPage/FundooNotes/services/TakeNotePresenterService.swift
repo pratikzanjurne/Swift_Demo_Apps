@@ -7,7 +7,7 @@ class TakeNotePresenterService {
         FirebaseDBManager.shared.saveNote(note: note)
     }
     
-    func deleteNote(noteToDelete:NoteModel,completion:(Bool,String)->Void){
+    func deleteNote(noteToDelete:NoteModel,completion:@escaping (Bool,String)->Void){
 //        NoteDBManager.deleteNote(noteToDelete: noteToDelete) { (status, message) in
 //            completion(status, message)
 //        }
@@ -15,14 +15,20 @@ class TakeNotePresenterService {
             completion(result, message)
         }
     }
-    func deleteNoteT(noteToDelete:NoteModel,completion:(Bool,String)->Void){
+    func deleteNoteFromTrash(noteToDelete:NoteModel,completion:@escaping (Bool,String)->Void){
 //        NoteDBManager.deleteNoteT(noteToDelete: noteToDelete) { (status, message) in
 //            completion(status, message)
 //        }
+        FirebaseDBManager.shared.deleteNoteFromTrash(noteToDelete: noteToDelete) { (result, message) in
+            completion(result, message)
+        }
     }
-    func restoreNote(noteToRestore:NoteModel,completion:(Bool,String)->Void){
-        NoteDBManager.restoreNote(note: noteToRestore) { (status, message) in
-            completion(status, message)
+    func restoreNote(noteToRestore:NoteModel,completion:@escaping (Bool,String)->Void){
+//        NoteDBManager.restoreNote(note: noteToRestore) { (status, message) in
+//            completion(status, message)
+//        }
+        FirebaseDBManager.shared.restoreNoteFromTrash(noteToRestore: noteToRestore) { (result, message) in
+            completion(result, message)
         }
     }
 

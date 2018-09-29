@@ -447,9 +447,8 @@ extension DashboardViewController:PShowNotes{
                 self.navigationBar.barTintColor = UIColor(hexString: colour)
                 presenter?.getNotesOfType(.deleted, completion: { (notes) in
                     self.filteredNotes = notes
+                    self.collectionView.reloadData()
                 })
-                collectionView.reloadData()
-                break
             default:
                 if option == .note{
                     self.isFilterActive = false
@@ -461,8 +460,8 @@ extension DashboardViewController:PShowNotes{
                 self.navigationBar.barTintColor = UIColor(hexString: colour)
                 presenter?.getNotesOfType(option, completion: { (notes) in
                     self.filteredNotes = notes
+                    self.collectionView.reloadData()
                 })
-                collectionView.reloadData()
         }
     }
 }

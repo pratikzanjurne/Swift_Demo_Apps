@@ -72,12 +72,12 @@ class FirebaseDBManager{
             let imageRef = storageRootRef.child("noteImages").child("\(stringUID).png")
             imageRef.putData(imageData, metadata: nil, completion: { (metaData, error) in
                 if error != nil{
-                    print(error?.localizedDescription)
+                    print(error?.localizedDescription as Any)
                     return
                 }
                 imageRef.downloadURL(completion: { (url, error) in
                     if error != nil{
-                        print(error?.localizedDescription)
+                        print(error?.localizedDescription as Any)
                         return
                     }
                     if let imageURL = url?.absoluteString{
@@ -93,14 +93,177 @@ class FirebaseDBManager{
         }
     }
     
-    func deleteNote(noteToDelete:NoteModel,completion:(Bool,String)->Void){
+    func deleteNote(noteToDelete:NoteModel,completion:@escaping (Bool,String)->Void){
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let userNotesRef = self.rootRef.child(userId).child("notes")
-        let noteRef = userNotesRef.child(noteToDelete.note_id)
-        let value = ["isDeleted":true]
-        noteRef.updateChildValues(value)
-        completion(true, "Deleted")
+        userNotesRef.observe(.value) { (snapshot) in
+            if snapshot.hasChild(noteToDelete.note_id){
+                let noteRef = userNotesRef.child(noteToDelete.note_id)
+                let value = ["isDeleted":true]
+                noteRef.updateChildValues(value)
+                completion(true,"Deleted")
+                return
+            }else{
+                completion(false, "Note not found")
+            }
+        }
     }
     
+    func deleteNoteFromTrash(noteToDelete:NoteModel,completion:@escaping (Bool,String)->Void){
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let userNoteRef = rootRef.child(userId).child("notes")
+        userNoteRef.observe(.value) { (snapshot) in
+            if snapshot.hasChild(noteToDelete.note_id){
+                let noteRef = userNoteRef.child(noteToDelete.note_id)
+                noteRef.removeValue()
+                completion(true,"Deleted")
+                return
+            }else{
+                completion(false, "Note note found")
+            }
+        }
+    }
     
+    func restoreNoteFromTrash(noteToRestore:NoteModel,completion:@escaping (Bool,String)->Void){
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let userNotesRef = self.rootRef.child(userId).child("notes")
+        userNotesRef.observe(.value) { (snapshot) in
+            if snapshot.hasChild(noteToRestore.note_id){
+                let noteRef = userNotesRef.child(noteToRestore.note_id)
+                let value = ["isDeleted":false]
+                noteRef.updateChildValues(value)
+                completion(true,"Restored")
+                return
+            }else{
+                completion(false, "Note not found")
+            }
+        }
+    }
+    
+    func pinNote(noteToPin:NoteModel,completion:@escaping (Bool,String)->Void){
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let userNotesRef = self.rootRef.child(userId).child("notes")
+        userNotesRef.observe(.value) { (snapshot) in
+            if snapshot.hasChild(noteToPin.note_id){
+                let noteRef = userNotesRef.child(noteToPin.note_id)
+                let value = ["isPinned":true,"isArchived":false]
+                noteRef.updateChildValues(value)
+                completion(true,"Restored")
+                return
+            }else{
+                completion(false, "Note not found")
+            }
+        }
+    }
+    
+    func pinNoteArray(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
+        for note in notes{
+            self.pinNote(noteToPin: note, completion: { (result,message) in
+                completion(result, message)
+            })
+        }
+    }
+    
+    func getNotes(completion:@escaping ([NoteModel])->Void){
+        var notes = [NoteModel]()
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let userNotesRef = rootRef.child(userId).child("notes")
+        userNotesRef.observe(.value) { (snapshot) in
+            guard let noteObjects  = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            for noteObject in noteObjects{
+                guard let note = noteObject.value as? [String:Any] else { return }
+                let noteId = noteObject.key
+                let color = note["color"] as! String
+                let createdDate = note["creadtedDate"] as! String
+                let editedDate = note["editedDate"] as! String
+                let isArchived = note["isArchived"] as! Bool
+                let isDeleted = note["isDeleted"] as! Bool
+                let isPinned = note["isPinned"] as! Bool
+                let isRemindered = note["isRemindered"] as! Bool
+                let noteDisc = note["note"] as! String
+                let reminderDate = note["reminderDate"] as! String
+                let title = note["title"] as! String
+                if isDeleted == false{
+                    if let noteImageURL = note["image"] as? String{
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate))
+                    }else{
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate))
+                    }
+                }
+            }
+            completion(notes)
+        }
+    }
+    
+    func getDeletedNotes(completion:@escaping ([NoteModel])->Void){
+        var notes = [NoteModel]()
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let userNotesRef = rootRef.child(userId).child("notes")
+        userNotesRef.observe(.value) { (snapshot) in
+            guard let noteObjects  = snapshot.children.allObjects as? [DataSnapshot] else { return }
+            for noteObject in noteObjects{
+                guard let note = noteObject.value as? [String:Any] else { return }
+                let noteId = noteObject.key
+                let color = note["color"] as! String
+                let createdDate = note["creadtedDate"] as! String
+                let editedDate = note["editedDate"] as! String
+                let isArchived = note["isArchived"] as! Bool
+                let isDeleted = note["isDeleted"] as! Bool
+                let isPinned = note["isPinned"] as! Bool
+                let isRemindered = note["isRemindered"] as! Bool
+                let noteDisc = note["note"] as! String
+                let reminderDate = note["reminderDate"] as! String
+                let title = note["title"] as! String
+                if isDeleted{
+                    if let noteImageURL = note["image"] as? String{
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate))
+                    }else{
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate))
+                    }
+                }
+            }
+            completion(notes)
+        }
+
+    }
+    
+    func getNotesOfType(_ type:Constant.NoteOfType,completion:@escaping ([NoteModel])->Void){
+
+        switch type {
+            case .note:
+                var dBNotes = [NoteModel]()
+                self.getNotes { (notes) in
+                    dBNotes = notes
+                    let notes = dBNotes.filter({ (note) -> Bool in
+                        return note.is_deleted != true && note.is_archived != true
+                    })
+                    completion(notes)
+                }
+            case .archive:
+                var dBNotes = [NoteModel]()
+                self.getNotes { (notes) in
+                    dBNotes = notes
+                    let notes = dBNotes.filter({ (note) -> Bool in
+                        return note.is_deleted != true && note.is_archived == true
+                    })
+                    completion(notes)
+                }
+            case .reminder:
+                var dBNotes = [NoteModel]()
+                self.getNotes { (notes) in
+                    dBNotes = notes
+                    let notes = dBNotes.filter({ (note) -> Bool in
+                        return note.is_deleted != true && note.is_remidered == true
+                    })
+                    completion(notes)
+                }
+            case .deleted:
+                getDeletedNotes(completion: { (notes) in
+                    completion(notes)
+                })
+                break
+            default:
+                break
+        }
+    }
 }
