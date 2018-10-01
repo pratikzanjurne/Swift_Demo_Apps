@@ -3,3 +3,4 @@
 //
 
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
+#import <SDWebImage/UIImageView+WebCache.h>

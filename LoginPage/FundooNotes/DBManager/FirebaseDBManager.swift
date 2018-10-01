@@ -1,8 +1,10 @@
 import Foundation
 import Firebase
+import UIKit
 import FirebaseDatabase
 import FirebaseAuth
 import FirebaseStorage
+import SDWebImage
 
 class FirebaseDBManager{
     
@@ -75,6 +77,7 @@ class FirebaseDBManager{
                     print(error?.localizedDescription as Any)
                     return
                 }
+                
                 imageRef.downloadURL(completion: { (url, error) in
                     if error != nil{
                         print(error?.localizedDescription as Any)
@@ -185,9 +188,10 @@ class FirebaseDBManager{
                 let title = note["title"] as! String
                 if isDeleted == false{
                     if let noteImageURL = note["image"] as? String{
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate))
+                        
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate, imageUrl: noteImageURL))
                     }else{
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate))
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate, imageUrl: nil))
                     }
                 }
             }
@@ -216,9 +220,9 @@ class FirebaseDBManager{
                 let title = note["title"] as! String
                 if isDeleted{
                     if let noteImageURL = note["image"] as? String{
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate))
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate, imageUrl: noteImageURL))
                     }else{
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate))
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate, imageUrl: nil))
                     }
                 }
             }

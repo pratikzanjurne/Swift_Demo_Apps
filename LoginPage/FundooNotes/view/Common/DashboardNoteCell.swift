@@ -1,4 +1,5 @@
 import UIKit
+import SDWebImage
 
 class DashboardNoteCell:UICollectionViewCell{
     
@@ -37,13 +38,29 @@ class DashboardNoteCell:UICollectionViewCell{
     }
     
     func setData(note:NoteModel){
-        if let imageData = note.image{
-            if let noteImage = UIImage(data:imageData as Data){
-                let newHeight = Helper.shared.getScaledHeight(imageWidth: noteImage.size.width, imageHeight: noteImage.size.height, scaleWidth: self.bounds.width)
-                self.imageViewHeightConstraint.constant = newHeight
-                self.imageView.image = noteImage
-            }
+        if let imageUrl = note.imageUrl{
+            let url = URL(fileURLWithPath: imageUrl)
+            self.imageView.sd_setImage(with: url, completed: { (image, error, imageCache, url) in
+                if error == nil{
+                    if let noteImage = image{
+                        let newHeight = Helper.shared.getScaledHeight(imageWidth: noteImage.size.width, imageHeight: noteImage.size.height, scaleWidth: self.bounds.width)
+                        self.imageViewHeightConstraint.constant = newHeight
+                    }else{
+                        print("Image not found")
+                    }
+                }else{
+                    print(error?.localizedDescription)
+                }
+
+            })
         }
+//        if let imageData = note.image{
+//            if let noteImage = UIImage(data:imageData as Data){
+//                let newHeight = Helper.shared.getScaledHeight(imageWidth: noteImage.size.width, imageHeight: noteImage.size.height, scaleWidth: self.bounds.width)
+//                self.imageViewHeightConstraint.constant = newHeight
+//                self.imageView.image = noteImage
+//            }
+//        }
         let titleString = "\(note.title) \n"
         let attributedString = NSMutableAttributedString(string: titleString, attributes: [NSAttributedStringKey.font:UIFont.boldSystemFont(ofSize: 15)])
         attributedString.append(NSAttributedString(string: note.note, attributes: [NSAttributedStringKey.font: UIFont.systemFont(ofSize: 14)]))

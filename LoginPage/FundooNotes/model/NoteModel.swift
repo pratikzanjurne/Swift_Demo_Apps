@@ -15,4 +15,5 @@ struct NoteModel{
     var reminder_time:String?
     var userId:String
     var edited_date:String
+    var imageUrl:String?
 }
