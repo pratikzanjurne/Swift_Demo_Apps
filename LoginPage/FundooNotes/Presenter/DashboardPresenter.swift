@@ -86,4 +86,30 @@ class DashboardPresenter{
             completion(status,message)
         })
     }
+    func deleteNoteArray(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
+        presenterService?.deleteNoteArray(notes: notes) { (result, message) in
+            completion(result, message)
+        }
+    }
+    
+    func deleteNoteArrayFromTrash(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
+        presenterService?.deleteNoteArrayFromTrash(notes: notes) { (result, message) in
+            completion(result, message)
+        }
+    }
+    
+    func restoreNoteArrayFromTrash(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
+        presenterService?.restoreNoteArrayFromTrash(notes: notes) { (result, message) in
+            completion(result, message)
+        }
+    }
+    func reloadView(){
+        pDashboardView?.reloadView()
+    }
+    
+    func setReminderArray(notes:[NoteModel],reminderDate:String,reminderTime:String,completion:@escaping (Bool,String)->Void){
+        presenterService?.setReminderArray(notes: notes, reminderDate: reminderDate, reminderTime: reminderTime, completion: { (result, message) in
+            completion(result, message)
+        })
+    }
 }

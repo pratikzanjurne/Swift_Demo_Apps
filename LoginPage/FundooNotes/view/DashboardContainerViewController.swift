@@ -7,6 +7,8 @@ protocol PDashboardContainerView {
 class DashboardContainerViewController: BaseViewController,PDashboardContainerView,PHideSideMenu {
     
     var name:String = ""
+    var isNotificationTriggered = false
+    var notificationNoteId = ""
     @IBOutlet var sideMenuConstrains: NSLayoutConstraint!
 
     var isOpenedSideMenu = false
@@ -15,8 +17,18 @@ class DashboardContainerViewController: BaseViewController,PDashboardContainerVi
     override func viewDidLoad() {
         super.viewDidLoad()
         initialseView()
+       
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if isNotificationTriggered{
+            isNotificationTriggered = false
+            let stroryBoard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = stroryBoard.instantiateViewController(withIdentifier: "TakeNoteViewController") as! TakeNoteViewController
+            present(vc, animated: true, completion: nil)
+        }
+    }
     override func initialseView() {
         SideMenuTableViewController.sideMenuDelegate = self
         NotificationCenter.default.addObserver(self, selector: #selector(toggleSideMenu), name: NSNotification.Name("ToggleSideMenu"), object: nil)

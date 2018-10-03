@@ -1,5 +1,7 @@
 import Foundation
 import UIKit
+import UserNotifications
+
 
 class Helper {
     static let shared = Helper()
@@ -48,6 +50,43 @@ class Helper {
             completion("Tomorrow \(time)")
         }else{
             completion("\(date) \(time)")
+        }
+    }
+    
+    func setReminderForArray(notes:[NoteModel],reminderDate:String,reminderTime:String,completion:@escaping (Bool,String)->Void){
+        for note in notes{
+            self.setReminder(note: note, reminderDate: reminderDate, reminderTime: reminderTime, completion: { (result, message) in
+                completion(result, message)
+            })
+        }
+    }
+    
+    func setReminder(note:NoteModel,reminderDate:String,reminderTime:String,completion:@escaping (Bool,String)->Void) {
+//        let center = UNUserNotificationCenter.current()
+//        let options: UNAuthorizationOptions = [.alert,.sound]
+//        center.requestAuthorization(options: options) { (granted, error) in
+//            if !granted{
+//            }
+//        }
+//        center.getNotificationSettings { (setting) in
+//            if setting.authorizationStatus != .authorized{
+//
+//            }
+//        }
+        let content = UNMutableNotificationContent()
+        content.body = note.note
+        content.title = note.title
+        content.sound = UNNotificationSound.default()
+        let dateFormater = DateFormatter()
+        dateFormater.dateFormat = "MM-dd-yyyy h:mm a"
+        let convertedDate = dateFormater.date(from: "\(reminderDate) \(reminderTime)")
+        let triggerDate = Calendar.current.dateComponents([.year,.month,.day,.hour,.minute], from: convertedDate!)
+        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
+        let request = UNNotificationRequest(identifier: note.note_id, content: content, trigger: trigger)
+        AppDelegate.center.add(request) { (error) in
+            if error == nil{
+                completion(true,"Reminder has been set.")
+            }
         }
     }
 

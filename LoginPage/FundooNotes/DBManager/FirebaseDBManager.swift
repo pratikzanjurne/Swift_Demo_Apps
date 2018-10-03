@@ -7,11 +7,12 @@ import FirebaseStorage
 import SDWebImage
 
 class FirebaseDBManager{
-    
     static let shared = FirebaseDBManager()
     private let rootRef = Database.database().reference().child("users")
     private let storageRootRef = Storage.storage().reference()
+    
     private init(){
+        rootRef.keepSynced(true)
     }
     
     func createUser(userModel:UserModel,completion:@escaping (Bool)->Void){
@@ -143,6 +144,31 @@ class FirebaseDBManager{
         }
     }
     
+    func setReminderArray(notes:[NoteModel],reminderDate:String,reminderTime:String,completion:@escaping (Bool,String)->Void){
+        for note in notes{
+            self.setReminder(note: note, reminderDate: reminderDate, reminderTime: reminderTime, completion: { (result, message) in
+                completion(result, message)
+            })
+        }
+    }
+    
+    func setReminder(note:NoteModel,reminderDate:String,reminderTime:String,completion:@escaping (Bool,String)->Void){
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let userNotesRef = self.rootRef.child(userId).child("notes")
+        userNotesRef.observe(.value) { (snapshot) in
+            if snapshot.hasChild(note.note_id){
+                let noteRef = userNotesRef.child(note.note_id)
+                let value:[String:Any] = ["isRemindered":true,"reminderDate":"\(reminderDate) \(reminderTime)"]
+                noteRef.updateChildValues(value)
+                completion(true,"Reminder set")
+                return
+            }else{
+                completion(false, "Note not found")
+            }
+        }
+    }
+
+
     func pinNote(noteToPin:NoteModel,completion:@escaping (Bool,String)->Void){
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let userNotesRef = self.rootRef.child(userId).child("notes")
@@ -167,6 +193,30 @@ class FirebaseDBManager{
         }
     }
     
+    func deleteNoteArray(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
+        for note in notes{
+            self.deleteNote(noteToDelete: note, completion: { (result, message) in
+                completion(result,message)
+            })
+        }
+    }
+    
+    func deleteNoteArrayFromTrash(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
+        for note in notes{
+            self.deleteNoteFromTrash(noteToDelete: note, completion: { (result, message) in
+                completion(result,message)
+            })
+        }
+    }
+    
+    func restoreNoteArrayFromTrash(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
+        for note in notes{
+            self.restoreNoteFromTrash(noteToRestore: note, completion: { (result, message) in
+                completion(result,message)
+            })
+        }
+    }
+    
     func getNotes(completion:@escaping ([NoteModel])->Void){
         var notes = [NoteModel]()
         guard let userId = Auth.auth().currentUser?.uid else { return }
@@ -184,14 +234,25 @@ class FirebaseDBManager{
                 let isPinned = note["isPinned"] as! Bool
                 let isRemindered = note["isRemindered"] as! Bool
                 let noteDisc = note["note"] as! String
-                let reminderDate = note["reminderDate"] as! String
+                let reminderDateNTime = note["reminderDate"] as! String
                 let title = note["title"] as! String
+                var reminderDate:String = ""
+                var reminderTime:String = ""
+                if isRemindered{
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MMM d, yyyy h:mm a"
+                    let date = formatter.date(from: reminderDateNTime)
+                    formatter.dateFormat = "MMM d, yyyy"
+                    reminderDate = formatter.string(from: date!)
+                    formatter.dateFormat = "h:mm a"
+                    reminderTime = formatter.string(from: date!)
+                }
                 if isDeleted == false{
                     if let noteImageURL = note["image"] as? String{
                         
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate, imageUrl: noteImageURL))
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: noteImageURL))
                     }else{
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate, imageUrl: nil))
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: nil))
                     }
                 }
             }
@@ -216,13 +277,24 @@ class FirebaseDBManager{
                 let isPinned = note["isPinned"] as! Bool
                 let isRemindered = note["isRemindered"] as! Bool
                 let noteDisc = note["note"] as! String
-                let reminderDate = note["reminderDate"] as! String
+                let reminderDateNTime = note["reminderDate"] as! String
                 let title = note["title"] as! String
+                var reminderDate:String = ""
+                var reminderTime:String = ""
+                if isRemindered{
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "MMM d, yyyy h:mm a"
+                    let date = formatter.date(from: reminderDateNTime)
+                    formatter.dateFormat = "MMM d, yyyy"
+                    reminderDate = formatter.string(from: date!)
+                    formatter.dateFormat = "h:mm a"
+                    reminderTime = formatter.string(from: date!)
+                }
                 if isDeleted{
                     if let noteImageURL = note["image"] as? String{
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate, imageUrl: noteImageURL))
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: noteImageURL))
                     }else{
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderDate, userId: userId, edited_date: editedDate, imageUrl: nil))
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: nil))
                     }
                 }
             }

@@ -35,5 +35,27 @@ class DashboardPresenterService {
             completion(status, message)
         }
     }
-
+    func deleteNoteArray(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
+        FirebaseDBManager.shared.deleteNoteArray(notes: notes) { (result, message) in
+            completion(result, message)
+        }
+    }
+    
+    func deleteNoteArrayFromTrash(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
+        FirebaseDBManager.shared.deleteNoteArrayFromTrash(notes: notes) { (result, message) in
+            completion(result, message)
+        }
+    }
+    
+    func restoreNoteArrayFromTrash(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
+        FirebaseDBManager.shared.restoreNoteArrayFromTrash(notes: notes) { (result, message) in
+            completion(result, message)
+        }
+    }
+    
+    func setReminderArray(notes:[NoteModel],reminderDate:String,reminderTime:String,completion:@escaping (Bool,String)->Void){
+        FirebaseDBManager.shared.setReminderArray(notes: notes, reminderDate: reminderDate, reminderTime: reminderTime) { (result, message) in
+            completion(result, message)
+        }
+    }
 }

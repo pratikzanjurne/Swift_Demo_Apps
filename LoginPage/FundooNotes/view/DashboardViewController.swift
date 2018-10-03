@@ -1,5 +1,6 @@
 import UIKit
 import  CoreData
+import UserNotifications
 
 protocol PDashboardView {
     func setNotes(notes : [NoteModel])
@@ -7,6 +8,7 @@ protocol PDashboardView {
     func stopLoading()
     func startLoading()
     func setSelectedNotes(notes:[NoteModel])
+    func reloadView()
 }
 
 
@@ -399,6 +401,21 @@ extension DashboardViewController:UISearchBarDelegate{
     }
 }
 extension DashboardViewController:PDashboardView{
+    func reloadView() {
+        if activeView == .note{
+            self.isFilterActive = false
+        }else{
+            self.isFilterActive = true
+        }
+        presenter?.getNotesOfType(activeView, completion: { (notes) in
+            self.filteredNotes = notes
+        })
+        setupData()
+        if let presenter = presenter{
+            presenter.getNotes()
+        }
+    }
+    
     func setSelectedNotes(notes: [NoteModel]) {
         self.selectedNotes = notes
     }
@@ -431,6 +448,7 @@ extension DashboardViewController:PDashboardView{
         self.filteredNotes = notes
         collectionView.reloadData()
     }
+    
 }
 
 
@@ -470,33 +488,60 @@ extension DashboardViewController:PNavigationItemDelegate{
         print("clicked option in \(self.activeView)")
     }
     func onClickBack() {
-        print("clicked back in \(self.activeView)")
         self.selectedNotes.removeAll()
         self.navigationBar.popItem(animated: false)
         self.isMultipleSelectionActive = false
         self.view.backgroundColor = UIColor(hexString: self.selectedColor)
         self.navigationBar.barTintColor = UIColor(hexString: self.selectedColor)
         self.collectionView.allowsMultipleSelection = false
+        self.presenter?.reloadView()
         self.collectionView.reloadData()
     }
     func onClickPin() {
         self.presenter?.pinNoteArray(notes: selectedNotes, completion: { (status, message) in
+            self.onClickBack()
         })
-        onClickBack()
-        presenter?.getNotes()
     }
     func onClickDelete() {
-        print("clicked delete in \(self.activeView)")
+        if self.activeView == .deleted{
+            presenter?.deleteNoteArrayFromTrash(notes: self.selectedNotes, completion: { (status, message) in
+                self.onClickBack()
+            })
+        }else{
+            presenter?.deleteNoteArray(notes: self.selectedNotes, completion: { (status, message) in
+                self.onClickBack()
+            })
+        }
     }
-    func onClickColor() {
+    func onClickColor(){
         print("clicked color in \(self.activeView)")
     }
-    
     func onClickReminder() {
-        print("clicked reminder in \(self.activeView)")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "SetReminderView") as? SetReminderViewController else{
+            return;
+        }
+        vc.reminderDelegate = self
+        present(vc, animated: true, completion: nil)
     }
     func onClickRestore() {
-        print("clicked restore in deleted")
+        presenter?.restoreNoteArrayFromTrash(notes: self.selectedNotes, completion: { (status, message) in
+            self.onClickBack()
+        })
     }
+    
+}
+
+extension DashboardViewController:PReminderDelegate{
+    
+    func setReminderData(date: String, time: String) {
+        self.presenter?.setReminderArray(notes: self.selectedNotes, reminderDate: date, reminderTime: time, completion: { (result, message) in
+        })
+        Helper.shared.setReminderForArray(notes: self.selectedNotes, reminderDate: date, reminderTime: time) { (result, Message) in
+        }
+        self.onClickBack()
+        
+    }
+    
     
 }

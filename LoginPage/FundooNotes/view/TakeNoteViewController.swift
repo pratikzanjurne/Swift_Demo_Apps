@@ -1,5 +1,4 @@
 import UIKit
-import UserNotifications
 
 protocol PTakeNoteView{
     func getPhoto(_ option: Helper.photoOptionSelected)
@@ -10,7 +9,6 @@ protocol PTakeNoteView{
     func pinAction()
     func archiveAction()
     func setUpData(note:NoteModel)
-    func setReminder(note:NoteModel)
     func toggleColorOptionTblView(constant:CGFloat)
 }
 
@@ -40,7 +38,7 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     var isRemindered = false
     var isDeleted = false
     let optionsMenu = ["Open Gallery","Open Camera"]
-    var reminderArray = ["MMM d, yyyy","HH:MM"]
+    var reminderArray = ["MMM d, yyyy","h:mm a"]
     var imageData:NSData?
     var presenter:TakeNotePresenter?
     var colorOptionTblContentHeight:CGFloat?
@@ -120,7 +118,9 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         let userId = UserDefaults.standard.object(forKey: "userId") as! String
         var note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:imageData, is_archived: isArchived, is_remidered: isRemindered , is_deleted: isDeleted, creadted_date: createdDate , colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned, reminder_date: reminderArray[0], reminder_time: reminderArray[1], userId: userId, edited_date: dateInFormat, imageUrl: nil)
         if reminderArray[0] != "MMM d, yyyy" && reminderArray[1] != "HH:MM"{
-            presenter?.setReminder(note:note)
+            Helper.shared.setReminder(note: note, reminderDate: note.reminder_date!, reminderTime: note.reminder_time!, completion: { (result, message) in
+                
+            })
         }else{
             note.is_remidered = false
         }
@@ -276,33 +276,6 @@ extension TakeNoteViewController:PTakeNoteView {
             isColourOptionEnabled = false
         }
     }
-    func setReminder(note:NoteModel) {
-        let center = UNUserNotificationCenter.current()
-        let options: UNAuthorizationOptions = [.alert,.sound]
-        center.requestAuthorization(options: options) { (granted, error) in
-            if !granted{
-            }
-        }
-        center.getNotificationSettings { (setting) in
-            if setting.authorizationStatus != .authorized{
-                
-            }
-        }
-        let content = UNMutableNotificationContent()
-        content.body = note.note
-        content.title = note.title
-        content.sound = UNNotificationSound.default()
-        let dateFormater = DateFormatter()
-        dateFormater.dateFormat = "MM-dd-yyyy h:mm a"
-        let convertedDate = dateFormater.date(from: "\(reminderArray[0]) \(reminderArray[1])")
-        let triggerDate = Calendar.current.dateComponents([.year,.month,.day,.hour,.minute], from: convertedDate!)
-        let trigger = UNCalendarNotificationTrigger(dateMatching: triggerDate, repeats: true)
-        let request = UNNotificationRequest(identifier: "UYLLocalNotification", content: content, trigger: trigger)
-        center.add(request) { (error) in
-            if error != nil{
-            }
-        }
-    }
     
     func getPhoto(_ option: Helper.photoOptionSelected){
         switch option{
@@ -407,8 +380,11 @@ extension TakeNoteViewController:PTakeNoteView {
             self.isRemindered = true
             self.reminderArray[0] = note.reminder_date!
             self.reminderArray[1] = note.reminder_time!
-            noteView.reminderLabel.text = "\(note.reminder_date!) \(note.reminder_time!)"
+            Helper.shared.compareDate(date: note.reminder_date!, time: note.reminder_time!, completion: { (dateString) in
+                noteView.reminderLabel.text = "\(dateString)"
+            })
         }else{
+            self.isRemindered = false
             self.noteView.reminderTextViewHC.constant = 0
         }
         self.view.backgroundColor = UIColor(hexString: note.colour)
@@ -449,11 +425,10 @@ extension TakeNoteViewController:PTakeNoteView {
 
 extension TakeNoteViewController:PReminderDelegate{
     func setReminderData(date: String, time: String) {
-        self.isRemindered = true
-        
         self.reminderArray[0] = date
         self.reminderArray[1] = time
-        if date != "MMM d, yyyy" && time != "HH:MM"{
+        if date != "MMM d, yyyy" && time != "h:mm a"{
+            self.isRemindered = true
             self.noteView.reminderTextViewHC.constant = 18
             Helper.shared.compareDate(date: date, time: time, completion: { (dateString) in
                 noteView.reminderLabel.text = "\(dateString)"

@@ -16,7 +16,7 @@ class SetReminderViewController: UIViewController,UITableViewDelegate,UITableVie
     var presenter:SetReminderPresenter?
     var reminderDelegate:PReminderDelegate?
     var array = ["Date","Time","Repeat"]
-    var subTitleArray = ["MMM d, yyyy","HH:MM","Repeat"]
+    var subTitleArray = ["MMM d, yyyy","h:mm a","Repeat"]
     var selectedSection:Int = 0;
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,7 +39,7 @@ class SetReminderViewController: UIViewController,UITableViewDelegate,UITableVie
     }
 
     @IBAction func onCancelPressed(_ sender: Any) {
-        self.reminderDelegate?.setReminderData(date: "MMM d, yyyy",time: "HH:MM")
+        self.reminderDelegate?.setReminderData(date: "MMM d, yyyy",time: "h:mm a")
         self.dismiss(animated: true, completion: nil)
     }
     
