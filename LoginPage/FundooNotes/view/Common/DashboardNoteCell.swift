@@ -39,7 +39,7 @@ class DashboardNoteCell:UICollectionViewCell{
     
     func setData(note:NoteModel){
         if let imageUrl = note.imageUrl{
-            let url = URL(fileURLWithPath: imageUrl)
+            let url = URL(string: imageUrl)
             self.imageView.sd_setImage(with: url, completed: { (image, error, imageCache, url) in
                 if error == nil{
                     if let noteImage = image{

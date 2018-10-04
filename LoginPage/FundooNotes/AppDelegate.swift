@@ -40,9 +40,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate,UNUserNotificationCenterDe
         let stroryBoard = UIStoryboard(name: "Main", bundle: nil)
         let vc = stroryBoard.instantiateViewController(withIdentifier: "DashboardContainerViewController") as! DashboardContainerViewController
         vc.isNotificationTriggered = true
-        vc.notificationNoteId = response.actionIdentifier
-//        let nav = UINavigationController(rootViewController: vc)
-//        nav.isNavigationBarHidden = true
+        vc.notificationNoteId = response.notification.request.identifier
         window?.rootViewController = vc
     }
     

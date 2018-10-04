@@ -342,4 +342,42 @@ class FirebaseDBManager{
                 break
         }
     }
+    
+    func searchNote(noteId:String,completion:@escaping (NoteModel)->Void){
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let userNotesRef = self.rootRef.child(userId).child("notes")
+        let noteRef = userNotesRef.child(noteId)
+        noteRef.observe(.value) { (snapshot) in
+            guard let note = snapshot.value as? [String:Any] else { return }
+            let noteId = noteId
+            let color = note["color"] as! String
+            let createdDate = note["creadtedDate"] as! String
+            let editedDate = note["editedDate"] as! String
+            let isArchived = note["isArchived"] as! Bool
+            let isDeleted = note["isDeleted"] as! Bool
+            let isPinned = note["isPinned"] as! Bool
+            let isRemindered = note["isRemindered"] as! Bool
+            let noteDisc = note["note"] as! String
+            let reminderDateNTime = note["reminderDate"] as! String
+            let title = note["title"] as! String
+            var reminderDate:String = ""
+            var reminderTime:String = ""
+            if isRemindered{
+                let formatter = DateFormatter()
+                formatter.dateFormat = "MMM d, yyyy h:mm a"
+                let date = formatter.date(from: reminderDateNTime)
+                formatter.dateFormat = "MMM d, yyyy"
+                reminderDate = formatter.string(from: date!)
+                formatter.dateFormat = "h:mm a"
+                reminderTime = formatter.string(from: date!)
+            }
+            if let noteImageURL = note["image"] as? String{
+                let noteModel = NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: noteImageURL)
+                completion(noteModel)
+            }else{
+                let noteModel = NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: nil)
+                completion(noteModel)
+            }
+        }
+    }
 }

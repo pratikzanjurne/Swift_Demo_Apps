@@ -52,6 +52,8 @@
 		0AA2B00B2125C6B600C3B33E /* DashboardPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA2B00A2125C6B600C3B33E /* DashboardPresenter.swift */; };
 		0AA79C8F21491A8800BA2B3F /* HCollectionReusableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AA79C8E21491A8800BA2B3F /* HCollectionReusableView.xib */; };
 		0AA79C9121491BC600BA2B3F /* HCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AA79C9021491BC600BA2B3F /* HCollectionReusableView.swift */; };
+		0AAE220F2165E41100EC4BC2 /* DashboardContainerPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAE220E2165E41100EC4BC2 /* DashboardContainerPresenter.swift */; };
+		0AAE22112165E43300EC4BC2 /* DashboardContainePresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AAE22102165E43300EC4BC2 /* DashboardContainePresenterService.swift */; };
 		0AC79EDA2152143000258C45 /* ColourOptionTblVew.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AC79ED92152143000258C45 /* ColourOptionTblVew.xib */; };
 		0AC79EDC2152160600258C45 /* ColourOptionTblView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC79EDB2152160600258C45 /* ColourOptionTblView.swift */; };
 		0AC7EBA6214786A200CAF9BC /* SetReminderPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AC7EBA5214786A200CAF9BC /* SetReminderPresenter.swift */; };
@@ -143,6 +145,8 @@
 		0AA2B00A2125C6B600C3B33E /* DashboardPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardPresenter.swift; sourceTree = "<group>"; };
 		0AA79C8E21491A8800BA2B3F /* HCollectionReusableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HCollectionReusableView.xib; sourceTree = "<group>"; };
 		0AA79C9021491BC600BA2B3F /* HCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HCollectionReusableView.swift; sourceTree = "<group>"; };
+		0AAE220E2165E41100EC4BC2 /* DashboardContainerPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardContainerPresenter.swift; sourceTree = "<group>"; };
+		0AAE22102165E43300EC4BC2 /* DashboardContainePresenterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardContainePresenterService.swift; sourceTree = "<group>"; };
 		0AC79ED92152143000258C45 /* ColourOptionTblVew.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ColourOptionTblVew.xib; sourceTree = "<group>"; };
 		0AC79EDB2152160600258C45 /* ColourOptionTblView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColourOptionTblView.swift; sourceTree = "<group>"; };
 		0AC7EBA5214786A200CAF9BC /* SetReminderPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetReminderPresenter.swift; sourceTree = "<group>"; };
@@ -330,6 +334,7 @@
 				0A1311312131424C00D785DD /* TakeNotePresenter.swift */,
 				0A048A62212E6C7900871177 /* SideMenuPresenter.swift */,
 				0AC7EBA5214786A200CAF9BC /* SetReminderPresenter.swift */,
+				0AAE220E2165E41100EC4BC2 /* DashboardContainerPresenter.swift */,
 			);
 			path = Presenter;
 			sourceTree = "<group>";
@@ -340,6 +345,7 @@
 				0AA2B0012125406C00C3B33E /* PresenterService.swift */,
 				0A048A66212E6ECB00871177 /* DashboardPresenterService.swift */,
 				0AD21FF22135A7D7000025B3 /* TakeNotePresenterService.swift */,
+				0AAE22102165E43300EC4BC2 /* DashboardContainePresenterService.swift */,
 			);
 			path = services;
 			sourceTree = "<group>";
@@ -605,6 +611,7 @@
 				0AD21241212686FA00FAEE00 /* LoginViewPresenter.swift in Sources */,
 				0AD212492126E85500FAEE00 /* ForgotPasswrdPresenter.swift in Sources */,
 				0AA79C9121491BC600BA2B3F /* HCollectionReusableView.swift in Sources */,
+				0AAE220F2165E41100EC4BC2 /* DashboardContainerPresenter.swift in Sources */,
 				0A1311322131424C00D785DD /* TakeNotePresenter.swift in Sources */,
 				0A97F04A215DF3A40079099F /* UserInfoModel.swift in Sources */,
 				0ADF6276212D29A300C07571 /* TakeNoteViewController.swift in Sources */,
@@ -615,6 +622,7 @@
 				0A11FC712122F3C00035CEC2 /* RagisterViewController.swift in Sources */,
 				0ADF0EC82144098200B28139 /* PinterestLayout.swift in Sources */,
 				0AA2B0042125962C00C3B33E /* UserModel.swift in Sources */,
+				0AAE22112165E43300EC4BC2 /* DashboardContainePresenterService.swift in Sources */,
 				0AC79EDC2152160600258C45 /* ColourOptionTblView.swift in Sources */,
 				0AA2B0062125A98800C3B33E /* BaseViewController.swift in Sources */,
 				0A048A63212E6C7900871177 /* SideMenuPresenter.swift in Sources */,

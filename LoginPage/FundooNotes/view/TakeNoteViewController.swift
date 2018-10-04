@@ -42,6 +42,7 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     var imageData:NSData?
     var presenter:TakeNotePresenter?
     var colorOptionTblContentHeight:CGFloat?
+    var notificationId:String?
     override func viewDidLoad() {
         super.viewDidLoad()
         initialseView()
@@ -56,6 +57,10 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         btnPin.action = #selector(onPinPressed)
         btnArchive.target = self
         btnArchive.action = #selector(onArchivePressed)
+        noteView.reminderTextView.isUserInteractionEnabled = true
+//        noteView.reminderLabel.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(onReminderLblPressed(sender:)))
+        noteView.reminderTextView.addGestureRecognizer(tapGesture)
         presenter = TakeNotePresenter(pTakeNoteView: self, presenterService: TakeNotePresenterService())
         noteView.noteTextView.delegate = self
         noteView.titleTextView.delegate = self
@@ -179,6 +184,16 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
     }
    @objc func onPinPressed() {
         presenter?.performPinAction()
+    }
+    
+    @objc func onReminderLblPressed(sender: UITapGestureRecognizer){
+            print("Label pressed")
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        guard let vc = storyboard.instantiateViewController(withIdentifier: "SetReminderView") as? SetReminderViewController else{
+            return;
+        }
+        vc.reminderDelegate = self
+        present(vc, animated: true, completion: nil)
     }
 
     @objc func onArchivePressed() {

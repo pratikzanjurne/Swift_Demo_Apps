@@ -13,6 +13,7 @@ class DashboardContainerViewController: BaseViewController,PDashboardContainerVi
 
     var isOpenedSideMenu = false
     var userId:String?
+    var presenter:DashboardContainerPresenter?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,11 +27,17 @@ class DashboardContainerViewController: BaseViewController,PDashboardContainerVi
             isNotificationTriggered = false
             let stroryBoard = UIStoryboard(name: "Main", bundle: nil)
             let vc = stroryBoard.instantiateViewController(withIdentifier: "TakeNoteViewController") as! TakeNoteViewController
-            present(vc, animated: true, completion: nil)
+            presenter?.searchNote(noteId: notificationNoteId, completion: { (noteModel) in
+                var note = noteModel
+                note.is_remidered = false
+                vc.note = note
+                self.present(vc, animated: true, completion: nil)
+            })
         }
     }
     override func initialseView() {
         SideMenuTableViewController.sideMenuDelegate = self
+        presenter = DashboardContainerPresenter(pDashboardContainerView: self, presenterService: DashboardContainerPresenterService())
         NotificationCenter.default.addObserver(self, selector: #selector(toggleSideMenu), name: NSNotification.Name("ToggleSideMenu"), object: nil)
     }
 
