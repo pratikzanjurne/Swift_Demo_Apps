@@ -39,15 +39,18 @@ class DashboardPresenter{
         self.computeTextLabelHeight(text: note.creadted_date,  width: width) { (dateHeight) in
             height = height + 30
         }
-        if let imageData = note.image{
-            if let noteImage = UIImage(data:imageData as Data){
-                self.computeImageHeight(image: noteImage, width: width) { (imageHeight) in
-                    height = height + imageHeight
-                }
-            }
+        if let imageUrl = note.imageUrl{
+            guard let newImgheight = note.imageHeight else { return }
+            guard let newImgWidth = note.imageWidth else { return }
+            let newHeight =  Helper.shared.getScaledHeight(imageWidth: newImgWidth, imageHeight: newImgheight , scaleWidth: width)
+            height = height + newHeight
+//            if let noteImage = UIImage(data:imageData as Data){
+//                self.computeImageHeight(image: noteImage, width: width) { (imageHeight) in
+//                    height = height + imageHeight
+//                }
+//            }
         }
         completion(height)
-        
     }
     
     func computeTextLabelHeightAttributed(text:NSAttributedString,width:CGFloat,completion:(CGFloat)->Void){

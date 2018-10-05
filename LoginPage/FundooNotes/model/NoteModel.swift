@@ -16,4 +16,6 @@ struct NoteModel{
     var userId:String
     var edited_date:String
     var imageUrl:String?
+    var imageHeight:CGFloat?
+    var imageWidth:CGFloat?
 }

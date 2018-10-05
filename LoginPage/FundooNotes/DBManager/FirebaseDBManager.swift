@@ -65,11 +65,13 @@ class FirebaseDBManager{
             }
         })
     }
-    
-    func saveNote(note:NoteModel){
+
+    func createNote(note:NoteModel){
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let userNotesRef = self.rootRef.child(userId).child("notes")
         let noteRef = userNotesRef.child(note.note_id)
+        let noteInfo:[String:Any] = ["title":note.title,"note":note.note,"creadtedDate":note.creadted_date,"reminderDate":"\(note.reminder_date!) \(note.reminder_time!)","editedDate":note.edited_date,"isArchived":note.is_archived,"isDeleted":note.is_deleted,"isPinned":note.is_pinned,"isRemindered":note.is_remidered,"color":note.colour]
+        noteRef.setValue(noteInfo)
         if let imageData = note.image as Data?{
             let stringUID = NSUUID().uuidString
             let imageRef = storageRootRef.child("noteImages").child("\(stringUID).png")
@@ -78,29 +80,68 @@ class FirebaseDBManager{
                     print(error?.localizedDescription as Any)
                     return
                 }
-                
                 imageRef.downloadURL(completion: { (url, error) in
                     if error != nil{
                         print(error?.localizedDescription as Any)
                         return
                     }
                     if let imageURL = url?.absoluteString{
-                        let noteInfo:[String:Any] = ["title":note.title,"note":note.note,"creadtedDate":note.creadted_date,"reminderDate":"\(note.reminder_date!) \(note.reminder_time!)","editedDate":note.edited_date,"isArchived":note.is_archived,"isDeleted":note.is_deleted,"isPinned":note.is_pinned,"isRemindered":note.is_remidered,"color":note.colour,"image":imageURL]
-                        noteRef.setValue(noteInfo)
-                        
+                        self.updateImageUrl(note: note, imageUrl: imageURL)
                     }
                 })
             })
-        }else{
-            let noteInfo:[String:Any] = ["title":note.title,"note":note.note,"creadtedDate":note.creadted_date,"reminderDate":"\(note.reminder_date!) \(note.reminder_time!)","editedDate":note.edited_date,"isArchived":note.is_archived,"isDeleted":note.is_deleted,"isPinned":note.is_pinned,"isRemindered":note.is_remidered,"color":note.colour]
-            noteRef.setValue(noteInfo)
         }
     }
     
+    func updateImageUrl(note:NoteModel,imageUrl:String){
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let userNotesRef = self.rootRef.child(userId).child("notes")
+        userNotesRef.observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.hasChild(note.note_id){
+                let noteRef = userNotesRef.child(note.note_id)
+                let value:[String:Any] = ["image":imageUrl,"imageHeight":note.imageHeight!,"imageWidth":note.imageWidth!]
+                noteRef.updateChildValues(value)
+                return
+            }
+        }
+    }
+    
+    func updateNote(note:NoteModel){
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let userNotesRef = self.rootRef.child(userId).child("notes")
+        userNotesRef.observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.hasChild(note.note_id){
+                let noteRef = userNotesRef.child(note.note_id)
+                let value:[String:Any] = ["title":note.title,"note":note.note,"creadtedDate":note.creadted_date,"reminderDate":"\(note.reminder_date!) \(note.reminder_time!)","editedDate":note.edited_date,"isArchived":note.is_archived,"isDeleted":note.is_deleted,"isPinned":note.is_pinned,"isRemindered":note.is_remidered,"color":note.colour]
+                noteRef.updateChildValues(value)
+                if let imageData = note.image as Data?{
+                    let stringUID = NSUUID().uuidString
+                    let imageRef = self.storageRootRef.child("noteImages").child("\(stringUID).png")
+                    imageRef.putData(imageData, metadata: nil, completion: { (metaData, error) in
+                        if error != nil{
+                            print(error?.localizedDescription as Any)
+                            return
+                        }
+                        imageRef.downloadURL(completion: { (url, error) in
+                            if error != nil{
+                                print(error?.localizedDescription as Any)
+                                return
+                            }
+                            if let imageURL = url?.absoluteString{
+                                self.updateImageUrl(note: note, imageUrl: imageURL)
+                            }
+                        })
+                    })
+                }
+                return
+            }
+            return
+        }
+    }
     func deleteNote(noteToDelete:NoteModel,completion:@escaping (Bool,String)->Void){
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let userNotesRef = self.rootRef.child(userId).child("notes")
-        userNotesRef.observe(.value) { (snapshot) in
+        userNotesRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.hasChild(noteToDelete.note_id){
                 let noteRef = userNotesRef.child(noteToDelete.note_id)
                 let value = ["isDeleted":true]
@@ -116,7 +157,7 @@ class FirebaseDBManager{
     func deleteNoteFromTrash(noteToDelete:NoteModel,completion:@escaping (Bool,String)->Void){
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let userNoteRef = rootRef.child(userId).child("notes")
-        userNoteRef.observe(.value) { (snapshot) in
+        userNoteRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.hasChild(noteToDelete.note_id){
                 let noteRef = userNoteRef.child(noteToDelete.note_id)
                 noteRef.removeValue()
@@ -131,7 +172,7 @@ class FirebaseDBManager{
     func restoreNoteFromTrash(noteToRestore:NoteModel,completion:@escaping (Bool,String)->Void){
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let userNotesRef = self.rootRef.child(userId).child("notes")
-        userNotesRef.observe(.value) { (snapshot) in
+        userNotesRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.hasChild(noteToRestore.note_id){
                 let noteRef = userNotesRef.child(noteToRestore.note_id)
                 let value = ["isDeleted":false]
@@ -155,7 +196,7 @@ class FirebaseDBManager{
     func setReminder(note:NoteModel,reminderDate:String,reminderTime:String,completion:@escaping (Bool,String)->Void){
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let userNotesRef = self.rootRef.child(userId).child("notes")
-        userNotesRef.observe(.value) { (snapshot) in
+        userNotesRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.hasChild(note.note_id){
                 let noteRef = userNotesRef.child(note.note_id)
                 let value:[String:Any] = ["isRemindered":true,"reminderDate":"\(reminderDate) \(reminderTime)"]
@@ -172,7 +213,7 @@ class FirebaseDBManager{
     func pinNote(noteToPin:NoteModel,completion:@escaping (Bool,String)->Void){
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let userNotesRef = self.rootRef.child(userId).child("notes")
-        userNotesRef.observe(.value) { (snapshot) in
+        userNotesRef.observeSingleEvent(of: .value) { (snapshot) in
             if snapshot.hasChild(noteToPin.note_id){
                 let noteRef = userNotesRef.child(noteToPin.note_id)
                 let value = ["isPinned":true,"isArchived":false]
@@ -221,7 +262,7 @@ class FirebaseDBManager{
         var notes = [NoteModel]()
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let userNotesRef = rootRef.child(userId).child("notes")
-        userNotesRef.observe(.value) { (snapshot) in
+         userNotesRef.observeSingleEvent(of: .value) { (snapshot) in
             guard let noteObjects  = snapshot.children.allObjects as? [DataSnapshot] else { return }
             for noteObject in noteObjects{
                 guard let note = noteObject.value as? [String:Any] else { return }
@@ -249,10 +290,11 @@ class FirebaseDBManager{
                 }
                 if isDeleted == false{
                     if let noteImageURL = note["image"] as? String{
-                        
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: noteImageURL))
+                        let imageHeight = note["imageHeight"] as? CGFloat
+                        let imageWidth = note["imageWidth"] as? CGFloat
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: noteImageURL, imageHeight: imageHeight, imageWidth: imageWidth))
                     }else{
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: nil))
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: nil, imageHeight: nil, imageWidth: nil))
                     }
                 }
             }
@@ -264,7 +306,7 @@ class FirebaseDBManager{
         var notes = [NoteModel]()
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let userNotesRef = rootRef.child(userId).child("notes")
-        userNotesRef.observe(.value) { (snapshot) in
+         userNotesRef.observeSingleEvent(of: .value) { (snapshot) in
             guard let noteObjects  = snapshot.children.allObjects as? [DataSnapshot] else { return }
             for noteObject in noteObjects{
                 guard let note = noteObject.value as? [String:Any] else { return }
@@ -292,9 +334,11 @@ class FirebaseDBManager{
                 }
                 if isDeleted{
                     if let noteImageURL = note["image"] as? String{
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: noteImageURL))
+                        let imageHeight = note["imageHeight"] as? CGFloat
+                        let imageWidth = note["imageWidth"] as? CGFloat
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: noteImageURL, imageHeight: imageHeight, imageWidth: imageWidth))
                     }else{
-                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: nil))
+                        notes.append(NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: nil, imageHeight: nil, imageWidth: nil))
                     }
                 }
             }
@@ -347,7 +391,7 @@ class FirebaseDBManager{
         guard let userId = Auth.auth().currentUser?.uid else { return }
         let userNotesRef = self.rootRef.child(userId).child("notes")
         let noteRef = userNotesRef.child(noteId)
-        noteRef.observe(.value) { (snapshot) in
+        userNotesRef.observeSingleEvent(of: .value) { (snapshot) in
             guard let note = snapshot.value as? [String:Any] else { return }
             let noteId = noteId
             let color = note["color"] as! String
@@ -372,10 +416,12 @@ class FirebaseDBManager{
                 reminderTime = formatter.string(from: date!)
             }
             if let noteImageURL = note["image"] as? String{
-                let noteModel = NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: noteImageURL)
+                let imageHeight = note["imageHeight"] as? CGFloat
+                let imageWidth = note["imageWidth"] as? CGFloat
+                let noteModel = NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: noteImageURL, imageHeight: imageHeight, imageWidth: imageWidth)
                 completion(noteModel)
             }else{
-                let noteModel = NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: nil)
+                let noteModel = NoteModel(title: title, note: noteDisc, image: nil, is_archived: isArchived, is_remidered: isRemindered, is_deleted: isDeleted, creadted_date: createdDate, colour: color, note_id: noteId, is_pinned: isPinned, reminder_date: reminderDate, reminder_time: reminderTime, userId: userId, edited_date: editedDate, imageUrl: nil, imageHeight: nil, imageWidth: nil)
                 completion(noteModel)
             }
         }

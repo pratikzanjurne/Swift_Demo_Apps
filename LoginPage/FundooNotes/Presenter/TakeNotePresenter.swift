@@ -62,4 +62,7 @@ class TakeNotePresenter{
             completion(status, message)
         })
     }
+    func updateNote(note:NoteModel){
+        presenterService?.updateNote(note: note)
+    }
 }

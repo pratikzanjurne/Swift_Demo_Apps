@@ -165,6 +165,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="download" translatesAutoresizingMaskIntoConstraints="NO" id="XVd-sn-WGa">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
                             <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Qnx-hc-ZY8">
                                 <rect key="frame" x="177" y="323" width="20" height="20"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -265,7 +268,7 @@
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstItem="sDZ-uW-Gg4" firstAttribute="leading" secondItem="4th-yh-i1g" secondAttribute="leading" constant="16" id="7Lb-xS-eeS"/>
                                     <constraint firstItem="WSA-AR-amO" firstAttribute="top" secondItem="4th-yh-i1g" secondAttribute="top" constant="100" id="DZL-bb-ziI"/>
@@ -284,10 +287,14 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="XVd-sn-WGa" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="3qu-bO-K7D"/>
                             <constraint firstItem="4th-yh-i1g" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="8xp-K5-wch"/>
                             <constraint firstItem="4th-yh-i1g" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="On4-VK-4Yh"/>
                             <constraint firstItem="4th-yh-i1g" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="Ysr-9g-xwJ"/>
                             <constraint firstAttribute="trailing" secondItem="4th-yh-i1g" secondAttribute="trailing" id="cTU-4Z-jhs"/>
+                            <constraint firstItem="XVd-sn-WGa" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="j98-cx-IHB"/>
+                            <constraint firstItem="XVd-sn-WGa" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="kBK-VJ-yO5"/>
+                            <constraint firstItem="XVd-sn-WGa" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="rH4-Ca-VHN"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -304,7 +311,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-47" y="234"/>
+            <point key="canvasLocation" x="-47.200000000000003" y="233.43328335832086"/>
         </scene>
         <!--DashboardContainerViewController-->
         <scene sceneID="EAW-uS-VxL">
@@ -1113,6 +1120,7 @@
         <image name="camera" width="24" height="24"/>
         <image name="check" width="24" height="24"/>
         <image name="clear" width="24" height="24"/>
+        <image name="download" width="225" height="225"/>
         <image name="list" width="24" height="24"/>
         <image name="list_view" width="24" height="24"/>
         <image name="mic" width="24" height="24"/>

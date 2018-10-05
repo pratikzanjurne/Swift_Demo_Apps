@@ -9,6 +9,7 @@ protocol PDashboardView {
     func startLoading()
     func setSelectedNotes(notes:[NoteModel])
     func reloadView()
+    
 }
 
 
@@ -56,6 +57,7 @@ class DashboardViewController:BaseViewController{
             self.filteredNotes = notes
         })
         setupData()
+        collectionView.reloadData()
         if let presenter = presenter{
             presenter.getNotes()
         }
@@ -64,7 +66,7 @@ class DashboardViewController:BaseViewController{
         self.navigationBar.barTintColor = UIColor(hexString: selectedColor)
         let cell = UINib(nibName: "DashboardNoteCell", bundle: nil)
         self.collectionView.register(cell, forCellWithReuseIdentifier: "DashboardNoteCell")
-        collectionView.register(UINib(nibName:"HCollectionReusableView",bundle:nil),forSupplementaryViewOfKind:UICollectionElementKindSectionHeader,withReuseIdentifier:"HeaderCell")
+    collectionView.register(UINib(nibName:"HCollectionReusableView",bundle:nil),forSupplementaryViewOfKind:UICollectionElementKindSectionHeader,withReuseIdentifier:"HeaderCell")
 
         collectionView.contentInset.bottom = 5
         collectionView.contentInset.left = 5
@@ -401,6 +403,7 @@ extension DashboardViewController:UISearchBarDelegate{
     }
 }
 extension DashboardViewController:PDashboardView{
+    
     func reloadView() {
         if activeView == .note{
             self.isFilterActive = false

@@ -108,20 +108,13 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
         let date = Date()
         dateFormater.dateFormat = "MMM d, yyyy"
         let dateInFormat = dateFormater.string(from: date)
-        let createdDate:String
-        if let receivedNote = self.note{
-            createdDate = receivedNote.creadted_date
-            presenter?.deleteNoteFromTrash(noteToDelete: receivedNote, completion: { (status, message) in
-            })
-        }else{
-            createdDate = dateInFormat
-        }
+        let createdDate:String = dateInFormat
         let uuid = UUID().uuidString.lowercased()
         if let image = self.image{
             self.imageData = UIImagePNGRepresentation(image) as NSData?
         }
         let userId = UserDefaults.standard.object(forKey: "userId") as! String
-        var note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:imageData, is_archived: isArchived, is_remidered: isRemindered , is_deleted: isDeleted, creadted_date: createdDate , colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned, reminder_date: reminderArray[0], reminder_time: reminderArray[1], userId: userId, edited_date: dateInFormat, imageUrl: nil)
+        var note = NoteModel(title: noteView.titleTextView.text, note: noteView.noteTextView.text, image:imageData, is_archived: isArchived, is_remidered: isRemindered , is_deleted: isDeleted, creadted_date: createdDate , colour: (self.view.backgroundColor?.toHexString())! , note_id: uuid, is_pinned: isPinned, reminder_date: reminderArray[0], reminder_time: reminderArray[1], userId: userId, edited_date: dateInFormat, imageUrl: nil, imageHeight: image?.size.height, imageWidth: image?.size.width)
         if reminderArray[0] != "MMM d, yyyy" && reminderArray[1] != "HH:MM"{
             Helper.shared.setReminder(note: note, reminderDate: note.reminder_date!, reminderTime: note.reminder_time!, completion: { (result, message) in
                 
@@ -130,8 +123,13 @@ class TakeNoteViewController: BaseViewController,UITextViewDelegate,PColorDelega
             note.is_remidered = false
         }
         if (note.image != nil || note.note != "" || note.title != ""){
-            presenter?.saveNote(note: note)
-             print("Saved")
+            if let receivedNote = self.note{
+                note.creadted_date = receivedNote.creadted_date
+                note.note_id = receivedNote.note_id
+                presenter?.updateNote(note: note)
+            }else{
+                presenter?.saveNote(note: note)
+            }
         }
         presenter?.presentDashboardView()
     }
@@ -412,6 +410,21 @@ extension TakeNoteViewController:PTakeNoteView {
                 noteView.imageViewHeightC.constant = noteView.imageView.frame.height
                 presenter?.updateImageView()
             }
+        }
+        if let imageUrl = note.imageUrl{
+            guard let url = URL(string: imageUrl) else { return }
+            noteView.imageView.sd_setImage(with: url, completed: { (image, error, imageCache, url) in
+                if error == nil{
+                    if let noteImage = image{
+                        self.image = noteImage
+                        self.noteView.imageView.frame = CGRect(x: 0, y: 0, width: self.view.bounds.width, height: (self.view.bounds.width / noteImage.getAspectRatio()))
+                        self.noteView.imageView.image = noteImage
+                        self.noteView.imageViewHeightC.constant = self.noteView.imageView.frame.height
+                        self.presenter?.updateImageView()
+                        
+                    }
+                }
+            })
         }
         if note.is_pinned{
             btnPin.tintColor = UIColor.blue

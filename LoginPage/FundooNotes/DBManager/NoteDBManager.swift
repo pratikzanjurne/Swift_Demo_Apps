@@ -68,11 +68,11 @@ class NoteDBManager{
                 if note.is_deleted != true && note.userid == userId{
                     if let image = note.image{
 //                        let noteImage = UIImage(data: image as Data)
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: image, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!, edited_date: note.edited_date!, imageUrl: nil))
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: image, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!, edited_date: note.edited_date!, imageUrl: nil, imageHeight: nil, imageWidth: nil))
                         
                         
                     }else{
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!, edited_date: note.edited_date!, imageUrl: nil))
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!, edited_date: note.edited_date!, imageUrl: nil, imageHeight: nil, imageWidth: nil))
                     }
                     
                 }
@@ -130,11 +130,11 @@ class NoteDBManager{
                 if note.is_deleted && note.userid == userId{
                     if let image = note.image{
 //                        let noteImage = UIImage(data: image as Data)
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: image, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!, edited_date: note.edited_date!, imageUrl: nil))
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: image, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!, edited_date: note.edited_date!, imageUrl: nil, imageHeight: nil, imageWidth: nil))
                         
                         
                     }else{
-                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!, edited_date: note.edited_date!, imageUrl: nil))
+                        notes.append(NoteModel(title: note.title!, note: note.note!, image: nil, is_archived: note.is_archived, is_remidered: note.is_remidered, is_deleted: note.is_deleted, creadted_date: note.creadted_date!, colour: note.colour!, note_id: note.note_id!, is_pinned: note.is_pinned, reminder_date: note.reminder_date, reminder_time: note.reminder_time, userId: note.userid!, edited_date: note.edited_date!, imageUrl: nil, imageHeight: nil, imageWidth: nil))
                     }
                     
                 }

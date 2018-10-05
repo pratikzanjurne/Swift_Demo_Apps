@@ -3,8 +3,8 @@ import Foundation
 class TakeNotePresenterService {
     
     func saveNote(note:NoteModel){
-        NoteDBManager.saveNote(note: note)
-        FirebaseDBManager.shared.saveNote(note: note)
+//        FirebaseDBManager.shared.saveNote(note: note)
+        FirebaseDBManager.shared.createNote(note: note)
     }
     
     func deleteNote(noteToDelete:NoteModel,completion:@escaping (Bool,String)->Void){
@@ -30,6 +30,10 @@ class TakeNotePresenterService {
         FirebaseDBManager.shared.restoreNoteFromTrash(noteToRestore: noteToRestore) { (result, message) in
             completion(result, message)
         }
+    }
+    
+    func updateNote(note:NoteModel){
+        FirebaseDBManager.shared.updateNote(note: note)
     }
 
 }
