@@ -188,7 +188,9 @@ class FirebaseDBManager{
     func setReminderArray(notes:[NoteModel],reminderDate:String,reminderTime:String,completion:@escaping (Bool,String)->Void){
         for note in notes{
             self.setReminder(note: note, reminderDate: reminderDate, reminderTime: reminderTime, completion: { (result, message) in
-                completion(result, message)
+                if note.note_id == notes[notes.count-1].note_id{
+                    completion(result, message)
+                }
             })
         }
     }
@@ -228,16 +230,20 @@ class FirebaseDBManager{
     
     func pinNoteArray(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
         for note in notes{
-            self.pinNote(noteToPin: note, completion: { (result,message) in
-                completion(result, message)
+            self.pinNote(noteToPin: note, completion: { _,_ in
+                
             })
         }
+        completion(true, "Done")
+
     }
     
     func deleteNoteArray(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
         for note in notes{
             self.deleteNote(noteToDelete: note, completion: { (result, message) in
-                completion(result,message)
+                if note.note_id == notes[notes.count-1].note_id{
+                    completion(result, message)
+                }
             })
         }
     }
@@ -245,7 +251,9 @@ class FirebaseDBManager{
     func deleteNoteArrayFromTrash(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
         for note in notes{
             self.deleteNoteFromTrash(noteToDelete: note, completion: { (result, message) in
-                completion(result,message)
+                if note.note_id == notes[notes.count-1].note_id{
+                    completion(result, message)
+                }
             })
         }
     }
@@ -253,8 +261,36 @@ class FirebaseDBManager{
     func restoreNoteArrayFromTrash(notes:[NoteModel],completion:@escaping (Bool,String)->Void){
         for note in notes{
             self.restoreNoteFromTrash(noteToRestore: note, completion: { (result, message) in
-                completion(result,message)
+                if note.note_id == notes[notes.count-1].note_id{
+                    completion(result, message)
+                }
             })
+        }
+    }
+    
+    func changeColorOfNoteArray(notes:[NoteModel],color:String,completion:@escaping (Bool,String)->Void){
+        for note in notes{
+            self.changeColorOfNote(note: note, color: color, completion: { (result, message) in
+                if note.note_id == notes[notes.count-1].note_id{
+                    completion(result, message)
+                }
+            })
+        }
+    }
+    
+    func changeColorOfNote(note:NoteModel,color:String,completion:@escaping (Bool,String)->Void){
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let userNotesRef = self.rootRef.child(userId).child("notes")
+        userNotesRef.observeSingleEvent(of: .value) { (snapshot) in
+            if snapshot.hasChild(note.note_id){
+                let noteRef = userNotesRef.child(note.note_id)
+                let value = ["color":color]
+                noteRef.updateChildValues(value)
+                completion(true, "Color Changed.")
+                return
+            }else{
+                completion(false,"Something went wrong.")
+            }
         }
     }
     

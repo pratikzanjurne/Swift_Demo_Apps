@@ -2,6 +2,7 @@ import UIKit
 import  CoreData
 import UserNotifications
 
+
 protocol PDashboardView {
     func setNotes(notes : [NoteModel])
     func setDeletedNotes(notes:[NoteModel])
@@ -23,6 +24,10 @@ class DashboardViewController:BaseViewController{
     @IBOutlet var searchBarConstraint: NSLayoutConstraint!
     @IBOutlet var searchBar: UISearchBar!
     @IBOutlet var navigationBar: UINavigationBar!
+    @IBOutlet var dropDownColorOptnHC: NSLayoutConstraint!
+    @IBOutlet var dropDownColorOption: ColourOptions!
+    @IBOutlet var dropdownMenu: DropdownTableView!
+    @IBOutlet var dropdownMenuHC: NSLayoutConstraint!
     
     let searchController = UISearchController(searchResultsController: nil)
     var userId:String?
@@ -40,6 +45,8 @@ class DashboardViewController:BaseViewController{
     var selectedNotes = [NoteModel]()
     var activeView = Constant.NoteOfType.note
     var selectedColor:String = Constant.Color.colourOrange
+    var isDropdownColorOptionVisible = false
+    var isDropdownMenuViaible = false
     override func viewDidLoad() {
         super.viewDidLoad()
         initialseView()
@@ -80,6 +87,8 @@ class DashboardViewController:BaseViewController{
         searchBar.delegate = self
         searchBar.showsCancelButton = true
         SideMenuTableViewController.showNotesDelegate = self
+        dropDownColorOption.delegate = self
+        self.dropdownMenu.delegate = self
     }
     
     func setupData(){
@@ -354,10 +363,6 @@ extension DashboardViewController:UICollectionViewDataSource,UICollectionViewDel
                 
             }
         }
-
-//        let item = notes.remove(at: sourceIndexPath.item)
-//        notes.insert(item, at: destinationIndexPath.item)
-//        collectionView.reloadData()
     }
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         return true
@@ -381,12 +386,12 @@ extension DashboardViewController:UISearchBarDelegate{
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         isFilterActive = false
         isSearchBarVisible = false
+        presenter?.reloadView()
+        searchBar.resignFirstResponder()
         searchBarConstraint.constant = 0
         UIView.animate(withDuration: 0.5) {
             self.view.layoutIfNeeded()
         }
-        presenter?.getNotes()
-        searchBar.resignFirstResponder()
     }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
         isFilterActive = true
@@ -405,6 +410,12 @@ extension DashboardViewController:UISearchBarDelegate{
 extension DashboardViewController:PDashboardView{
     
     func reloadView() {
+        self.filteredNotes = [NoteModel]()
+        self.pinnedFilteredNotes = [NoteModel]()
+        self.notes = [NoteModel]()
+        self.pinnedNotes = [NoteModel]()
+        self.unpinnedNotes = [NoteModel]()
+        self.selectedNotes = [NoteModel]()
         if activeView == .note{
             self.isFilterActive = false
         }else{
@@ -413,7 +424,6 @@ extension DashboardViewController:PDashboardView{
         presenter?.getNotesOfType(activeView, completion: { (notes) in
             self.filteredNotes = notes
         })
-        setupData()
         if let presenter = presenter{
             presenter.getNotes()
         }
@@ -488,7 +498,22 @@ extension DashboardViewController:PShowNotes{
 }
 extension DashboardViewController:PNavigationItemDelegate{
     func onClickOption() {
-        print("clicked option in \(self.activeView)")
+        if isDropdownMenuViaible{
+            self.dropdownMenuHC.constant = 0
+            isDropdownMenuViaible = false
+            UIView.animate(withDuration: 0.15, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }else{
+            self.dropdownMenuHC.constant = 132
+            isDropdownMenuViaible = true
+            UIView.animate(withDuration: 0.15, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
+        if isDropdownColorOptionVisible{
+            self.onClickColor()
+        }
     }
     func onClickBack() {
         self.selectedNotes.removeAll()
@@ -498,7 +523,6 @@ extension DashboardViewController:PNavigationItemDelegate{
         self.navigationBar.barTintColor = UIColor(hexString: self.selectedColor)
         self.collectionView.allowsMultipleSelection = false
         self.presenter?.reloadView()
-        self.collectionView.reloadData()
     }
     func onClickPin() {
         self.presenter?.pinNoteArray(notes: selectedNotes, completion: { (status, message) in
@@ -517,7 +541,22 @@ extension DashboardViewController:PNavigationItemDelegate{
         }
     }
     func onClickColor(){
-        print("clicked color in \(self.activeView)")
+        if isDropdownColorOptionVisible{
+            self.dropDownColorOptnHC.constant = 0
+            isDropdownColorOptionVisible = false
+            UIView.animate(withDuration: 0.15, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }else{
+            self.dropDownColorOptnHC.constant = 130
+            isDropdownColorOptionVisible = true
+            UIView.animate(withDuration: 0.15, animations: {
+                self.view.layoutIfNeeded()
+            })
+        }
+        if isDropdownMenuViaible{
+            self.onClickOption()
+        }
     }
     func onClickReminder() {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
@@ -538,13 +577,35 @@ extension DashboardViewController:PNavigationItemDelegate{
 extension DashboardViewController:PReminderDelegate{
     
     func setReminderData(date: String, time: String) {
-        self.presenter?.setReminderArray(notes: self.selectedNotes, reminderDate: date, reminderTime: time, completion: { (result, message) in
-        })
-        Helper.shared.setReminderForArray(notes: self.selectedNotes, reminderDate: date, reminderTime: time) { (result, Message) in
+        if date != "MMM d, yyyy" && time != "h:mm a"{
+            self.presenter?.setReminderArray(notes: self.selectedNotes, reminderDate: date, reminderTime: time, completion: { (result, message) in
+            })
+            Helper.shared.setReminderForArray(notes: self.selectedNotes,    reminderDate: date, reminderTime: time) { (result, Message) in
+            }
+        }else{
+            
         }
         self.onClickBack()
+    }
+}
+
+extension DashboardViewController:PColorDelegate{
+    func onChangeColor(color: String) {
+        presenter?.changeColorOfNoteArray(notes: self.selectedNotes, color: color, completion: { (result, message) in
+            self.isDropdownColorOptionVisible = false
+            self.dropDownColorOptnHC.constant = 0
+            UIView.animate(withDuration: 0.5) {
+                self.view.layoutIfNeeded()
+            }
+            self.onClickBack()
+        })
+
+    }
+}
+
+extension DashboardViewController:PDropdownMenu{
+    func didSelectCell() {
         
     }
-    
-    
 }
+

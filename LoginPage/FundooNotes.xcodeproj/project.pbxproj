@@ -66,6 +66,10 @@
 		0AD21FED21351687000025B3 /* DashboardNoteCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD21FEC21351687000025B3 /* DashboardNoteCell.swift */; };
 		0AD21FF32135A7D7000025B3 /* TakeNotePresenterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD21FF22135A7D7000025B3 /* TakeNotePresenterService.swift */; };
 		0AD21FFB21368663000025B3 /* DashboardNoteCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AD21FFA21368663000025B3 /* DashboardNoteCell.xib */; };
+		0AD3A7EE2168BA40009DF2A1 /* DropdownMenuTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD3A7EC2168BA40009DF2A1 /* DropdownMenuTableViewCell.swift */; };
+		0AD3A7EF2168BA40009DF2A1 /* DropdownMenuTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AD3A7ED2168BA40009DF2A1 /* DropdownMenuTableViewCell.xib */; };
+		0AD3A7F12168BC00009DF2A1 /* DropdownTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AD3A7F02168BC00009DF2A1 /* DropdownTableView.swift */; };
+		0AD3A7F32168BC18009DF2A1 /* DropdownTableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0AD3A7F22168BC18009DF2A1 /* DropdownTableView.xib */; };
 		0ADF0EC12143FBCB00B28139 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADF0EC02143FBCB00B28139 /* Helper.swift */; };
 		0ADF0EC72144098200B28139 /* PinterestLayoutDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADF0EC42144098100B28139 /* PinterestLayoutDelegate.swift */; };
 		0ADF0EC82144098200B28139 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ADF0EC52144098100B28139 /* PinterestLayout.swift */; };
@@ -159,6 +163,10 @@
 		0AD21FEC21351687000025B3 /* DashboardNoteCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashboardNoteCell.swift; sourceTree = "<group>"; };
 		0AD21FF22135A7D7000025B3 /* TakeNotePresenterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TakeNotePresenterService.swift; sourceTree = "<group>"; };
 		0AD21FFA21368663000025B3 /* DashboardNoteCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DashboardNoteCell.xib; sourceTree = "<group>"; };
+		0AD3A7EC2168BA40009DF2A1 /* DropdownMenuTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownMenuTableViewCell.swift; sourceTree = "<group>"; };
+		0AD3A7ED2168BA40009DF2A1 /* DropdownMenuTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DropdownMenuTableViewCell.xib; sourceTree = "<group>"; };
+		0AD3A7F02168BC00009DF2A1 /* DropdownTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropdownTableView.swift; sourceTree = "<group>"; };
+		0AD3A7F22168BC18009DF2A1 /* DropdownTableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DropdownTableView.xib; sourceTree = "<group>"; };
 		0ADF0EC02143FBCB00B28139 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		0ADF0EC42144098100B28139 /* PinterestLayoutDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PinterestLayoutDelegate.swift; sourceTree = "<group>"; };
 		0ADF0EC52144098100B28139 /* PinterestLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PinterestLayout.swift; path = ../../../../../../../Downloads/PinterestLayout.swift; sourceTree = "<group>"; };
@@ -276,6 +284,10 @@
 				0AA043C62152189600B91E67 /* ColourOptionTbleViewCell.xib */,
 				0AA043C8215218CA00B91E67 /* ColourOptionTblViewCell.swift */,
 				0A1E5BB4215B68BE002FD19F /* NavigationHelper.swift */,
+				0AD3A7EC2168BA40009DF2A1 /* DropdownMenuTableViewCell.swift */,
+				0AD3A7ED2168BA40009DF2A1 /* DropdownMenuTableViewCell.xib */,
+				0AD3A7F02168BC00009DF2A1 /* DropdownTableView.swift */,
+				0AD3A7F22168BC18009DF2A1 /* DropdownTableView.xib */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -500,6 +512,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0AD3A7F32168BC18009DF2A1 /* DropdownTableView.xib in Resources */,
 				0AA043C72152189600B91E67 /* ColourOptionTbleViewCell.xib in Resources */,
 				0A93BB0A2139203200BA586B /* ColourOptions.xib in Resources */,
 				0AD21FFB21368663000025B3 /* DashboardNoteCell.xib in Resources */,
@@ -507,6 +520,7 @@
 				0A11FC4521228CAF0035CEC2 /* LaunchScreen.storyboard in Resources */,
 				0AC79EDA2152143000258C45 /* ColourOptionTblVew.xib in Resources */,
 				0A11FC4221228CAF0035CEC2 /* Assets.xcassets in Resources */,
+				0AD3A7EF2168BA40009DF2A1 /* DropdownMenuTableViewCell.xib in Resources */,
 				0A2AA46E212EE98F00515640 /* NoteView.xib in Resources */,
 				0A1F5AB5215CE371004DEC82 /* GoogleService-Info.plist in Resources */,
 				0AA79C8F21491A8800BA2B3F /* HCollectionReusableView.xib in Resources */,
@@ -539,6 +553,8 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-FundooNotes/Pods-FundooNotes-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/Canvas/Canvas.framework",
+				"${BUILT_PRODUCTS_DIR}/Dropper/Dropper.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
 				"${BUILT_PRODUCTS_DIR}/GTMSessionFetcher/GTMSessionFetcher.framework",
@@ -553,6 +569,8 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Canvas.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Dropper.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GTMSessionFetcher.framework",
@@ -605,6 +623,7 @@
 				0AA043C9215218CA00B91E67 /* ColourOptionTblViewCell.swift in Sources */,
 				0AD2124321269EDE00FAEE00 /* RagisterPresenter.swift in Sources */,
 				0A11FC6F2122EA660035CEC2 /* DashboardViewController.swift in Sources */,
+				0AD3A7EE2168BA40009DF2A1 /* DropdownMenuTableViewCell.swift in Sources */,
 				0A125BAB2158B4D000DA04CE /* Note+CoreDataClass.swift in Sources */,
 				0AA2B00B2125C6B600C3B33E /* DashboardPresenter.swift in Sources */,
 				0ADF0EC72144098200B28139 /* PinterestLayoutDelegate.swift in Sources */,
@@ -637,6 +656,7 @@
 				0A11FC4021228CAF0035CEC2 /* LoginPage.xcdatamodeld in Sources */,
 				0A5D7E6B2146879B00F81F39 /* SetReminderViewController.swift in Sources */,
 				0A11FC3A21228CAF0035CEC2 /* LoginViewController.swift in Sources */,
+				0AD3A7F12168BC00009DF2A1 /* DropdownTableView.swift in Sources */,
 				0A17863221340CA900622F72 /* NoteModel.swift in Sources */,
 				0A93BB102139510F00BA586B /* ColourCell.swift in Sources */,
 				0AC7EBA6214786A200CAF9BC /* SetReminderPresenter.swift in Sources */,

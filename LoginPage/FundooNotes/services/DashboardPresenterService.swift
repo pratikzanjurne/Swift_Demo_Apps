@@ -58,4 +58,10 @@ class DashboardPresenterService {
             completion(result, message)
         }
     }
+    
+    func changeColorOfNoteArray(notes:[NoteModel],color:String,completion:@escaping (Bool,String)->Void){
+        FirebaseDBManager.shared.changeColorOfNoteArray(notes: notes, color: color) { (result, message) in
+            completion(result, message)
+        }
+    }
 }

@@ -16,7 +16,7 @@ class NavigationHelper{
         pinBtn.tintColor = UIColor.gray
         let reminderBtn = UIBarButtonItem(image: #imageLiteral(resourceName: "remind"), style: .plain, target: target, action: #selector(delegate?.onClickReminder))
         reminderBtn.tintColor = UIColor.gray
-        let colorBtn = UIBarButtonItem(image: #imageLiteral(resourceName: "archive"), style: .plain, target: target, action: #selector(delegate?.onClickColor))
+        let colorBtn = UIBarButtonItem(image: #imageLiteral(resourceName: "color_lens"), style: .plain, target: target, action: #selector(delegate?.onClickColor))
         colorBtn.tintColor = UIColor.gray
         let optionBtn = UIBarButtonItem(image: #imageLiteral(resourceName: "vertical_menu"), style: .plain, target: target, action: #selector(delegate?.onClickOption))
         optionBtn.tintColor = UIColor.gray

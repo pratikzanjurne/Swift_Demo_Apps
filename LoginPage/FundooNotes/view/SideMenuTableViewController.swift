@@ -1,4 +1,5 @@
 import UIKit
+import SDWebImage
 
 protocol PSideMenuView{
 }
@@ -34,14 +35,9 @@ class SideMenuTableViewController: UITableViewController,PSideMenuView {
         presenter = SideMenuPresenter(pSideMenuView: self, persenterService: DashboardPresenterService())
         self.userImageView.backgroundColor = UIColor.white
         if let imageUrlString = UserDefaults.standard.object(forKey: "imageUrl") as? String{
-            print(imageUrlString)
-            let imageUrl = URL(fileURLWithPath: imageUrlString)
-            do{
-                let imageData = try Data(contentsOf: imageUrl)
-                self.userImageView.image = UIImage(data: imageData)
-            }catch{
-                print(error)
-            }
+            let url = URL(string: imageUrlString)
+            self.userImageView.sd_setImage(with: url, completed: { (image, error, cachetype, url) in
+            })
         }
         self.userNameLabel.text = (UserDefaults.standard.object(forKey: "username") as? String)
         self.userEmailLabel.text = UserDefaults.standard.object(forKey: "userId") as? String

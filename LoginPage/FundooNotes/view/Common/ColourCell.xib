@@ -13,10 +13,10 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="colourCell" id="MWe-hm-oU6" customClass="ColourCell" customModule="FundooNotes" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
+            <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                <rect key="frame" x="0.0" y="0.0" width="36" height="36"/>
+                <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
                 <autoresizingMask key="autoresizingMask"/>
             </view>
             <viewLayoutGuide key="safeArea" id="Hio-MV-Jie"/>

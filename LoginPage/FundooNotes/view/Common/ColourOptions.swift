@@ -41,7 +41,7 @@ extension ColourOptions:UICollectionViewDelegate,UICollectionViewDataSource{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "colourCell", for: indexPath) as! ColourCell
         cell.backgroundColor = UIColor(hexString: colourArray[indexPath.item])
         UIHelper.shared.setShadow(view: cell)
-        UIHelper.shared.setCornerRadius(view: cell,radius:24)
+        UIHelper.shared.setCornerRadius(view: cell,radius:cell.bounds.width/2)
         UIHelper.shared.setCornerRadius(view: cell.contentView,radius:24)
         cell.layer.borderWidth = 0.5
         cell.layer.borderColor = UIColor(hexString: Constant.Color.colourReminderText).cgColor
@@ -54,6 +54,8 @@ extension ColourOptions:UICollectionViewDelegate,UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         delegate?.onChangeColor(color: colourArray[indexPath.item])
     }
+    
+    
     
 }
 extension UIColor {

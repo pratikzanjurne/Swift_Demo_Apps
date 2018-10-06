@@ -5,6 +5,8 @@ PODS:
   - Bolts/AppLinks (1.9.0):
     - Bolts/Tasks
   - Bolts/Tasks (1.9.0)
+  - Canvas (0.1.2)
+  - Dropper (2.7.6)
   - FBSDKCoreKit (4.35.0):
     - Bolts (~> 1.7)
   - FBSDKLoginKit (4.35.0):
@@ -110,6 +112,8 @@ PODS:
   - "UITextView+Placeholder (1.2.0)"
 
 DEPENDENCIES:
+  - Canvas
+  - Dropper
   - FBSDKLoginKit
   - Firebase/Auth
   - Firebase/Core
@@ -122,6 +126,8 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - Bolts
+    - Canvas
+    - Dropper
     - FBSDKCoreKit
     - FBSDKLoginKit
     - Firebase
@@ -144,6 +150,8 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Bolts: ac6567323eac61e203f6a9763667d0f711be34c8
+  Canvas: eb861e3b555d032648146c8ffda1a5dea40059ca
+  Dropper: 52a020beb6fef2e4b1d55447f17099e5776954ef
   FBSDKCoreKit: 1a5b2e3ceb5ca827a53c54aa5f4a3480efff80d2
   FBSDKLoginKit: 00a3d65d1226852f9d76dcddff01981e5e6d9c38
   Firebase: 75ea9e232eefa158c1049028030b8f661a2ccb62
@@ -164,6 +172,6 @@ SPEC CHECKSUMS:
   SDWebImage: 624d6e296c69b244bcede364c72ae0430ac14681
   "UITextView+Placeholder": 77680995fcdd07c3f52ec92fe1150874a2ac89ff
 
-PODFILE CHECKSUM: bbc7eddb6331ef4427e4652da671fbe356671a72
+PODFILE CHECKSUM: fad6945aa978731bc6445b6b1d8cf0a8a1b6269f
 
 COCOAPODS: 1.5.3

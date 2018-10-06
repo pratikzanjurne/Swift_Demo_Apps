@@ -13,5 +13,7 @@ target 'FundooNotes' do
     pod 'Firebase/Auth'
     pod 'Firebase/Storage'
     pod 'SDWebImage/WebP'
+    pod 'Canvas'
+    #pod 'Dropper'
     
 end

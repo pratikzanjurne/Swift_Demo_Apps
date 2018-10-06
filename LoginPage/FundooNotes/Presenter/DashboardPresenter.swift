@@ -115,4 +115,9 @@ class DashboardPresenter{
             completion(result, message)
         })
     }
+    func changeColorOfNoteArray(notes:[NoteModel],color:String,completion:@escaping (Bool,String)->Void){
+        presenterService?.changeColorOfNoteArray(notes: notes, color: color, completion: { (result, message) in
+            completion(result, message)
+        })
+    }
 }
